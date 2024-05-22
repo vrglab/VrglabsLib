@@ -15,12 +15,10 @@ public class ItemsLoader implements ILoader {
     @Override
     public void Load(UUID modid) {
        try {
-           Set<Class<?>> class_s = ReflectionUtils.getAnnotatedClassesInPackage(ModLoader.GetItemsPackageDir(modid), ItemMarker.class, ModLoader.GetModClassLoader(modid));
-           ModLogger.LOGGER.info("Found items amount for " + modid +": " + class_s.size());
-           DeferredRegister registery = ModLoader.GetItemRegistry(modid);
+           Set<Class<?>> class_s = ReflectionUtils.getAnnotatedClassesInPackage(ModLoader.GetPackageDir(modid, "items"), ItemMarker.class, ModLoader.GetModClassLoader(modid));
+           DeferredRegister registery = ModLoader.GetRegistry(modid, "items");
            for (Class<?> clas: class_s) {
                ItemMarker marker = ReflectionUtils.getClassAnnotation(clas, ItemMarker.class);
-               ModLogger.LOGGER.info("Registering for " + modid +" The item: " + marker.ItemName());
                RegistryObject registered = registery.register(marker.ItemName(), () -> {
                    return ReflectionUtils.createInstance(clas);
                });

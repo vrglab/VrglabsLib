@@ -1,4 +1,4 @@
-package org.Vrglab.lib.core.Loaders.Item;
+package org.Vrglab.lib.core.Loaders.Block;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ItemMarker {
+public @interface BlockMarker {
     String ItemName();
 }

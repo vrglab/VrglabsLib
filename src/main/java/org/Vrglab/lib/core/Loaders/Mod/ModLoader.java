@@ -5,6 +5,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.Vrglab.lib.core.Loaders.Block.BlocksLoader;
 import org.Vrglab.lib.core.Loaders.ILoader;
 import org.Vrglab.lib.core.Loaders.Item.ItemsLoader;
 
@@ -33,30 +34,44 @@ public class ModLoader {
             registered_mod_packages.get(id).put("items", packages_dir + ".items");
             registered_mod_loaders.get(id).put("items", new ItemsLoader());
 
+
+            registered_mod_registries.get(id).put("blocks", DeferredRegister.create(ForgeRegistries.BLOCKS, ModId));
+            registered_mod_packages.get(id).put("blocks", packages_dir + ".blocks");
+            registered_mod_loaders.get(id).put("blocks", new BlocksLoader());
+
             InitializeMod(id);
 
             registered_mod_registries.get(id).get("items").register(mod_eventbus);
+            registered_mod_registries.get(id).get("blocks").register(mod_eventbus);
         }
     }
 
-    public static DeferredRegister<Item> GetItemRegistry(UUID modid) {
-       return registered_mod_registries.get(modid).get("items");
+    public static UUID ModIdNameToUUID(String modid){
+        return mods.get(modid);
+    }
+
+
+    public static DeferredRegister<Item> GetRegistry(UUID modid, String wtg) {
+       return registered_mod_registries.get(modid).get(wtg);
     }
 
     public static ClassLoader GetModClassLoader(UUID modid) {
         return classLoaderMap.get(modid);
     }
 
-    public static String GetItemsPackageDir(UUID modid) {
-        return registered_mod_packages.get(modid).get("items");
+    public static String GetPackageDir(UUID modid, String wtg) {
+        return registered_mod_packages.get(modid).get(wtg);
     }
 
-    public static ILoader GetModItemLoader(UUID modid) {
-        return registered_mod_loaders.get(modid).get("items");
+    public static ILoader GetModLoader(UUID modid, String wtg) {
+        return registered_mod_loaders.get(modid).get(wtg);
     }
 
     public static void InitializeMod(UUID mod) {
-        ItemsLoader itemsLoader = (ItemsLoader)GetModItemLoader(mod);
+        ItemsLoader itemsLoader = (ItemsLoader)GetModLoader(mod, "items");
         itemsLoader.Load(mod);
+
+        BlocksLoader blocksLoader = (BlocksLoader)GetModLoader(mod, "blocks");
+        blocksLoader.Load(mod);
     }
 }
