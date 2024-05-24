@@ -29,7 +29,7 @@ public class BlocksLoader implements ILoader {
                 RegistryObject registered = registery.register(marker.ItemName(), () -> {
                     return ReflectionUtils.createInstance(clas);
                 });
-                RegistryObject registered_item =items_registery.register(marker.ItemName(), () -> { return new BlockItem((Block)registered.get(),((org.Vrglab.lib.core.Loaders.Block.Block)registered.get()).GetItemProperties()); });
+                RegistryObject registered_item =items_registery.register(marker.ItemName(), () -> { return new BlockItem((Block)registered.get(),((org.Vrglab.lib.core.Loaders.Block.IBlockType)registered.get()).GetItemProperties()); });
 
                 ItemsDatabase.getInstance().Store(modid, marker.ItemName(), registered_item);
                 BlocksDatabase.getInstance().Store(modid, marker.ItemName(), registered);
