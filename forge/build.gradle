@@ -1,0 +1,5 @@
+apply from: "https://raw.githubusercontent.com/vrglab/Ressource/master/forge.gradle"
+
+dependencies {
+
+}

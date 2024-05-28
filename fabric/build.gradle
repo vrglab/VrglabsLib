@@ -1,0 +1,6 @@
+apply from: "https://raw.githubusercontent.com/vrglab/Ressource/master/fabric.gradle"
+
+dependencies {
+    // Fabric Api
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${minFabricApiVer}+${mcVersion}"
+}
