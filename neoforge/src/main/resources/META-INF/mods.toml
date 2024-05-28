@@ -1,35 +1,38 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[2,)"
 #issueTrackerURL = ""
 license = "Insert License Here"
 
 [[mods]]
 modId = "vrglabslib"
 version = "${version}"
-displayName = "Vrglabs Lib"
-authors = "Vrglab"
+displayName = "Vrglabs lib"
+authors = "Me!"
 description = '''
-Better Registration for multi-platform based mods
+This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
 [[dependencies.vrglabslib]]
-modId = "forge"
-mandatory = true
-versionRange = "[43,)"
+modId = "neoforge"
+type = "required"
+versionRange = "[20.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "[1.20.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "architectury"
-mandatory = true
+type = "required"
 versionRange = "[11.1.17,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "vrglabslib.mixins.json"

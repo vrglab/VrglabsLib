@@ -1,4 +1,4 @@
-package org.Vrglab.fabric.client;
+package org.vrglab.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 

@@ -1,4 +1,4 @@
-package org.Vrglab.quilt.Utils;
+package org.vrglab.fabriclike.Utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -12,8 +12,9 @@ import org.Vrglab.Utils.Modinfo;
 
 import java.util.function.Supplier;
 
-@Deprecated(forRemoval = true)
-public class QuiltRegistryCreator {
+
+public class FabricLikeRegistryCreator {
+
     public static void Create(String modid) {
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
