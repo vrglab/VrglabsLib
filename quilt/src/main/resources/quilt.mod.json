@@ -6,7 +6,7 @@
     "version": "${version}",
     "metadata": {
       "name": "Vrglabs Lib",
-      "description": "Better Registration and mod implementation's",
+      "description": "Better Registration for multi-platform based mods",
       "contributors": {
         "Vrglab": "Author"
       },
@@ -36,8 +36,5 @@
         "version": ">=6.6.92"
       }
     ]
-  },
-  "mixin": [
-    "vrglabslib.mixins.json"
-  ]
+  }
 }

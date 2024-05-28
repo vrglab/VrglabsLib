@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "Vrglabs Lib"
 authors = "Vrglab"
 description = '''
-Better Registration and mod implementation's
+Better Registration for multi-platform based mods
 '''
 #logoFile = ""
 

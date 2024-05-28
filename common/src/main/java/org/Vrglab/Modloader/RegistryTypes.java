@@ -1,11 +1,14 @@
 package org.Vrglab.Modloader;
 
 public enum RegistryTypes {
-    ITEMS,
-    BLOCKS,
+    ITEM,
+    BLOCK,
+    ITEMLESS_BLOCK,
     ENTITY_BLOCK,
     MENU,
     RECIPE,
     ENTITY,
-    TAG
+    TAG,
+    BIOM,
+    STRUCTURE
 }
