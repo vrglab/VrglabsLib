@@ -3,7 +3,7 @@
   "id": "vrglabslib",
   "version": "${version}",
   "name": "Vrglabs Lib",
-  "description": "Better Registration and mod implementation's",
+  "description": "Better Registration for multi-platform based mods",
   "authors": [
     "Vrglab"
   ],
