@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "vrglabslib",
   "version": "${version}",
-  "name": "Vrglabs lib",
+  "name": "Vrglabs Lib",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Me!"

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "vrglabslib",
+    "version": "${version}",
+    "metadata": {
+      "name": "Vrglabs Lib",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "contributors": {
+        "Me!": "Author"
+      },
+      "icon": "assets/vrglabslib/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "org.Vrglab.quilt.ExampleModQuilt"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=1.19.2"
+      },
+      {
+        "id": "architectury",
+        "version": ">=6.6.92"
+      }
+    ]
+  },
+  "mixin": [
+    "vrglabslib.mixins.json"
+  ]
+}
