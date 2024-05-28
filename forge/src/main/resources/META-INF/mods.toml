@@ -7,9 +7,9 @@ license = "Insert License Here"
 modId = "vrglabslib"
 version = "${version}"
 displayName = "Vrglabs Lib"
-authors = "Me!"
+authors = "Vrglab"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Better Registration and mod implementation's
 '''
 #logoFile = ""
 

@@ -6,16 +6,16 @@
     "version": "${version}",
     "metadata": {
       "name": "Vrglabs Lib",
-      "description": "This is an example description! Tell everyone what your mod is about!",
+      "description": "Better Registration and mod implementation's",
       "contributors": {
-        "Me!": "Author"
+        "Vrglab": "Author"
       },
       "icon": "assets/vrglabslib/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "org.Vrglab.quilt.ExampleModQuilt"
+        "org.Vrglab.quilt.VLQuiltEntrypoint"
       ]
     },
     "depends": [

@@ -1,8 +1,9 @@
 package org.Vrglab;
 
-public final class VrglabsLib {
-    public static final String MOD_ID = "vrglabslib";
+import org.Vrglab.Utils.Modinfo;
 
+public final class VrglabsLib {
     public static void init() {
+        Modinfo.LOGGER.info("Starting Vrglab's Lib ...");
     }
 }
