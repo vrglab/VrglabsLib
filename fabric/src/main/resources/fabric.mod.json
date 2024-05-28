@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "vrglabslib",
   "version": "${version}",
-  "name": "Vrglab's lib",
+  "name": "Vrglabs lib",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Me!"
@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.Vrglab.fabric.ExampleModFabric"
+      "org.Vrglab.fabric.VLFabricEntryPoint"
     ],
     "client": [
       "org.Vrglab.fabric.client.ExampleModFabricClient"

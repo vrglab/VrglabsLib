@@ -6,7 +6,7 @@ license = "Insert License Here"
 [[mods]]
 modId = "vrglabslib"
 version = "${version}"
-displayName = "Vrglab's lib"
+displayName = "Vrglabs lib"
 authors = "Me!"
 description = '''
 This is an example description! Tell everyone what your mod is about!
