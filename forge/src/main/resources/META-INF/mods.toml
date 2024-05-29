@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[49,)"
 #issueTrackerURL = ""
 license = "Insert License Here"
 
@@ -16,7 +16,7 @@ Better Registration for multi-platform based mods
 [[dependencies.vrglabslib]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[49,)"
 ordering = "NONE"
 side = "BOTH"
 
