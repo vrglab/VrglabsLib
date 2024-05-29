@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "Insert License Here"
+
+[[mods]]
+modId = "vrglabslib"
+version = "${version}"
+displayName = "Vrglabs Lib"
+authors = "Vrglab"
+description = '''
+Better Registration for multi-platform based mods
+'''
+#logoFile = ""
+
+[[dependencies.vrglabslib]]
+modId = "neoforge"
+type = "required"
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.vrglabslib]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.20.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "vrglabslib.mixins.json"
