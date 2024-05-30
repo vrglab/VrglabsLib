@@ -10,19 +10,22 @@ Like Architectury we support very little when it comes to IDE's, [Intellij](http
 Open The version you want to work on in the respective branch and then open the folder matching the name of the version's branch as a project
 
 ### Usage in your own mod
-First add the required maven repository to your settings.gradle file
+First add the required maven repository to your build.gradle file in the root
 ``` groovy
-repositories {
-    mavenCentral()
-    maven {
-        url = uri("https://raw.githubusercontent.com/vrglab/Maven/master/")
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+    repositories {
+        maven {
+            url 'https://raw.githubusercontent.com/vrglab/Maven/master/'
+        }
     }
 }
 ```
 and then modify your Architectury Commons project build.gradle
 ``` groovy
 dependencies {
-    implementation 'org.Vrglab:vrglabslib-common:1.0.0-mc<WANTED MINECRAFT VERSION>'
+    implementation 'org.Vrglab:vrglabslib:common-1.0.0-mc<WANTED MINECRAFT VERSION>'
 }
 ```
 and then you need to do the same for every mod loader you would like to develop on like so:
@@ -30,30 +33,30 @@ and then you need to do the same for every mod loader you would like to develop 
 Forge:
 ``` groovy
 dependencies {
-    implementation 'org.Vrglab:vrglabslib-forge:1.0.0-mc<WANTED MINECRAFT VERSION>'
+    implementation 'org.Vrglab:vrglabslib:forge-1.0.0-mc<WANTED MINECRAFT VERSION>'
 }
 ```
 
 NeoForge:
 ``` groovy
 dependencies {
-    implementation 'org.Vrglab:vrglabslib-neoforge:1.0.0-mc<WANTED MINECRAFT VERSION>'
+    implementation 'org.Vrglab:vrglabslib:neoforge-1.0.0-mc<WANTED MINECRAFT VERSION>'
 }
 ```
 
 I must mention Fabric and Quilt Share the same library so you could use this for both:
 ``` groovy
 dependencies {
-    implementation 'org.Vrglab:vrglabslib-fabric-like:1.0.0-mc<WANTED MINECRAFT VERSION>'
+    implementation 'org.Vrglab:vrglabslib:fabric-like-1.0.0-mc<WANTED MINECRAFT VERSION>'
 }
 ```
 for mappings you need add this
 ```groovy
 dependencies {
-    mappings 'org.Vrglab:vrglabslib-mappings:1.0.0-mc<WANTED MINECRAFT VERSION>@tiny'
+    mappings 'org.Vrglab:vrglabslib:mappings-1.0.0-mc<WANTED MINECRAFT VERSION>@tiny'
 }
 ```
-To you build.gradle in your root project directory.
+To your build.gradle in your root project directory.
 
 
 you register your object's like so:
