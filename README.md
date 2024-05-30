@@ -23,6 +23,7 @@ and then modify your build.gradle to include
 ``` groovy
 dependencies {
     implementation 'org.Vrglab:vrglabslib-common:1.0.0-mc<WANTED MINECRAFT VERSION>'
-    mappings 'org.Vrglab:vrglabslib-mappings:1.0.0-mc<WANTED MINECRAFT VERSION>:mappings@tiny'
+    mappings 'org.Vrglab:vrglabslib-mappings:1.0.0-mc<WANTED MINECRAFT VERSION>@tiny'
 }
 ```
+and at last run gradlew to set up your environment
