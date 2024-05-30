@@ -7,9 +7,9 @@ license = "Insert License Here"
 modId = "vrglabslib"
 version = "${version}"
 displayName = "Vrglabs Lib"
-authors = "Vrglab"
+authors = "Me!"
 description = '''
-Better Registration for multi-platform based mods
+This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
@@ -25,6 +25,13 @@ modId = "minecraft"
 type = "required"
 versionRange = "[1.20.4,)"
 ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.vrglabslib]]
+modId = "architectury"
+type = "required"
+versionRange = "[11.1.17,)"
+ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]

@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[49,)"
 #issueTrackerURL = ""
 license = "Insert License Here"
 
@@ -7,29 +7,29 @@ license = "Insert License Here"
 modId = "vrglabslib"
 version = "${version}"
 displayName = "Vrglabs Lib"
-authors = "Vrglab"
+authors = "Me!"
 description = '''
-Code dependency for all mods to use, make mod making simpler and more dynamic
+This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
 [[dependencies.vrglabslib]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[49,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,)"
+versionRange = "[1.20.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "architectury"
 mandatory = true
-versionRange = "[6.6.92,)"
+versionRange = "[11.1.17,)"
 ordering = "AFTER"
 side = "BOTH"

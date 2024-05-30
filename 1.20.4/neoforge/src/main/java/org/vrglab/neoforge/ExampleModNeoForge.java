@@ -1,13 +1,11 @@
-package org.vrglab.neoforge;
+package org.Vrglab.neoforge;
 
 import net.neoforged.fml.common.Mod;
-import org.Vrglab.Utils.Modinfo;
-import org.Vrglab.VrglabsLib;
 
-
-@Mod(Modinfo.MOD_ID)
+@Mod(ExampleMod.MOD_ID)
 public final class ExampleModNeoForge {
     public ExampleModNeoForge() {
-        VrglabsLib.init();
+        // Run our common setup.
+        ExampleMod.init();
     }
 }

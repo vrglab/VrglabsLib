@@ -1,4 +1,4 @@
-package org.vrglab.fabriclike.Utils;
+package org.Vrglab.fabriclike.Utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -8,12 +8,10 @@ import net.minecraft.util.Identifier;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Utils.Modinfo;
 
 import java.util.function.Supplier;
 
-
-public class FabricLikeRegistryCreator {
+public class FabricLikeRegisteryCreator {
 
     public static void Create(String modid) {
         ICallBack ItemRegistryCallBack = new ICallBack() {

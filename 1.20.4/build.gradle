@@ -9,7 +9,7 @@ architectury {
 }
 
 allprojects {
-    group = project.maven_group
+    group = rootProject.maven_group
     version = "$project.name-$rootProject.mod_version"
 }
 
@@ -65,22 +65,6 @@ subprojects {
             // Notice: This block does NOT have the same function as the block in the top level.
             // The repositories here will be used for publishing your artifact, not for
             // retrieving dependencies.
-        }
-    }
-
-    task reinstallDependencies {
-        group = 'build'
-        description = 'Reinstalls all project dependencies'
-
-        doLast {
-            // Delete the Gradle dependencies cache
-            delete fileTree(dir: "${rootProject.projectDir}/.gradle", include: '**/caches/modules-2/**')
-
-            // Download all dependencies again
-            exec {
-                workingDir rootProject.projectDir
-                commandLine 'gradle', 'clean', 'build', '--refresh-dependencies'
-            }
         }
     }
 }

@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "template",
+  "id": "vrglabslib",
   "version": "${version}",
-  "name": "template",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Vrglabs Lib",
+  "description": "Code dependency for all mods to use, make mod making simpler and more dynamic",
   "authors": [
-    "Me!"
+    "Vrglab"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "CC0-1.0",
-  "icon": "assets/template/icon.png",
+  "icon": "assets/vrglabslib/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.Vrglab.fabric.ExampleModFabric"
+      "org.Vrglab.fabric.VLModFabric"
     ],
     "client": [
       "org.Vrglab.fabric.client.ExampleModFabricClient"
     ]
   },
   "mixins": [
-    "template.mixins.json"
+    "vrglabslib.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.11",

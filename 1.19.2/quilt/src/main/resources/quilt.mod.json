@@ -2,20 +2,20 @@
   "schema_version": 1,
   "quilt_loader": {
     "group": "${group}",
-    "id": "template",
+    "id": "vrglabslib",
     "version": "${version}",
     "metadata": {
-      "name": "template",
-      "description": "This is an example description! Tell everyone what your mod is about!",
+      "name": "Vrglabs Lib",
+      "description": "Code dependency for all mods to use, make mod making simpler and more dynamic",
       "contributors": {
-        "Me!": "Author"
+        "Vrglab": "Author"
       },
-      "icon": "assets/template/icon.png"
+      "icon": "assets/vrglabslib/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "org.Vrglab.quilt.ExampleModQuilt"
+        "org.Vrglab.quilt.VLModQuilt"
       ]
     },
     "depends": [
@@ -38,6 +38,6 @@
     ]
   },
   "mixin": [
-    "template.mixins.json"
+    "vrglabslib.mixins.json"
   ]
 }

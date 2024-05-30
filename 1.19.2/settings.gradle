@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'template'
+rootProject.name = 'vrglabslib'
 
 include 'common'
 include 'fabric'

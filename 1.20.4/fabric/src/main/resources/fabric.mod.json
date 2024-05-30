@@ -3,9 +3,9 @@
   "id": "vrglabslib",
   "version": "${version}",
   "name": "Vrglabs Lib",
-  "description": "Better Registration for multi-platform based mods",
+  "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Vrglab"
+    "Me!"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.Vrglab.fabric.VLFabricEntryPoint"
+      "org.Vrglab.fabric.VLModFabric"
     ],
     "client": [
-      "org.vrglab.fabric.client.ExampleModFabricClient"
+      "org.Vrglab.fabric.client.ExampleModFabricClient"
     ]
   },
   "mixins": [
@@ -29,6 +29,7 @@
     "fabricloader": ">=0.15.11",
     "minecraft": "~1.20.4",
     "java": ">=17",
+    "architectury": ">=11.1.17",
     "fabric-api": "*"
   },
   "suggests": {

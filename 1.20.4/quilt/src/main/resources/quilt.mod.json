@@ -6,16 +6,16 @@
     "version": "${version}",
     "metadata": {
       "name": "Vrglabs Lib",
-      "description": "Better Registration for multi-platform based mods",
+      "description": "This is an example description! Tell everyone what your mod is about!",
       "contributors": {
-        "Vrglab": "Author"
+        "Me!": "Author"
       },
       "icon": "assets/vrglabslib/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "org.Vrglab.quilt.VLQuiltEntrypoint"
+        "org.Vrglab.quilt.VLModQuilt"
       ]
     },
     "depends": [
@@ -30,7 +30,14 @@
       {
         "id": "minecraft",
         "version": ">=1.20.4"
+      },
+      {
+        "id": "architectury",
+        "version": ">=11.1.17"
       }
     ]
-  }
+  },
+  "mixin": [
+    "vrglabslib.mixins.json"
+  ]
 }
