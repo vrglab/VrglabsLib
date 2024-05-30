@@ -6,10 +6,10 @@ license = "Insert License Here"
 [[mods]]
 modId = "vrglabslib"
 version = "${version}"
-displayName = "Vrglabs Lib"
-authors = "Vrglab"
+displayName = "template"
+authors = "Me!"
 description = '''
-Better Registration for multi-platform based mods
+This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
