@@ -1,17 +1,18 @@
 package org.Vrglab.forge.Utils;
 
 import com.google.common.collect.ImmutableSet;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DefaultedRegistry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.village.TradeOffer;
+import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
-import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,9 +20,8 @@ import net.minecraftforge.registries.RegistryObject;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Utils.Modinfo;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ForgeRegistryCreator {
@@ -86,4 +86,22 @@ public class ForgeRegistryCreator {
         Registry.initRegistry(POIcallback, RegistryTypes.POI, modid);
         Registry.initRegistry(POIcallback, RegistryTypes.PROFESSION, modid);
     }
+
+    public static void villagerTradeEvent(VillagerTradesEvent e, String modid) {
+        ICallBack Professioncallback = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                if(e.getType() == ((RegistryObject<VillagerProfession>)args[1]).get()) {
+                    Int2ObjectMap<List<TradeOffers.Factory>> trades = e.getTrades();
+                    for (TradeOffer data: (TradeOffer[])args[3]) {
+                        trades.get((int)args[2]).add((trader, rand) -> data);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
+    }
+
 }

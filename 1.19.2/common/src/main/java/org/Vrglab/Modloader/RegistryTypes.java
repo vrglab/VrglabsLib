@@ -12,5 +12,6 @@ public enum RegistryTypes {
     BIOM,
     STRUCTURE,
     POI,
-    PROFESSION
+    PROFESSION,
+    TRADE
 }

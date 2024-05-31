@@ -1,11 +1,12 @@
 package org.Vrglab.Modloader.Registration;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.village.TradeOffer;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Utils.Modinfo;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -65,15 +66,20 @@ public class Registry {
         return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
     }
 
-    public static Object RegisterPOI(String name, String Modid, Block aNew) {
-        return SimpleRegister(RegistryTypes.POI, Modid, name, aNew);
+    public static Object RegisterPOI(String name, String Modid, Object aNew, int tickcount, int searchdistance) {
+        return SimpleRegister(RegistryTypes.POI, Modid, name, tickcount, searchdistance, aNew);
     }
 
     public static Object RegisterProfession(String name, String Modid, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
         return SimpleRegister(RegistryTypes.PROFESSION, Modid, name, aNew, itemImmutableSet, blockImmutableSet, sound);
     }
 
+    public static void RegisterVillagerTrade(String name, String Modid, Object profession, int level, TradeOffer... trades) {
+        SimpleRegister(RegistryTypes.TRADE, Modid, name, profession, level, trades);
+    }
+
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){
+        Modinfo.LOGGER.info("Registering "+type.toString().toLowerCase() +" " +  args[0] + " for " + Modid);
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
             return open_registeries.get(Modid).get(type).accept(args);
         else {

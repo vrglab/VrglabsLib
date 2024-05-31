@@ -1,15 +1,16 @@
 package org.Vrglab.fabriclike.Utils;
 
-import com.google.common.collect.ImmutableSet;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
-import net.minecraft.world.poi.PointOfInterestType;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
@@ -43,7 +44,7 @@ public class FabricLikeRegisteryCreator {
         ICallBack POIRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.POINT_OF_INTEREST_TYPE, new Identifier(modid, args[0].toString()), new PointOfInterestType(ImmutableSet.copyOf(((Block)args[1]).getStateManager().getStates()), 1,1));
+                return PointOfInterestHelper.register(new Identifier(modid, args[0].toString()), (int)args[1], (int)args[2], (Block)args[3]);
             }
         };
 
@@ -54,10 +55,24 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
+        ICallBack TradeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                TradeOfferHelper.registerVillagerOffers((VillagerProfession)args[1] ,(int)args[2],
+                        factories -> {
+                            for (TradeOffer data: (TradeOffer[])args[3]) {
+                                factories.add(((entity, random) -> data));
+                            }
+                        });
+                return null;
+            }
+        };
+
         Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
         Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
         Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
+        Registry.initRegistry(TradeRegistryCallBack, RegistryTypes.TRADE, modid);
     }
 }
