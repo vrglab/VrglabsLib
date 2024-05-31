@@ -25,3 +25,5 @@ run
 forge*changelog.txt
 /.architectury-transformer/
 /*/.architectury-transformer/
+/*/.idea/
+/*/.gradle/
