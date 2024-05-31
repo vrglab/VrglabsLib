@@ -10,6 +10,6 @@ import org.Vrglab.fabriclike.VLModFabricLike;
 public final class VLModQuilt implements ModInitializer {
     @Override
     public void onInitialize(ModContainer mod) {
-        VLModFabricLike.init(Modinfo.MOD_ID, (args)-> VrglabsLib.init());
+        VLModFabricLike.init(Modinfo.MOD_ID, ()-> VrglabsLib.init());
     }
 }

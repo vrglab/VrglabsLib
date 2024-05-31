@@ -66,11 +66,11 @@ public class Registry {
     }
 
     public static Object RegisterPOI(String name, String Modid, Block aNew) {
-        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
+        return SimpleRegister(RegistryTypes.POI, Modid, name, aNew);
     }
 
-    public static Object RegisterProfession(String name, String Modid, String aNew, ImmutableSet<Item> itemImmutableSet, ImmutableSet<Block> blockImmutableSet, SoundEvent sound) {
-        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew, itemImmutableSet, blockImmutableSet, sound);
+    public static Object RegisterProfession(String name, String Modid, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
+        return SimpleRegister(RegistryTypes.PROFESSION, Modid, name, aNew, itemImmutableSet, blockImmutableSet, sound);
     }
 
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){

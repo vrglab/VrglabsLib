@@ -50,7 +50,7 @@ public class FabricLikeRegisteryCreator {
         ICallBack ProfesionRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.VILLAGER_PROFESSION, new Identifier(modid, args[0].toString()), VillagerProfessionBuilder.create().id(new Identifier(modid, args[0].toString())).workstation(RegistryKey.of(net.minecraft.util.registry.Registry.POINT_OF_INTEREST_TYPE_KEY, new Identifier(modid, args[1].toString()))).harvestableItems(args[2] == null ? null: (Item[])args[2]).secondaryJobSites(args[3] == null ? null: (Block[])args[3]).workSound(args[4] == null ? null: (SoundEvent)args[4]).build());
+                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.VILLAGER_PROFESSION, new Identifier(modid, args[0].toString()), VillagerProfessionBuilder.create().id(new Identifier(modid, args[0].toString())).workstation(RegistryKey.of(net.minecraft.util.registry.Registry.POINT_OF_INTEREST_TYPE_KEY, new Identifier(modid, args[1].toString()))).harvestableItems(args[2] == null ? null: (Item[])args[2]).secondaryJobSites(args[3] == null ? null: (Block[])args[3]).workSound((args.length >= 5 && args[4] == null) ? null : (SoundEvent)args[4]).build());
             }
         };
 
@@ -58,6 +58,6 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
         Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
-        Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.POI, modid);
+        Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
     }
 }
