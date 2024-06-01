@@ -26,6 +26,21 @@ import java.util.function.Supplier;
 
 public class ForgeRegistryCreator {
 
+
+   public static ICallBack TradeRegistryEventCallback = new ICallBack() {
+        @Override
+        public Object accept(Object... args) {
+            Object[] arg = (Object[]) args[0];
+            if(((VillagerTradesEvent)args[1]).getType() == ((RegistryObject<VillagerProfession>)arg[1]).get()) {
+                Int2ObjectMap<List<TradeOffers.Factory>> trades = ((VillagerTradesEvent)args[1]).getTrades();
+                for (TradeOffer data: (TradeOffer[])arg[3]) {
+                    trades.get((int)arg[2]).add((trader, rand) -> data);
+                }
+            }
+            return null;
+        }
+    };
+
     public static void Create(IEventBus eventBus, String modid) {
         DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         ITEM_REGISTRY.register(eventBus);
@@ -67,7 +82,7 @@ public class ForgeRegistryCreator {
         ICallBack POIcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return POI_REGISTRY.register(args[0].toString(), ()-> new PointOfInterestType(ImmutableSet.copyOf(((Block)args[1]).getStateManager().getStates()), 1,1));
+                return POI_REGISTRY.register(args[0].toString(), ()-> new PointOfInterestType(ImmutableSet.copyOf(((RegistryObject<Block>)args[3]).get().getStateManager().getStates()), 1,1));
             }
         };
 
@@ -84,24 +99,11 @@ public class ForgeRegistryCreator {
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);
         Registry.initRegistry(POIcallback, RegistryTypes.POI, modid);
-        Registry.initRegistry(POIcallback, RegistryTypes.PROFESSION, modid);
+        Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
     }
 
-    public static void villagerTradeEvent(VillagerTradesEvent e, String modid) {
-        ICallBack Professioncallback = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                if(e.getType() == ((RegistryObject<VillagerProfession>)args[1]).get()) {
-                    Int2ObjectMap<List<TradeOffers.Factory>> trades = e.getTrades();
-                    for (TradeOffer data: (TradeOffer[])args[3]) {
-                        trades.get((int)args[2]).add((trader, rand) -> data);
-                    }
-                }
-                return null;
-            }
-        };
-
-        Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
+    public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
+        Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
     }
 
 }

@@ -15,10 +15,13 @@ public class Registry {
     private static class UnregisteredData{
         public UnregisteredData( RegistryTypes registry_type, Object... args) {
             this.registry_type = registry_type;
-            this.args = args;
+            this.args = new ArrayList<>();
+            for (Object argdata: args) {
+                this.args.add(argdata);
+            }
         }
 
-        public Object[] args;
+        public List<Object> args;
         public RegistryTypes registry_type;
         public boolean resolved;
 
@@ -47,7 +50,18 @@ public class Registry {
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == _currentRegistryTypes){
-                    data.Obj = _registery.accept(data.args);
+                    data.Obj = _registery.accept(data.args.toArray());
+                    data.resolved = true;
+                }
+            }
+        }
+    }
+
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, RegistryTypes ResolveTypeOf, String modid){
+        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
+            for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
+                if(!data.resolved && data.registry_type == ResolveTypeOf){
+                    data.Obj = resolver.accept(data.args.toArray(), eventData);
                 }
             }
         }
@@ -66,8 +80,8 @@ public class Registry {
         return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
     }
 
-    public static Object RegisterPOI(String name, String Modid, Object aNew, int tickcount, int searchdistance) {
-        return SimpleRegister(RegistryTypes.POI, Modid, name, tickcount, searchdistance, aNew);
+    public static Object RegisterPOI(String name, String Modid, Object block, int tickcount, int searchdistance) {
+        return SimpleRegister(RegistryTypes.POI, Modid, name, tickcount, searchdistance, block);
     }
 
     public static Object RegisterProfession(String name, String Modid, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
