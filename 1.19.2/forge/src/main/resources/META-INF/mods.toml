@@ -5,7 +5,7 @@ license = "Insert License Here"
 
 [[mods]]
 modId = "vrglabslib"
-version = "${version}"
+version = "1.0.0"
 displayName = "Vrglabs Lib"
 authors = "Vrglab"
 description = '''
