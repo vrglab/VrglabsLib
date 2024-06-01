@@ -44,12 +44,20 @@ dependencies {
 }
 ```
 
-I must mention Fabric and Quilt Share the same library so you could use this for both:
+Fabric:
 ``` groovy
 dependencies {
-    implementation 'org.Vrglab:vrglabslib:fabric-like-1.0.0-mc<WANTED MINECRAFT VERSION>'
+    implementation 'org.Vrglab:vrglabslib:fabric-1.0.0-mc<WANTED MINECRAFT VERSION>'
 }
 ```
+
+Quilt:
+``` groovy
+dependencies {
+    implementation 'org.Vrglab:vrglabslib:quilt-1.0.0-mc<WANTED MINECRAFT VERSION>'
+}
+```
+
 for mappings you need add this
 ```groovy
 dependencies {
