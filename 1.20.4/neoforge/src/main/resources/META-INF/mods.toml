@@ -5,11 +5,11 @@ license = "Insert License Here"
 
 [[mods]]
 modId = "vrglabslib"
-version = "${version}"
+version = "1.0.0"
 displayName = "Vrglabs Lib"
-authors = "Me!"
+authors = "Vrglab"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Code dependency for all mods to use, make mod making simpler and more dynamic
 '''
 #logoFile = ""
 

@@ -3,9 +3,9 @@
   "id": "vrglabslib",
   "version": "${version}",
   "name": "Vrglabs Lib",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Code dependency for all mods to use, make mod making simpler and more dynamic",
   "authors": [
-    "Me!"
+    "Vrglab"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",

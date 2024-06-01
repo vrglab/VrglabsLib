@@ -10,5 +10,8 @@ public enum RegistryTypes {
     ENTITY,
     TAG,
     BIOM,
-    STRUCTURE
+    STRUCTURE,
+    POI,
+    PROFESSION,
+    TRADE
 }
