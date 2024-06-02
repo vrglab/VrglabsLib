@@ -1,14 +1,20 @@
 package org.Vrglab.Modloader.Registration;
 
+import dev.architectury.registry.level.biome.BiomeModifications;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
+import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Modloader.VinillaBiomeTypes;
 import org.Vrglab.Utils.Modinfo;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Registry {
@@ -67,7 +73,6 @@ public class Registry {
         }
     }
 
-
     public static Object RegisterItem(String name, String Modid, Supplier aNew) {
         return SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew);
     }
@@ -90,6 +95,23 @@ public class Registry {
 
     public static void RegisterVillagerTrade(String name, String Modid, Object profession, int level, TradeOffer... trades) {
         SimpleRegister(RegistryTypes.TRADE, Modid, name, profession, level, trades);
+    }
+
+    public static Object RegisterOreConfiguredFeature(String name, String Modid, List<OreFeatureConfig.Target> targets, int size) {
+        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, new OreFeatureConfig(targets, size));
+    }
+
+    public static Object RegisterConfiguredFeature(String name, String Modid, Feature feat, Object... data) {
+        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT, Modid, name, feat, data);
+    }
+
+    public static Object RegisterPlacedFeature(String name, String Modid, Object configured_feat, Object data) {
+        return SimpleRegister(RegistryTypes.PLACED_FEAT, Modid, name, configured_feat, data);
+    }
+
+    public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
+
+        SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
 
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){

@@ -7,22 +7,30 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.gen.YOffset;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
+import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 
 import java.util.List;
 import java.util.function.Supplier;
+
 
 public class ForgeRegistryCreator {
 
@@ -42,6 +50,20 @@ public class ForgeRegistryCreator {
     };
 
     public static void Create(IEventBus eventBus, String modid) {
+        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((RegistryObject<Block>)args[0]).get().getDefaultState();
+            }
+        };
+
+        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((int) args[0]), YOffset.aboveBottom((int) args[1]));
+            }
+        };
+
         DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
         ITEM_REGISTRY.register(eventBus);
 
@@ -95,11 +117,27 @@ public class ForgeRegistryCreator {
             }
         };
 
+        ICallBack OreGenRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ConfiguredFeatures.register(args[0].toString(), (Feature) args[1], (OreFeatureConfig)args[2]);
+            }
+        };
+
+        ICallBack PlacedFeatCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return PlacedFeatures.register(args[0].toString(), (RegistryEntry<? extends ConfiguredFeature<?, ?>>) args[1], (List<PlacementModifier>) args[2]);
+            }
+        };
+
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);
         Registry.initRegistry(POIcallback, RegistryTypes.POI, modid);
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
+        Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
+        Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
     }
 
     public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
