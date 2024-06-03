@@ -97,8 +97,8 @@ public class Registry {
         SimpleRegister(RegistryTypes.TRADE, Modid, name, profession, level, trades);
     }
 
-    public static Object RegisterOreConfiguredFeature(String name, String Modid, List<OreFeatureConfig.Target> targets, int size) {
-        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, new OreFeatureConfig(targets, size));
+    public static Object RegisterOreConfiguredFeature(String name, String Modid, Supplier<List<OreFeatureConfig.Target>> targets, int size) {
+        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, targets, size);
     }
 
     public static Object RegisterConfiguredFeature(String name, String Modid, Feature feat, Object... data) {

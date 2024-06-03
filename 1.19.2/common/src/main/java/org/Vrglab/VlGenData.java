@@ -13,7 +13,7 @@ import java.util.List;
 
 public class VlGenData {
 
-    public static Object ORE_GEN_FEAT = Registry.RegisterOreConfiguredFeature("block_ore", Modinfo.MOD_ID, OreGenFeatCreationHelper.create().addMatchCase(OreConfiguredFeatures.STONE_ORE_REPLACEABLES, VlBlocks.BLOCK).addMatchCase(OreConfiguredFeatures.DEEPSLATE_ORE_REPLACEABLES, VlBlocks.BLOCK).build(), 5);
+    public static Object ORE_GEN_FEAT = Registry.RegisterOreConfiguredFeature("block_ore", Modinfo.MOD_ID, ()->OreGenFeatCreationHelper.create().addMatchCase(OreConfiguredFeatures.STONE_ORE_REPLACEABLES, VlBlocks.BLOCK).addMatchCase(OreConfiguredFeatures.DEEPSLATE_ORE_REPLACEABLES, VlBlocks.BLOCK).build(), 5);
 
     public static Object PLACED_FEAT = Registry.RegisterPlacedFeature("block_ore_placed", Modinfo.MOD_ID, ORE_GEN_FEAT, PlacementModifierCreationHelper.create().HeightRangePlacement(-80, 80).CountModifier(10).build());
 

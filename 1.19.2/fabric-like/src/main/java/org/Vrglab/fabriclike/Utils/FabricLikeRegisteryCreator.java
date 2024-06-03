@@ -98,7 +98,7 @@ public class FabricLikeRegisteryCreator {
         ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ConfiguredFeatures.register(args[0].toString(), (Feature) args[1], (OreFeatureConfig)args[2]);
+                return ConfiguredFeatures.register(args[0].toString(), (Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(), (int)args[3]));
             }
         };
 
