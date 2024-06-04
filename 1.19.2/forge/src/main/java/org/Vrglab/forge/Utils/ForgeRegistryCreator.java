@@ -24,6 +24,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -32,6 +33,8 @@ import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.Types.ICallbackVoid;
+import org.Vrglab.Networking.Network;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +70,20 @@ public class ForgeRegistryCreator {
             @Override
             public Object accept(Object... args) {
                 return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((int) args[0]), YOffset.aboveBottom((int) args[1]));
+            }
+        };
+
+        Network.registerGlobalReceiver = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+
+            }
+        };
+
+        Network.clientSendPacket = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+
             }
         };
 

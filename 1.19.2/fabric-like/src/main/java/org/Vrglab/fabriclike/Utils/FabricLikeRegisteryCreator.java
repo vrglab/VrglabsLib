@@ -1,14 +1,16 @@
 package org.Vrglab.fabriclike.Utils;
 
-import net.fabricmc.fabric.api.biome.v1.BiomeModification;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryEntry;
@@ -25,7 +27,9 @@ import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Modloader.VinillaBiomeTypes;
+import org.Vrglab.Networking.Network;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -44,6 +48,20 @@ public class FabricLikeRegisteryCreator {
             @Override
             public Object accept(Object... args) {
                 return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
+            }
+        };
+
+        Network.registerGlobalReceiver = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+                ServerPlayNetworking.registerGlobalReceiver((Identifier) args[0], (a,b,c,d,e)->((ICallBack)args[1]).accept(a,b,c,d,e));
+            }
+        };
+
+        Network.clientSendPacket = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+                ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
             }
         };
 
