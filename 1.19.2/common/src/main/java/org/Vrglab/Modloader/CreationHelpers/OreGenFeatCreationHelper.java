@@ -31,13 +31,4 @@ public class OreGenFeatCreationHelper {
     public List<OreFeatureConfig.Target> build(){
         return targets;
     }
-
-    public Supplier<List<OreFeatureConfig.Target>> buildSupplier(){
-        return new Supplier<List<OreFeatureConfig.Target>>() {
-            @Override
-            public List<OreFeatureConfig.Target> get() {
-                return targets;
-            }
-        };
-    }
 }

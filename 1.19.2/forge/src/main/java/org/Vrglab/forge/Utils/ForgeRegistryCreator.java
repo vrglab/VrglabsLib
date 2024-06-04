@@ -87,7 +87,7 @@ public class ForgeRegistryCreator {
         CONFIGURED_FEAT.register(eventBus);
 
         DeferredRegister<PlacedFeature> PLACED_FEAT = DeferredRegister.create(net.minecraft.util.registry.Registry.PLACED_FEATURE_KEY, modid);
-        CONFIGURED_FEAT.register(eventBus);
+        PLACED_FEAT.register(eventBus);
 
         ICallBack Itemcallback = new ICallBack() {
             @Override

@@ -14,7 +14,6 @@ public enum RegistryTypes {
     POI,
     PROFESSION,
     TRADE,
-    CONFIGURED_FEAT,
     CONFIGURED_FEAT_ORE,
     PLACED_FEAT,
     BIOME_MODIFICATIONS

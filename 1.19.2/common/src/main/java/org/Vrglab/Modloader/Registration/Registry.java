@@ -101,10 +101,6 @@ public class Registry {
         return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, targets, size);
     }
 
-    public static Object RegisterConfiguredFeature(String name, String Modid, Feature feat, Object... data) {
-        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT, Modid, name, feat, data);
-    }
-
     public static Object RegisterPlacedFeature(String name, String Modid, Object configured_feat, Object data) {
         return SimpleRegister(RegistryTypes.PLACED_FEAT, Modid, name, configured_feat, data);
     }
