@@ -3,6 +3,13 @@
 
 This project has one singular goal, make Registration of things global and as easy to use as you can in the Architectury environment.
 
+### Why ?
+You see i was tired of having to re-learn a mod loader **cough** **cough** Forge **cough** **cough** everytime it updated and i was really sick of having to rewrite registration code everytime i start a new project specially when the mod supports multiple modloaders, that i decided to make a Registration wrapper that always stays the same and supports all current modloaders.
+
+### What Mc Versions are supported right now ?
+* *1.19.2*
+* *1.20.4*
+
 ## Building
 
 ### Development
