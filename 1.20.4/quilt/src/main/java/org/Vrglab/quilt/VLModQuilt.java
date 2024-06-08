@@ -1,5 +1,6 @@
 package org.Vrglab.quilt;
 
+import net.minecraft.registry.RegistryWrapper;
 import org.Vrglab.Utils.Modinfo;
 import org.Vrglab.VrglabsLib;
 import org.quiltmc.loader.api.ModContainer;

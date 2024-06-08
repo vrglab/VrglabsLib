@@ -8,8 +8,8 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.RegistryTypes;
-import org.Vrglab.Modloader.VinillaBiomeTypes;
+import org.Vrglab.Modloader.enumTypes.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.Modinfo;
 
 import java.util.*;

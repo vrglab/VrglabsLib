@@ -17,9 +17,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 
 import java.util.List;

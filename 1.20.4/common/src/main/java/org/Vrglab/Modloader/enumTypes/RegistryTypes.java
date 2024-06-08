@@ -1,4 +1,4 @@
-package org.Vrglab.Modloader;
+package org.Vrglab.Modloader.enumTypes;
 
 public enum RegistryTypes {
     ITEM,

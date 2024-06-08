@@ -2,16 +2,15 @@ package org.Vrglab.fabriclike.Utils;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
@@ -24,10 +23,10 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
+import org.Vrglab.Modloader.Registration.Bootstrapper;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.VinillaBiomeTypes;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -100,19 +99,19 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
-       /* ICallBack OreGenRegistryCallBack = new ICallBack() {
+       ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ConfiguredFeatures.register(new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(), RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(modid, args[0].toString())), (Feature) args[1], (int)args[3]));
+                return Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
             }
         };
 
         ICallBack PlacedFeatCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return PlacedFeatures.register(args[0].toString(), (RegistryEntry<? extends ConfiguredFeature<?, ?>>) args[1], (List<PlacementModifier>) args[2]);
+                return Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid,args[1], args[2]);
             }
-        };*/
+        };
 
         ICallBack BiomeModCallBack = new ICallBack() {
             @Override
@@ -133,8 +132,25 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
         Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(TradeRegistryCallBack, RegistryTypes.TRADE, modid);
-       /* Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
-        Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);*/
+        Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
+        Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
         Registry.initRegistry(BiomeModCallBack, RegistryTypes.BIOME_MODIFICATIONS, modid);
+    }
+
+    public static void configureBootstrappables(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries) {
+        entries.addAll(Wrapper.getWrapperOrThrow(RegistryKeys.CONFIGURED_FEATURE));
+        entries.addAll(Wrapper.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE));
+    }
+
+    public static void boostrap(RegistryBuilder builder, String modid) {
+        builder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, (r)->Bootstrapper.initBootstrapper((args)->{
+           return r.register((RegistryKey<ConfiguredFeature<?,?>>) args[0], (ConfiguredFeature<?, ?>)args[1]);
+        }, BootstrapType.CONFIGUERED_FEAT_ORES, modid));
+
+
+        builder.addRegistry(RegistryKeys.PLACED_FEATURE, (r)->Bootstrapper.initBootstrapper((args)->{
+            var config_feat_lookup = r.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
+            return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[0]), (List<PlacementModifier>)args[1]));
+        }, BootstrapType.CONFIGUERED_FEAT_ORES, modid));
     }
 }
