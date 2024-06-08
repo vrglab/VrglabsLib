@@ -1,7 +1,9 @@
 package org.Vrglab.Modloader.CreationHelpers;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.structure.rule.RuleTest;
+import net.minecraft.structure.rule.TagMatchRuleTest;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
 
@@ -22,8 +24,8 @@ public class OreGenFeatCreationHelper {
         return gen;
     }
 
-    public OreGenFeatCreationHelper addMatchCase(RuleTest feat, Object block) {
-        targets.add(OreFeatureConfig.createTarget(feat, (BlockState)ObjectBlockToStateConverted.accept(block)));
+    public OreGenFeatCreationHelper addMatchCase(TagKey feat, Object block) {
+        targets.add(OreFeatureConfig.createTarget(new TagMatchRuleTest(feat), (BlockState)ObjectBlockToStateConverted.accept(block)));
         return this;
     }
 

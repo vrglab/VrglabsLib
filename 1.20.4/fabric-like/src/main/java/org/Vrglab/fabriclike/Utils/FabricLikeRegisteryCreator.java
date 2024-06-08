@@ -102,14 +102,18 @@ public class FabricLikeRegisteryCreator {
        ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
+                RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(modid, args[0].toString()));
+                Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, r, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
+                return r;
             }
         };
 
         ICallBack PlacedFeatCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid,args[1], args[2]);
+                RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(modid, args[0].toString()));
+                Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid, r, args[1], args[2]);
+                return r;
             }
         };
 
@@ -118,9 +122,9 @@ public class FabricLikeRegisteryCreator {
             public Object accept(Object... args) {
                 VinillaBiomeTypes types = (VinillaBiomeTypes) args[1];
                 switch (types){
-                    case END -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), (GenerationStep.Feature) args[2], ((RegistryEntry<PlacedFeature>) args[3]).getKey().get());
-                    case NETHER -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), (GenerationStep.Feature) args[2], ((RegistryEntry<PlacedFeature>) args[3]).getKey().get());
-                    case OVERWORLD -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), (GenerationStep.Feature) args[2], ((RegistryEntry<PlacedFeature>) args[3]).getKey().get());
+                    case END -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
+                    case NETHER -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
+                    case OVERWORLD -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
                 }
                 return null;
             }
@@ -150,7 +154,7 @@ public class FabricLikeRegisteryCreator {
 
         builder.addRegistry(RegistryKeys.PLACED_FEATURE, (r)->Bootstrapper.initBootstrapper((args)->{
             var config_feat_lookup = r.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
-            return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[0]), (List<PlacementModifier>)args[1]));
+            return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[1]), (List<PlacementModifier>)args[2]));
         }, BootstrapType.CONFIGUERED_FEAT_ORES, modid));
     }
 }
