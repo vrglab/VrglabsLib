@@ -1,11 +1,8 @@
 package org.Vrglab.Modloader.CreationHelpers;
 
-import net.minecraft.world.gen.YOffset;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.placementmodifier.*;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Utils.Modinfo;
+import org.Vrglab.Utils.VLModInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +31,7 @@ public class PlacementModifierCreationHelper {
 
     public PlacementModifierCreationHelper CountModifier(int count) {
         if(targets.get(0)!= null && targets.get(0).getClass() == RarityFilterPlacementModifier.class) {
-            Modinfo.LOGGER.error("Cant add Count modifier when Rarity modifier is already added");
+            VLModInfo.LOGGER.error("Cant add Count modifier when Rarity modifier is already added");
             return this;
         }
 
@@ -44,7 +41,7 @@ public class PlacementModifierCreationHelper {
 
     public PlacementModifierCreationHelper RarityModifier(int chance) {
         if(targets.get(0)!= null && targets.get(0).getClass() == CountPlacementModifier.class) {
-            Modinfo.LOGGER.error("Cant add Rarity modifier when Count modifier is already added");
+            VLModInfo.LOGGER.error("Cant add Rarity modifier when Count modifier is already added");
             return this;
         }
 

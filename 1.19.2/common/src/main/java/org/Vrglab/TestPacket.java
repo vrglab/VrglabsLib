@@ -6,16 +6,16 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.Vrglab.Networking.Packet.BaseC2SPacket;
-import org.Vrglab.Utils.Modinfo;
+import org.Vrglab.Utils.VLModInfo;
 
 public class TestPacket extends BaseC2SPacket {
     @Override
     protected void ExecuteOnServer(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, Object responseSender) {
-        Modinfo.LOGGER.info("Packet Sent");
+        VLModInfo.LOGGER.info("Packet Sent");
     }
 
     @Override
     public Identifier getKey() {
-        return new Identifier(Modinfo.MOD_ID, "net_test_packet");
+        return new Identifier(VLModInfo.MOD_ID, "net_test_packet");
     }
 }

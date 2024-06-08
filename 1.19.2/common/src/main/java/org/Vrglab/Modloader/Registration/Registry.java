@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
-import org.Vrglab.Utils.Modinfo;
+import org.Vrglab.Utils.VLModInfo;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -109,7 +109,7 @@ public class Registry {
     }
 
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){
-        Modinfo.LOGGER.info("Registering "+type.toString().toLowerCase() +" " +  args[0] + " for " + Modid);
+        VLModInfo.LOGGER.info("Registering "+type.toString().toLowerCase() +" " +  args[0] + " for " + Modid);
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
             return open_registeries.get(Modid).get(type).accept(args);
         else {

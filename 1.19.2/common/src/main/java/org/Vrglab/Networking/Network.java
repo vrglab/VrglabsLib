@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Networking.Packet.BaseC2SPacket;
-import org.Vrglab.Utils.Modinfo;
+import org.Vrglab.Utils.VLModInfo;
 
 
 
@@ -16,7 +16,7 @@ public class Network {
     public static ICallbackVoid clientSendPacket;
 
     public static void RegisterC2SGlobal(BaseC2SPacket packet_receiver){
-        Modinfo.LOGGER.info("Registering C2S: " + packet_receiver.getKey());
+        VLModInfo.LOGGER.info("Registering C2S: " + packet_receiver.getKey());
         registerGlobalReceiver.accept(packet_receiver.getKey(), new ICallbackVoid() {
             @Override
             public void accept(Object... args) {

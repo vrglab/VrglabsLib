@@ -1,10 +1,6 @@
 package org.Vrglab.fabriclike;
 
-import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallBackVoidNoArg;
-import org.Vrglab.Modloader.Types.ICallbackVoid;
-import org.Vrglab.Utils.Modinfo;
-import org.Vrglab.VrglabsLib;
 import org.Vrglab.fabriclike.Utils.FabricLikeRegisteryCreator;
 
 public final class VLModFabricLike {
