@@ -99,7 +99,7 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
-       ICallBack OreGenRegistryCallBack = new ICallBack() {
+        ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(modid, args[0].toString()));
@@ -155,6 +155,6 @@ public class FabricLikeRegisteryCreator {
         builder.addRegistry(RegistryKeys.PLACED_FEATURE, (r)->Bootstrapper.initBootstrapper((args)->{
             var config_feat_lookup = r.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
             return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[1]), (List<PlacementModifier>)args[2]));
-        }, BootstrapType.CONFIGUERED_FEAT_ORES, modid));
+        }, BootstrapType.PLACED_FEAT, modid));
     }
 }

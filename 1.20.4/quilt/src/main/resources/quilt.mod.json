@@ -16,6 +16,9 @@
     "entrypoints": {
       "init": [
         "org.Vrglab.quilt.VLModQuilt"
+      ],
+      "fabric-datagen": [
+        "org.Vrglab.quilt.VLDataGenerator"
       ]
     },
     "depends": [
@@ -38,6 +41,6 @@
     ]
   },
   "mixin": [
-    "vrglabslib.mixins.json"
+
   ]
 }
