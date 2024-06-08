@@ -11,7 +11,7 @@ import org.Vrglab.Utils.Modinfo;
 
 public class VlGenData {
 
-    public static Object ORE_GEN_FEAT = Registry.RegisterOreConfiguredFeature("block_ore", Modinfo.MOD_ID, ()->OreGenFeatCreationHelper.create().addMatchCase(BlockTags.STONE_ORE_REPLACEABLES, VlBlocks.BLOCK).addMatchCase(BlockTags.DEEPSLATE_ORE_REPLACEABLES, VlBlocks.BLOCK).build(), 5);
+    public static Object ORE_GEN_FEAT = Registry.RegisterOreConfiguredFeature("block_ore", Modinfo.MOD_ID, ()->OreGenFeatCreationHelper.create().addMatchCase(GenReplaceables.STONE_ORE_REPLACEABLES, VlBlocks.BLOCK).addMatchCase(GenReplaceables.DEEPSLATE_ORE_REPLACEABLES, VlBlocks.BLOCK).build(), 5);
 
     public static Object PLACED_FEAT = Registry.RegisterPlacedFeature("block_ore_placed", Modinfo.MOD_ID, ORE_GEN_FEAT, PlacementModifierCreationHelper.create().HeightRangePlacement(-80, 80).CountModifier(10).build());
 

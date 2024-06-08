@@ -6,6 +6,7 @@ import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.structure.rule.TagMatchRuleTest;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.enumTypes.GenReplaceables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,8 @@ public class OreGenFeatCreationHelper {
         return gen;
     }
 
-    public OreGenFeatCreationHelper addMatchCase(TagKey feat, Object block) {
-        targets.add(OreFeatureConfig.createTarget(new TagMatchRuleTest(feat), (BlockState)ObjectBlockToStateConverted.accept(block)));
+    public OreGenFeatCreationHelper addMatchCase(GenReplaceables feat, Object block) {
+        targets.add(OreFeatureConfig.createTarget(new TagMatchRuleTest(feat.getTagKey()), (BlockState)ObjectBlockToStateConverted.accept(block)));
         return this;
     }
 
