@@ -21,7 +21,7 @@ public class Bootstrapper {
         public BootstrapType registry_type;
         public boolean resolved;
 
-        public Registerable<?> Obj = null;
+        public Object Obj = null;
     }
 
     private static Map<String, Map<BootstrapType, ICallBack>> open_registeries = new HashMap<>();
@@ -37,7 +37,7 @@ public class Bootstrapper {
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (Bootstrapper.UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == _currentRegistryTypes){
-                    data.Obj = (Registerable<?>) _registery.accept(data.args.toArray());
+                    data.Obj = _registery.accept(data.args.toArray());
                     data.resolved = true;
                 }
             }
