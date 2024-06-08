@@ -5,9 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.village.TradeOffer;
-import net.minecraft.world.gen.GenerationStep;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.VinillaBiomeTypes;
 import org.Vrglab.Utils.Modinfo;
 
 public class VlPoiAndProfession {

@@ -1,6 +1,5 @@
 package org.Vrglab.Modloader.Registration;
 
-import dev.architectury.registry.level.biome.BiomeModifications;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
@@ -9,12 +8,11 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.RegistryTypes;
-import org.Vrglab.Modloader.VinillaBiomeTypes;
+import org.Vrglab.Modloader.enumTypes.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.Modinfo;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Registry {

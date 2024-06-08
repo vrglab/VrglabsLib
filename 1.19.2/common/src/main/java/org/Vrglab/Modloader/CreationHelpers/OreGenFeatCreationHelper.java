@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.enumTypes.GenReplaceables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,8 @@ public class OreGenFeatCreationHelper {
         return gen;
     }
 
-    public OreGenFeatCreationHelper addMatchCase(RuleTest feat, Object block) {
-        targets.add(OreFeatureConfig.createTarget(feat, (BlockState)ObjectBlockToStateConverted.accept(block)));
+    public OreGenFeatCreationHelper addMatchCase(GenReplaceables feat, Object block) {
+        targets.add(OreFeatureConfig.createTarget(feat.getRuleTest(), (BlockState)ObjectBlockToStateConverted.accept(block)));
         return this;
     }
 

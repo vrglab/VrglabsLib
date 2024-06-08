@@ -25,10 +25,10 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
-import org.Vrglab.Modloader.VinillaBiomeTypes;
+import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Networking.Network;
 
 import java.util.List;
