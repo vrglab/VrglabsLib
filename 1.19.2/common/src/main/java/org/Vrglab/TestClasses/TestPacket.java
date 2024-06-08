@@ -1,4 +1,4 @@
-package org.Vrglab;
+package org.Vrglab.TestClasses;
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;

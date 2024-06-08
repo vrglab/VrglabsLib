@@ -1,4 +1,4 @@
-package org.Vrglab;
+package org.Vrglab.TestClasses;
 
 import net.minecraft.world.gen.GenerationStep;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;

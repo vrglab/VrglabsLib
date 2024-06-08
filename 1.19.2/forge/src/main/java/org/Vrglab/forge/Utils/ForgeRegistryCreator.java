@@ -3,10 +3,14 @@ package org.Vrglab.forge.Utils;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -23,7 +27,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
+import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
@@ -65,6 +71,13 @@ public class ForgeRegistryCreator {
             }
         };
 
+        TypeTransformer.ObjectToBlockEntityType = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((RegistryObject)args[0]).get();
+            }
+        };
+
         Network.registerGlobalReceiver = new ICallbackVoid() {
             @Override
             public void accept(Object... args) {
@@ -97,6 +110,9 @@ public class ForgeRegistryCreator {
 
         DeferredRegister<PlacedFeature> PLACED_FEAT = DeferredRegister.create(net.minecraft.util.registry.Registry.PLACED_FEATURE_KEY, modid);
         PLACED_FEAT.register(eventBus);
+
+        DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
+        BLOCK_ENTITY_TYPE.register(eventBus);
 
         ICallBack Itemcallback = new ICallBack() {
             @Override
@@ -152,10 +168,18 @@ public class ForgeRegistryCreator {
             }
         };
 
+        ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return BLOCK_ENTITY_TYPE.register(args[0].toString(), ()->BlockEntityType.Builder.create((blockPos,blockState)->((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState), ((Block)((RegistryObject)args[2]).get())).build(null));
+            }
+        };
+
 
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);
+        Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
         Registry.initRegistry(POIcallback, RegistryTypes.POI, modid);
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(OreConfiguredFeatCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);

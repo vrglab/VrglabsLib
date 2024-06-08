@@ -7,6 +7,7 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
@@ -77,6 +78,10 @@ public class Registry {
 
     public static Object RegisterBlock(String name, String Modid, Supplier aNew, Item.Settings settings) {
         return SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
+    }
+
+    public static Object RegisterBlockEntityType(String name, String Modid, IBlockEntityLoaderFunction aNew, Object block) {
+        return SimpleRegister(RegistryTypes.BLOCK_ENTITY_TYPE, Modid, name, aNew, block);
     }
 
     public static Object RegisterItemlessBlock(String name, String Modid, Supplier aNew) {

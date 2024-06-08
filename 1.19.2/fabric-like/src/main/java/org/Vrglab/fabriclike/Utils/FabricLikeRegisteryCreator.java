@@ -4,15 +4,20 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
@@ -24,7 +29,9 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
+import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
@@ -50,6 +57,16 @@ public class FabricLikeRegisteryCreator {
                 return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
             }
         };
+
+
+        TypeTransformer.ObjectToBlockEntityType = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return (BlockEntityType<?>)args[0];
+            }
+        };
+
+
 
         Network.registerGlobalReceiver = new ICallbackVoid() {
             @Override
@@ -140,9 +157,23 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
+        ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                FabricBlockEntityTypeBuilder.Factory factory = new FabricBlockEntityTypeBuilder.Factory() {
+                    @Override
+                    public BlockEntity create(BlockPos blockPos, BlockState blockState) {
+                        return ((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState);
+                    }
+                };
+                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.BLOCK_ENTITY_TYPE, new Identifier(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
+            }
+        };
+
         Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
+        Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
         Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
         Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(TradeRegistryCallBack, RegistryTypes.TRADE, modid);
