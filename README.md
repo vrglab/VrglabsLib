@@ -1,7 +1,9 @@
 [![License](https://img.shields.io/github/license/vrglab/VrglabsLib)](LICENSE.txt) [![Releases](https://img.shields.io/github/v/release/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/releases) [![Issues](https://img.shields.io/bitbucket/issues/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/issues)
 # Vrglab's Lib
-
 This project has one singular goal, make Registration of things global and as easy to use as you can in the Architectury environment.
+
+### What does this project promise
+Never to change how registartion of somthing work's in a significant way, so when you switch versions, old code works as expected with very little to absoultly no changes needed
 
 ### Why ?
 You see i was tired of having to re-learn a mod loader **cough** **cough** Forge **cough** **cough** everytime it updated and i was really sick of having to rewrite registration code everytime i start a new project specially when the mod supports multiple modloaders, that i decided to make a Registration wrapper that always stays the same and supports all current modloaders.
