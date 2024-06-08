@@ -27,3 +27,6 @@ forge*changelog.txt
 /*/.architectury-transformer/
 /*/.idea/
 /*/.gradle/
+.cache
+/*/.cache/
+/.cache/

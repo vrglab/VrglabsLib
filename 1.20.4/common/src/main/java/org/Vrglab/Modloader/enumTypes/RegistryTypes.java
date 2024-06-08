@@ -1,4 +1,4 @@
-package org.Vrglab.Modloader;
+package org.Vrglab.Modloader.enumTypes;
 
 public enum RegistryTypes {
     ITEM,
@@ -13,5 +13,8 @@ public enum RegistryTypes {
     STRUCTURE,
     POI,
     PROFESSION,
-    TRADE
+    TRADE,
+    CONFIGURED_FEAT_ORE,
+    PLACED_FEAT,
+    BIOME_MODIFICATIONS
 }

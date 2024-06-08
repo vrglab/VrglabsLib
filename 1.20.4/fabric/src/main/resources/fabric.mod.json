@@ -20,6 +20,9 @@
     ],
     "client": [
       "org.Vrglab.fabric.client.ExampleModFabricClient"
+    ],
+    "fabric-datagen": [
+      "org.Vrglab.fabric.VLDataGenerator"
     ]
   },
   "mixins": [

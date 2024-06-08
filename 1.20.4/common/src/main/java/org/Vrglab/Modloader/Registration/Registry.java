@@ -4,8 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
+import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.RegistryTypes;
+import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.Modinfo;
 
 import java.util.*;
@@ -90,6 +94,19 @@ public class Registry {
 
     public static void RegisterVillagerTrade(String name, String Modid, Object profession, int level, TradeOffer... trades) {
         SimpleRegister(RegistryTypes.TRADE, Modid, name, profession, level, trades);
+    }
+
+    public static Object RegisterOreConfiguredFeature(String name, String Modid, Supplier<List<OreFeatureConfig.Target>> targets, int size) {
+        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, targets, size);
+    }
+
+    public static Object RegisterPlacedFeature(String name, String Modid, Object configured_feat, Object data) {
+        return SimpleRegister(RegistryTypes.PLACED_FEAT, Modid, name, configured_feat, data);
+    }
+
+    public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
+
+        SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
 
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){
