@@ -45,6 +45,6 @@ public class TestBlock extends BlockWithEntity implements BlockEntityProvider {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, (BlockEntityType)TypeTransformer.ObjectToBlockEntityType.accept(VlBlocks.BLOCK_ENTITY_TYPE), TestBlockEntity::tick);
+        return checkType(type, (BlockEntityType)TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE), TestBlockEntity::tick);
     }
 }

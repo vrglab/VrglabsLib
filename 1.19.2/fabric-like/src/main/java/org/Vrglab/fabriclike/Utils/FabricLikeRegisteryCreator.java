@@ -59,10 +59,10 @@ public class FabricLikeRegisteryCreator {
         };
 
 
-        TypeTransformer.ObjectToBlockEntityType = new ICallBack() {
+        TypeTransformer.ObjectToType = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return (BlockEntityType<?>)args[0];
+                return args[0];
             }
         };
 

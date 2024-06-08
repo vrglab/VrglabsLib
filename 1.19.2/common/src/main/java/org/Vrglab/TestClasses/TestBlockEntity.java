@@ -21,7 +21,7 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
 
     public TestBlockEntity( BlockPos pos, BlockState state) {
-        super((BlockEntityType<?>)TypeTransformer.ObjectToBlockEntityType.accept(VlBlocks.BLOCK_ENTITY_TYPE), pos, state);
+        super((BlockEntityType<?>)TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE), pos, state);
     }
 
     /**

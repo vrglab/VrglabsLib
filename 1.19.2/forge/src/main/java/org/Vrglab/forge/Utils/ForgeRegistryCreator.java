@@ -71,7 +71,7 @@ public class ForgeRegistryCreator {
             }
         };
 
-        TypeTransformer.ObjectToBlockEntityType = new ICallBack() {
+        TypeTransformer.ObjectToType = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 return ((RegistryObject)args[0]).get();
