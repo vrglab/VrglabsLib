@@ -6,11 +6,11 @@
     "version": "${version}",
     "metadata": {
       "name": "Vrglabs Lib",
-      "description": "Code dependency for all mods to use, make mod making simpler and more dynamic",
+      "description": "Architectury based custom data Registration system and Utilities",
       "contributors": {
         "Vrglab": "Author"
       },
-      "icon": "assets/vrglabslib/icon.png"
+      "icon": "logo.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {

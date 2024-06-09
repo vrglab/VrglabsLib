@@ -1,6 +1,7 @@
-[![License](https://img.shields.io/github/license/vrglab/VrglabsLib)](LICENSE.txt) [![Releases](https://img.shields.io/github/v/release/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/releases) [![Issues](https://img.shields.io/bitbucket/issues/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/issues)
 # Vrglab's Lib
-This project has one singular goal, make Registration of things global and as easy to use as you can in the Architectury environment.
+[![License](https://img.shields.io/github/license/vrglab/VrglabsLib)](LICENSE.txt) [![Releases](https://img.shields.io/github/v/release/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/releases) [![Issues](https://img.shields.io/bitbucket/issues/vrglab/VrglabsLib)](https://github.com/vrglab/VrglabsLib/issues)
+<div style="margin-left: 40svw"><img src="logo.png" width="100"></img></div>
+<div>This project has one singular goal, make Registration of things global and as easy to use as you can in the Architectury environment.</div>
 
 ### What does this project promise
 Never to change how registartion of somthing work's in a significant way, so when you switch versions, old code works as expected with very little to absoultly no changes needed
