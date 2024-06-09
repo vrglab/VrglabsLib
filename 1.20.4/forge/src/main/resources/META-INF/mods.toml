@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[49,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/vrglab/VrglabsLib/issues"
+license = "MIT"
 
 [[mods]]
 modId = "vrglabslib"
@@ -9,9 +9,9 @@ version = "1.0.0"
 displayName = "Vrglabs Lib"
 authors = "Vrglab"
 description = '''
-Code dependency for all mods to use, make mod making simpler and more dynamic
+Architectury based custom data Registration system and Utilities
 '''
-#logoFile = ""
+logoFile = "logo.png"
 
 [[dependencies.vrglabslib]]
 modId = "forge"
