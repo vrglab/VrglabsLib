@@ -1,7 +1,10 @@
 package org.Vrglab.Modloader.Registration;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.world.gen.GenerationStep;
@@ -9,8 +12,11 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
+import org.Vrglab.Modloader.Types.IScreenHandlerTypeCreationFunction;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
+import org.Vrglab.Screen.ScreenHandler;
 import org.Vrglab.Utils.VLModInfo;
 
 import java.util.*;
@@ -82,6 +88,14 @@ public class Registry {
 
     public static Object RegisterBlockEntityType(String name, String Modid, IBlockEntityLoaderFunction aNew, Object block) {
         return SimpleRegister(RegistryTypes.BLOCK_ENTITY_TYPE, Modid, name, aNew, block);
+    }
+
+    public static Object RegisterScreenHandlerType(String name, String Modid, IScreenHandlerTypeCreationFunction aNew) {
+        return SimpleRegister(RegistryTypes.SCREEN_HANDLER_TYPE, Modid, name, aNew);
+    }
+
+    public static  <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>>  void RegisterHandledScreen(String name, String Modid, Object handlerType, IScreenHandledCreationFunction<T, U> aNew) {
+        SimpleRegister(RegistryTypes.HANDLED_SCREEN, Modid, name, handlerType, aNew);
     }
 
     public static Object RegisterItemlessBlock(String name, String Modid, Supplier aNew) {
