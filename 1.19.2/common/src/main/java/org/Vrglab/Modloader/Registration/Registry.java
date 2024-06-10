@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  */
 public class Registry {
     private static class UnregisteredData{
-        public UnregisteredData( RegistryTypes registry_type, Object... args) {
+        public UnregisteredData(int registry_type, Object... args) {
             this.registry_type = registry_type;
             this.args = new ArrayList<>();
             for (Object argdata: args) {
@@ -39,14 +39,41 @@ public class Registry {
         }
 
         public List<Object> args;
-        public RegistryTypes registry_type;
+        public int registry_type;
         public boolean resolved;
 
         public Object Obj = null;
     }
 
-    private static Map<String, Map<RegistryTypes, ICallBack>> open_registeries = new HashMap<>();
+    private static Map<String, Map<Integer, ICallBack>> open_registeries = new HashMap<>();
     private static Map<String, Set<UnregisteredData>> ready_to_load_registeries = new HashMap<>();
+
+    /**
+     * Initializes a Modloader's Registry to be used for loading of objects
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, RegistryTypes, String)})</i></div>
+     * @param _registery The registry code
+     * @param _currentRegistryTypes the type of registry
+     * @param modid the Mod ID
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static void initRegistry(ICallBack _registery, int _currentRegistryTypes, String modid){
+        if(open_registeries.containsKey(modid)){
+            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+        } else{
+            open_registeries.put(modid, new HashMap());
+            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+        }
+        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
+            for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
+                if(!data.resolved && data.registry_type == _currentRegistryTypes){
+                    data.Obj = _registery.accept(data.args.toArray());
+                    data.resolved = true;
+                }
+            }
+        }
+    }
 
     /**
      * Initializes a Modloader's Registry to be used for loading of objects
@@ -59,14 +86,14 @@ public class Registry {
      */
     public static void initRegistry(ICallBack _registery, RegistryTypes _currentRegistryTypes, String modid){
         if(open_registeries.containsKey(modid)){
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+            open_registeries.get(modid).put(_currentRegistryTypes.getTypeId(), _registery);
         } else{
-            open_registeries.put(modid, new HashMap<>());
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+            open_registeries.put(modid, new HashMap());
+            open_registeries.get(modid).put(_currentRegistryTypes.getTypeId(), _registery);
         }
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
-                if(!data.resolved && data.registry_type == _currentRegistryTypes){
+                if(!data.resolved && data.registry_type == _currentRegistryTypes.getTypeId()){
                     data.Obj = _registery.accept(data.args.toArray());
                     data.resolved = true;
                 }
@@ -85,6 +112,27 @@ public class Registry {
      * @since 1.0.0
      */
     public static void ForgeEventResolver(Object eventData, ICallBack resolver, RegistryTypes ResolveTypeOf, String modid){
+        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
+            for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
+                if(!data.resolved && data.registry_type == ResolveTypeOf.getTypeId()){
+                    data.Obj = resolver.accept(data.args.toArray(), eventData);
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates an Event resolver for forge
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #ForgeEventResolver(Object, ICallBack, RegistryTypes, String)})</i></div>
+     * @param eventData The event data
+     * @param resolver The resolver code
+     * @param ResolveTypeOf The type of Object this event resolves
+     * @param modid The  Mod ID
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, int ResolveTypeOf, String modid){
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == ResolveTypeOf){
@@ -238,12 +286,51 @@ public class Registry {
     }
 
     public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
-
+        SimpleRegister(2,  Modid, name, biomeTypes, gen_step, Placed_ore);
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
 
+
+    /**
+     * Sends data to the modloader for something to be registered for MC
+     * @param type The type to use for registeration
+     * @param Modid The Mod Id of the Registerar
+     * @param args All the arguments needed to register the Object (On the callback end of this interaction the arguments are fed in the EXACT same order)
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){
         VLModInfo.LOGGER.info("Registering "+type.toString().toLowerCase() +" " +  args[0] + " for " + Modid);
+        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type.getTypeId()))
+            return open_registeries.get(Modid).get(type.getTypeId()).accept(args);
+        else {
+            UnregisteredData data = new UnregisteredData(type.getTypeId(), args);
+            if(!ready_to_load_registeries.containsKey(Modid)) {
+                ready_to_load_registeries.put(Modid, new HashSet<>());
+                ready_to_load_registeries.get(Modid).add(data);
+            }
+            else
+                ready_to_load_registeries.get(Modid).add(data);
+            return data.Obj;
+        }
+    }
+
+
+    /**
+     * Sends data to the modloader for something to be registered for MC
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #SimpleRegister(RegistryTypes, String, Object...)})</i></div>
+     * @param type The type to use for registeration
+     * @param Modid The Mod Id of the Registerar
+     * @param args All the arguments needed to register the Object (On the callback end of this interaction the arguments are fed in the EXACT same order)
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static Object SimpleRegister(int type, String Modid, Object... args){
+        VLModInfo.LOGGER.info("Registering "+String.valueOf(type).toLowerCase() +" " +  args[0] + " for " + Modid);
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
             return open_registeries.get(Modid).get(type).accept(args);
         else {
