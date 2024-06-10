@@ -96,7 +96,7 @@ public class Registry {
 
     /**
      * Register's a new Item for MC. Based on what Mod loader we are on, We either receive the Object itself or a
-     * RegistryObject of the Object to safely use the Object in other pieces of
+     * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
      * @param name The Item name (aka ID)
      * @param Modid The Mod Id of the Registerar
@@ -112,7 +112,7 @@ public class Registry {
 
     /**
      * Register's a new Block for MC. Based on what Mod loader we are on, We either receive the Object itself or a
-     * RegistryObject of the Object to safely use the Object in other pieces of
+     * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
      * @param name The Block name (aka ID)
      * @param Modid The Mod Id of the Registerar
@@ -127,21 +127,54 @@ public class Registry {
         return SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
     }
 
+    /**
+     * Register's a new Block Entity for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object, to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The Block Entity name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The {@link ::new} which gives us the Block Entity Instance
+     * @param block The block to attach the entity to (NOT converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterBlockEntityType(String name, String Modid, IBlockEntityLoaderFunction aNew, Object block) {
         return SimpleRegister(RegistryTypes.BLOCK_ENTITY_TYPE, Modid, name, aNew, block);
     }
 
+    /**
+     * Register's a new Screen Handler for MC.
+     * @param name The Screen Handler name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The {@link ::new} which gives us the Screen Handler Instance
+     * @return The registered data (The return value of this Function CAN NOT be converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterScreenHandlerType(String name, String Modid, IScreenHandlerTypeCreationFunction aNew) {
         return SimpleRegister(RegistryTypes.SCREEN_HANDLER_TYPE, Modid, name, aNew);
     }
 
+    /**
+     * Register's a new Handled Screen for MC.
+     * <div>You can call this function within any init() functions</div>
+     * @param name The name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The {@link ::new} which gives us the Handled Screen Instance
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static  <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>>  void RegisterHandledScreen(String name, String Modid, Object handlerType, IScreenHandledCreationFunction<T, U> aNew) {
         SimpleRegister(RegistryTypes.HANDLED_SCREEN, Modid, name, handlerType, aNew);
     }
 
     /**
      * Register's a new Itemless Block for MC. Based on what Mod loader we are on, We either receive the Object itself or a
-     * RegistryObject of the Object to safely use the Object in other pieces of
+     * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
      * @param name The Block name (aka ID)
      * @param Modid The Mod Id of the Registerar
@@ -155,10 +188,39 @@ public class Registry {
         return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
     }
 
+    /**
+     * Register's a new POI (Point of  Interest) for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object, to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The POI name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param block The block to attach the entity to (NOT converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
+     * @param tickcount The POI tick count
+     * @param searchdistance The Search distance for the POI
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterPOI(String name, String Modid, Object block, int tickcount, int searchdistance) {
         return SimpleRegister(RegistryTypes.POI, Modid, name, tickcount, searchdistance, block);
     }
 
+    /**
+     * Register's a new Villager Profession for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object, to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The Villager Profession name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The POI name (aka ID)
+     * @param itemImmutableSet Gatherable Items
+     * @param blockImmutableSet Secondary Job Site's
+     * @param sound Work Sound
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterProfession(String name, String Modid, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
         return SimpleRegister(RegistryTypes.PROFESSION, Modid, name, aNew, itemImmutableSet, blockImmutableSet, sound);
     }
