@@ -22,6 +22,12 @@ import org.Vrglab.Utils.VLModInfo;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * Class to handle Data registration Across Modloaders and various MC version
+ *
+ * @author Arad Bozorgmehr
+ * @since 1.0.0
+ */
 public class Registry {
     private static class UnregisteredData{
         public UnregisteredData( RegistryTypes registry_type, Object... args) {
@@ -68,6 +74,16 @@ public class Registry {
         }
     }
 
+    /**
+     * Creates an Event resolver for forge
+     * @param eventData The event data
+     * @param resolver The resolver code
+     * @param ResolveTypeOf The type of Object this event resolves
+     * @param modid The  Mod ID
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static void ForgeEventResolver(Object eventData, ICallBack resolver, RegistryTypes ResolveTypeOf, String modid){
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
@@ -78,10 +94,35 @@ public class Registry {
         }
     }
 
+    /**
+     * Register's a new Item for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The Item name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The supplier which gives us the Item Instance
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterItem(String name, String Modid, Supplier aNew) {
         return SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew);
     }
 
+    /**
+     * Register's a new Block for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The Block name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The supplier which gives us the Block Instance
+     * @param settings The {@link net.minecraft.item.Item.Settings} to use for the Blocks inventory Item
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterBlock(String name, String Modid, Supplier aNew, Item.Settings settings) {
         return SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
     }
@@ -98,6 +139,18 @@ public class Registry {
         SimpleRegister(RegistryTypes.HANDLED_SCREEN, Modid, name, handlerType, aNew);
     }
 
+    /**
+     * Register's a new Itemless Block for MC. Based on what Mod loader we are on, We either receive the Object itself or a
+     * RegistryObject of the Object to safely use the Object in other pieces of
+     * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
+     * @param name The Block name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param aNew The supplier which gives us the Block Instance
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0
+     */
     public static Object RegisterItemlessBlock(String name, String Modid, Supplier aNew) {
         return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
     }
