@@ -23,7 +23,7 @@ First add the required maven repository to your build.gradle file in the root
 allprojects {
     repositories {
         maven {
-            url 'https://maven.thevrglab.com/'
+            url "https://maven.thevrglab.com/"
         }
     }
 }
