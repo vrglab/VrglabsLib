@@ -21,11 +21,9 @@ Open The version you want to work on in the respective branch and then open the 
 First add the required maven repository to your build.gradle file in the root
 ``` groovy
 allprojects {
-    group = rootProject.maven_group
-    version = rootProject.mod_version
     repositories {
         maven {
-            url 'https://raw.githubusercontent.com/vrglab/Maven/master/'
+            url 'https://maven.thevrglab.com/'
         }
     }
 }
