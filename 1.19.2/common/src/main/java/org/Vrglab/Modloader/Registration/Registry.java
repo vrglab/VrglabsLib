@@ -14,6 +14,7 @@ import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
 import org.Vrglab.Modloader.Types.IScreenHandlerTypeCreationFunction;
+import org.Vrglab.Modloader.enumTypes.RegistryType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Screen.ScreenHandler;
@@ -44,13 +45,12 @@ public class Registry {
 
         public Object Obj = null;
     }
-
     private static Map<String, Map<Integer, ICallBack>> open_registeries = new HashMap<>();
     private static Map<String, Set<UnregisteredData>> ready_to_load_registeries = new HashMap<>();
 
     /**
      * Initializes a Modloader's Registry to be used for loading of objects
-     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, RegistryTypes, String)})</i></div>
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, RegistryType, String)})</i></div>
      * @param _registery The registry code
      * @param _currentRegistryTypes the type of registry
      * @param modid the Mod ID
@@ -84,7 +84,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static void initRegistry(ICallBack _registery, RegistryTypes _currentRegistryTypes, String modid){
+    public static void initRegistry(ICallBack _registery, RegistryType _currentRegistryTypes, String modid){
         if(open_registeries.containsKey(modid)){
             open_registeries.get(modid).put(_currentRegistryTypes.getTypeId(), _registery);
         } else{
@@ -111,7 +111,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static void ForgeEventResolver(Object eventData, ICallBack resolver, RegistryTypes ResolveTypeOf, String modid){
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, RegistryType ResolveTypeOf, String modid){
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == ResolveTypeOf.getTypeId()){
@@ -123,7 +123,7 @@ public class Registry {
 
     /**
      * Creates an Event resolver for forge
-     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #ForgeEventResolver(Object, ICallBack, RegistryTypes, String)})</i></div>
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #ForgeEventResolver(Object, ICallBack, RegistryType, String)})</i></div>
      * @param eventData The event data
      * @param resolver The resolver code
      * @param ResolveTypeOf The type of Object this event resolves
@@ -290,7 +290,6 @@ public class Registry {
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
 
-
     /**
      * Sends data to the modloader for something to be registered for MC
      * @param type The type to use for registeration
@@ -301,7 +300,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object SimpleRegister(RegistryTypes type, String Modid, Object... args){
+    public static Object SimpleRegister(RegistryType type, String Modid, Object... args){
         VLModInfo.LOGGER.info("Registering "+type.toString().toLowerCase() +" " +  args[0] + " for " + Modid);
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type.getTypeId()))
             return open_registeries.get(Modid).get(type.getTypeId()).accept(args);
@@ -320,7 +319,7 @@ public class Registry {
 
     /**
      * Sends data to the modloader for something to be registered for MC
-     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #SimpleRegister(RegistryTypes, String, Object...)})</i></div>
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #SimpleRegister(RegistryType, String, Object...)})</i></div>
      * @param type The type to use for registeration
      * @param Modid The Mod Id of the Registerar
      * @param args All the arguments needed to register the Object (On the callback end of this interaction the arguments are fed in the EXACT same order)

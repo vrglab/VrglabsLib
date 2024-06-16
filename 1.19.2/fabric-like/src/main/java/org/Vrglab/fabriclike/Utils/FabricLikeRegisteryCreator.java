@@ -1,5 +1,6 @@
 package org.Vrglab.fabriclike.Utils;
 
+import dev.architectury.platform.Platform;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -31,16 +32,17 @@ import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
-import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
-import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
+import net.minecraft.world.gen.placementmodifier.*;
+import org.Vrglab.Modloader.CreationHelpers.*;
+import org.Vrglab.Modloader.Registration.GeckoLibRegistery;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.*;
+import org.Vrglab.Modloader.enumTypes.Geckolib.GeoRegistryTypes;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Networking.Network;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib3.util.GeoArmorRegistryImpl;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -218,5 +220,16 @@ public class FabricLikeRegisteryCreator {
             }
         };
         Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
+
+        if(Platform.isModLoaded("geckolib3")) {
+            ICallBack GeckoArmorRegistryCallBack = new ICallBack() {
+                @Override
+                public Object accept(Object... args) {
+                    GeoArmorRenderer.registerArmorRenderer(((Supplier<GeoArmorRenderer>) args[1]).get(), (Item)TypeTransformer.ObjectToType.accept(args[2]));
+                    return null;
+                }
+            };
+            Registry.initRegistry(GeckoArmorRegistryCallBack, GeoRegistryTypes.ARMOR, modid);
+        }
     }
 }

@@ -34,6 +34,10 @@ dependencies {
     // Quilt Standard Libraries and QSL.
     modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:$rootProject.quilted_fabric_api_version"
 
+
+    modImplementation "software.bernie.geckolib:geckolib-quilt-$rootProject.geckolib_minecraft_version:$rootProject.geckolib_version"
+    implementation("com.eliotlash.mclib:mclib:20")
+
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:$rootProject.architectury_api_version") {
         // We must not pull Fabric Loader and Fabric API from Architectury Fabric.

@@ -1,6 +1,6 @@
 package org.Vrglab.Modloader.enumTypes;
 
-public enum RegistryTypes {
+public enum RegistryTypes implements RegistryType {
     ITEM(0),
     BLOCK(1),
     ITEMLESS_BLOCK(2),
@@ -27,6 +27,7 @@ public enum RegistryTypes {
         getTypeId = type;
     }
 
+    @Override
     public int getTypeId() {
         return getTypeId;
     }
