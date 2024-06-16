@@ -34,7 +34,7 @@ import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.*;
 import org.Vrglab.Modloader.CreationHelpers.*;
-import org.Vrglab.Modloader.Registration.GeckoLibRegistery;
+import org.Vrglab.Modloader.Registration.GeckoLibRegistry;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.Geckolib.GeoRegistryTypes;
