@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
@@ -288,6 +290,36 @@ public class Registry {
     public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
         SimpleRegister(2,  Modid, name, biomeTypes, gen_step, Placed_ore);
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
+    }
+
+    /**
+     *  Register's a new Recipe Serializer
+     *
+     * @param name The Villager Profession name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param serializer_instance The instance to the Recipe Serializer class
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static Object RegisterRecipeSerializer(String name, String Modid, RecipeSerializer serializer_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_SERIALIZER, Modid, name, serializer_instance);
+    }
+
+    /**
+     *  Register's a new Recipe Type
+     *
+     * @param name The Villager Profession name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param type_instance The instance to the Recipe Type class
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static Object RegisterRecipeType(String name, String Modid, RecipeType type_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_TYPE, Modid, name, type_instance);
     }
 
 

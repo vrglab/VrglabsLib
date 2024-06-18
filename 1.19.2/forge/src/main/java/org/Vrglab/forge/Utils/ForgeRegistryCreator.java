@@ -11,6 +11,8 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
@@ -118,6 +120,12 @@ public class ForgeRegistryCreator {
         DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
         BLOCK_ENTITY_TYPE.register(eventBus);
 
+        DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTRY = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, modid);
+        RECIPE_SERIALIZER_REGISTRY.register(eventBus);
+
+        DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTRY = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, modid);
+        RECIPE_TYPE_REGISTRY.register(eventBus);
+
         ICallBack Itemcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -192,6 +200,20 @@ public class ForgeRegistryCreator {
             }
         };
 
+        ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_SERIALIZER_REGISTRY.register(args[0].toString(), ()->(RecipeSerializer)args[1]);
+            }
+        };
+
+        ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_TYPE_REGISTRY.register(args[0].toString(), ()->(RecipeType)args[1]);
+            }
+        };
+
 
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
@@ -202,6 +224,8 @@ public class ForgeRegistryCreator {
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(OreConfiguredFeatCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
         Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
+        Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
+        Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
     public static void CreateClient(String modid){
