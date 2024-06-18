@@ -18,6 +18,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
@@ -188,6 +190,20 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
+        ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.RECIPE_SERIALIZER, new Identifier(modid, args[0].toString()), (RecipeSerializer)args[1]);
+            }
+        };
+
+        ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.RECIPE_TYPE, new Identifier(modid, args[0].toString()), (RecipeType) args[1]);
+            }
+        };
+
 
         Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
@@ -200,6 +216,8 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
         Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
         Registry.initRegistry(BiomeModCallBack, RegistryTypes.BIOME_MODIFICATIONS, modid);
+        Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
+        Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
     public static void CreateClient(String modid){

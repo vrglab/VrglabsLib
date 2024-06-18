@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
@@ -288,6 +290,14 @@ public class Registry {
     public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
         SimpleRegister(2,  Modid, name, biomeTypes, gen_step, Placed_ore);
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
+    }
+
+    public static Object RegisterRecipeSerializer(String name, String Modid, RecipeSerializer serializer_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_SERIALIZER, Modid, name, serializer_instance);
+    }
+
+    public static Object RegisterRecipeType(String name, String Modid, RecipeType type_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_TYPE, Modid, name, type_instance);
     }
 
 
