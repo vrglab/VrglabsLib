@@ -181,7 +181,7 @@ public class Registry {
      * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
      * @param name The Block Entity name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Block Entity Instance
+     * @param aNew The ::new which gives us the Block Entity Instance
      * @param block The block to attach the entity to (NOT converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
      * @return The registered data
      *
@@ -196,7 +196,7 @@ public class Registry {
      * Register's a new Screen Handler for MC.
      * @param name The Screen Handler name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Screen Handler Instance
+     * @param aNew The ::new which gives us the Screen Handler Instance
      * @return The registered data (The return value of this Function CAN NOT be converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
      *
      * @author Arad Bozorgmehr
@@ -211,7 +211,7 @@ public class Registry {
      * <div>You can call this function within any init() functions</div>
      * @param name The name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Handled Screen Instance
+     * @param aNew The ::new which gives us the Handled Screen Instance
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
