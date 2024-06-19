@@ -10,4 +10,6 @@ dependencies {
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
     compileOnly(project(path: ':common', configuration: 'namedElements')) { transitive false }
+
+    include modApi("teamreborn:energy:2.3.0")
 }

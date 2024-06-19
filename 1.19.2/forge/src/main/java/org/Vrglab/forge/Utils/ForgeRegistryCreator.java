@@ -1,6 +1,7 @@
 package org.Vrglab.forge.Utils;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Interner;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -33,6 +34,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -63,6 +65,47 @@ public class ForgeRegistryCreator {
    };
 
     public static void Create(IEventBus eventBus, String modid) {
+        EnergyStorage.createStorageInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return new net.minecraftforge.energy.EnergyStorage(Math.toIntExact((long)args[0]), Math.toIntExact((long)args[1]), Math.toIntExact((long)args[2]), Math.toIntExact((long)args[3])) {
+                    @Override
+                    public int receiveEnergy(int maxReceive, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.receiveEnergy(maxReceive, simulate);
+                    }
+
+                    @Override
+                    public int extractEnergy(int maxExtract, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.extractEnergy(maxExtract, simulate);
+                    }
+                };
+            }
+        };
+
+        EnergyStorage.receiveEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.minecraftforge.energy.EnergyStorage)args[0]).receiveEnergy((int)args[1], (boolean)args[2]);
+            }
+        };
+
+        EnergyStorage.extractEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.minecraftforge.energy.EnergyStorage)args[0]).extractEnergy((int)args[1], (boolean)args[2]);
+            }
+        };
+
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
             public Object accept(Object... args) {

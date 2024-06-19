@@ -15,6 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.Helpers.ImplementedInventory;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Utils.VLModInfo;
@@ -23,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 public class TestBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+
+    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000);
+
 
     public TestBlockEntity( BlockPos pos, BlockState state) {
         super((BlockEntityType<?>)TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE), pos, state);
@@ -40,7 +44,11 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
     }
 
     public static void tick(World world, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
+        if(blockEntity instanceof TestBlockEntity) {
+            TestBlockEntity entity = (TestBlockEntity)  blockEntity;
 
+           VLModInfo.LOGGER.info(String.valueOf(entity.energy_storage.getEnergyStored()));
+        }
     }
 
     @Override
