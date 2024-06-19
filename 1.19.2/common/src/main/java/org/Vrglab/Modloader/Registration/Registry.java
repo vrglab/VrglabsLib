@@ -288,7 +288,6 @@ public class Registry {
     }
 
     public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
-        SimpleRegister(2,  Modid, name, biomeTypes, gen_step, Placed_ore);
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
 
