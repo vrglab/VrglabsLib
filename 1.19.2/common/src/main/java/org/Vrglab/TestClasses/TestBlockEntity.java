@@ -14,15 +14,22 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.EnergyStorageUtils;
+import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Helpers.ImplementedInventory;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.Nullable;
 
-public class TestBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
+public class TestBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory, IEnergySupplier<EnergyStorage> {
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+
+    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000).setBlockEntityType(VlBlocks.BLOCK_ENTITY_TYPE).setMakeDirtyFunction(()->markDirty());
+
 
     public TestBlockEntity( BlockPos pos, BlockState state) {
         super((BlockEntityType<?>)TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE), pos, state);
@@ -40,7 +47,20 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
     }
 
     public static void tick(World world, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
+        if(blockEntity instanceof TestBlockEntity) {
+            TestBlockEntity entity = (TestBlockEntity)  blockEntity;
 
+
+           if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.NORTH, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.EAST, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.WEST, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.SOUTH, 10)) {
+
+           }
+        }
     }
 
     @Override
@@ -64,5 +84,10 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         return new TestBlockScreenHandler(syncId, inv, this);
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return energy_storage;
     }
 }

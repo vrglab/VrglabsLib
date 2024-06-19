@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,15 +28,20 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
+import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.EnergyStorageUtils;
+import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -43,6 +50,7 @@ import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Networking.Network;
+import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -50,6 +58,9 @@ import java.util.function.Supplier;
 public class FabricLikeRegisteryCreator {
 
     public static void Create(String modid) {
+
+        setEnergyStorageStatics(modid);
+
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -236,5 +247,71 @@ public class FabricLikeRegisteryCreator {
             }
         };
         Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
+    }
+
+
+    private static void setEnergyStorageStatics(String modid) {
+        EnergyStorageUtils.createStorageInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return new SimpleEnergyStorage((Long) args[0],(Long)  args[1],(Long)  args[2]){
+                    @Override
+                    protected void onFinalCommit() {
+                        super.onFinalCommit();
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                    }
+                };
+            }
+        };
+
+        EnergyStorageUtils.receiveEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                try (Transaction openTrans = Transaction.openOuter()) {
+                    long res = ((SimpleEnergyStorage)args[0]).insert((long)args[1], openTrans);
+                    openTrans.commit();
+                    return res;
+                }
+            }
+        };
+
+        EnergyStorageUtils.extractEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                try (Transaction openTrans = Transaction.openOuter()) {
+                    long res = ((SimpleEnergyStorage)args[0]).extract((long)args[1], openTrans);
+                    openTrans.commit();
+                    return res;
+                }
+            }
+        };
+
+        EnergyStorageUtils.hasExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                BlockEntity entity = (BlockEntity) args[0];
+
+                if(entity == null){
+                    return false;
+                }
+
+                return (team.reborn.energy.api.EnergyStorage.SIDED.find(entity.getWorld(), entity.getPos(), Direction.NORTH) != null ||
+                        team.reborn.energy.api.EnergyStorage.SIDED.find(entity.getWorld(), entity.getPos(), Direction.EAST) != null ||
+                        team.reborn.energy.api.EnergyStorage.SIDED.find(entity.getWorld(), entity.getPos(), Direction.WEST) != null ||
+                        team.reborn.energy.api.EnergyStorage.SIDED.find(entity.getWorld(), entity.getPos(), Direction.SOUTH) != null);
+            }
+        };
+
+        EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                team.reborn.energy.api.EnergyStorage storage = team.reborn.energy.api.EnergyStorage.SIDED.find((World) args[0], (BlockPos) args[1], (Direction) args[2]);
+                return new EnergyStorage(storage, storage.getCapacity(), storage.getCapacity(), storage.getCapacity(), storage.getAmount());
+            }
+        };
     }
 }
