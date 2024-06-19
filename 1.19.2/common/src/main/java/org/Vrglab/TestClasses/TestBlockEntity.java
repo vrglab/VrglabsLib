@@ -14,18 +14,20 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Helpers.ImplementedInventory;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.Nullable;
 
-public class TestBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
+public class TestBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory, IEnergySupplier<EnergyStorage> {
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
 
-    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000).setBlockEntityType(TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE));
+    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000).setBlockEntityType(VlBlocks.BLOCK_ENTITY_TYPE).setMakeDirtyFunction(()->markDirty());
 
 
     public TestBlockEntity( BlockPos pos, BlockState state) {
@@ -47,7 +49,17 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
         if(blockEntity instanceof TestBlockEntity) {
             TestBlockEntity entity = (TestBlockEntity)  blockEntity;
 
-           VLModInfo.LOGGER.info(String.valueOf(entity.energy_storage.getEnergyStored()));
+           if(EnergyStorage.containEnergyStorage(world, blockPos.offset(Direction.EAST))) {
+               entity.energy_storage.receiveEnergy(1);
+               VLModInfo.LOGGER.info("Current status: " + entity.energy_storage.getEnergyStored());
+           } else if(EnergyStorage.containEnergyStorage(world, blockPos.offset(Direction.NORTH))) {
+               EnergyStorage storage = EnergyStorage.getStorageInWorld(world, blockPos, Direction.NORTH);
+               if(!entity.energy_storage.isEmpty() && !storage.atMaxCapacity()) {
+                   storage.receiveEnergy(1);
+                   entity.energy_storage.extractEnergy(1);
+                   VLModInfo.LOGGER.info("Storage: " + storage.getEnergyStored() + " Sender: " + entity.energy_storage.getEnergyStored());
+               }
+           }
         }
     }
 
@@ -72,5 +84,10 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         return new TestBlockScreenHandler(syncId, inv, this);
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return energy_storage;
     }
 }

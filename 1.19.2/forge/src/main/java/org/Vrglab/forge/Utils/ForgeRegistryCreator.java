@@ -95,14 +95,14 @@ public class ForgeRegistryCreator {
         EnergyStorage.receiveEnergyInstance = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ((net.minecraftforge.energy.EnergyStorage)args[0]).receiveEnergy((int)args[1], (boolean)args[2]);
+                return ((net.minecraftforge.energy.EnergyStorage)args[0]).receiveEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
             }
         };
 
         EnergyStorage.extractEnergyInstance = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ((net.minecraftforge.energy.EnergyStorage)args[0]).extractEnergy((int)args[1], (boolean)args[2]);
+                return ((net.minecraftforge.energy.EnergyStorage)args[0]).extractEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
             }
         };
 

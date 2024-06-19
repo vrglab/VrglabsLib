@@ -28,16 +28,19 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -54,40 +57,8 @@ import java.util.function.Supplier;
 public class FabricLikeRegisteryCreator {
 
     public static void Create(String modid) {
-        EnergyStorage.createStorageInstance = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return new SimpleEnergyStorage((Long) args[0],(Long)  args[1],(Long)  args[2]){
-                    @Override
-                    protected void onFinalCommit() {
-                        super.onFinalCommit();
-                        try {
-                            ((EnergyStorage)args[4]).makeDirty.accept();
-                        } catch (Throwable t) {
 
-                        }
-                    }
-                };
-            }
-        };
-
-        EnergyStorage.receiveEnergyInstance = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                try (Transaction openTrans = Transaction.openOuter()) {
-                    return ((SimpleEnergyStorage)args[0]).insert((int)args[1], openTrans);
-                }
-            }
-        };
-
-        EnergyStorage.extractEnergyInstance = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                try (Transaction openTrans = Transaction.openOuter()) {
-                    return ((SimpleEnergyStorage)args[0]).extract((int)args[1], openTrans);
-                }
-            }
-        };
+        setEnergyStorageStatics(modid);
 
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
@@ -275,5 +246,47 @@ public class FabricLikeRegisteryCreator {
             }
         };
         Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
+    }
+
+
+    private static void setEnergyStorageStatics(String modid) {
+        EnergyStorage.createStorageInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return new SimpleEnergyStorage((Long) args[0],(Long)  args[1],(Long)  args[2]){
+                    @Override
+                    protected void onFinalCommit() {
+                        super.onFinalCommit();
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                    }
+                };
+            }
+        };
+
+        EnergyStorage.receiveEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                try (Transaction openTrans = Transaction.openOuter()) {
+                    long res = ((SimpleEnergyStorage)args[0]).insert((long)args[1], openTrans);
+                    openTrans.commit();
+                    return res;
+                }
+            }
+        };
+
+        EnergyStorage.extractEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                try (Transaction openTrans = Transaction.openOuter()) {
+                    long res = ((SimpleEnergyStorage)args[0]).extract((long)args[1], openTrans);
+                    openTrans.commit();
+                    return res;
+                }
+            }
+        };
     }
 }

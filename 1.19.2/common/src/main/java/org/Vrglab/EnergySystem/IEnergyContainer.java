@@ -26,6 +26,24 @@ public interface IEnergyContainer {
     long extractEnergy(long maxExtract, boolean simulate);
 
     /**
+     * Adds energy to the storage. Returns quantity of energy that was accepted.
+     *
+     * @param maxReceive
+     *            Maximum amount of energy to be inserted.
+     * @return Amount of energy that was accepted by the storage.
+     */
+    long receiveEnergy(long maxReceive);
+
+    /**
+     * Removes energy from the storage. Returns quantity of energy that was removed.
+     *
+     * @param maxExtract
+     *            Maximum amount of energy to be extracted.
+     * @return Amount of energy that was (or would have been) extracted from the storage.
+     */
+    long extractEnergy(long maxExtract);
+
+    /**
      * Returns the amount of energy currently stored.
      */
     long getEnergyStored();

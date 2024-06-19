@@ -1,5 +1,10 @@
 package org.Vrglab.EnergySystem;
 
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallBackVoidNoArg;
 
@@ -54,6 +59,35 @@ public class EnergyStorage implements IEnergyContainer{
         return createStorage(EnergyStorage.class, capacity, maxTransfer, maxExtract, energy);
     }
 
+    public static EnergyStorage getStorageInWorld(World world, BlockPos blockPos, Direction facing){
+        EnergyStorage storage = null;
+        BlockEntity entity = world.getBlockEntity(blockPos.offset(facing));
+        if(containEnergyStorage(entity)) {
+            try {
+                storage = ((IEnergySupplier<?>)entity).getEnergyStorage();
+            } catch (Throwable t) {
+
+            }
+        }
+        return  storage;
+    }
+
+    public static boolean containEnergyStorage(World world, BlockPos blockPos){
+        BlockEntity entity = world.getBlockEntity(blockPos);
+        return  containEnergyStorage(entity);
+    }
+
+    public static boolean containEnergyStorage(BlockEntity entity){
+        if(entity != null && entity instanceof IEnergySupplier<?>) {
+            try {
+                return true;
+            } catch (Throwable t) {
+
+            }
+        }
+        return  false;
+    }
+
 
     protected long energy;
     protected long capacity;
@@ -84,18 +118,51 @@ public class EnergyStorage implements IEnergyContainer{
 
     @Override
     public long receiveEnergy(long maxReceive, boolean simulate) {
-        energy = (long) receiveEnergyInstance.accept(actualEnergyInstance, maxReceive, simulate);
+        energy += Long.valueOf(receiveEnergyInstance.accept(actualEnergyInstance, maxReceive, simulate).toString());
         return energy;
     }
 
     @Override
     public long extractEnergy(long maxExtract, boolean simulate) {
-        energy = (long) extractEnergyInstance.accept(actualEnergyInstance, maxExtract, simulate);
+        energy -= Long.valueOf(extractEnergyInstance.accept(actualEnergyInstance, maxExtract, simulate).toString());
         return energy;
     }
 
+    /**
+     * Adds energy to the storage. Returns quantity of energy that was accepted.
+     *
+     * @param maxReceive Maximum amount of energy to be inserted.
+     * @return Amount of energy that was accepted by the storage.
+     */
+    @Override
+    public long receiveEnergy(long maxReceive) {
+        return receiveEnergy(maxReceive, false);
+    }
+
+    /**
+     * Removes energy from the storage. Returns quantity of energy that was removed.
+     *
+     * @param maxExtract Maximum amount of energy to be extracted.
+     * @return Amount of energy that was (or would have been) extracted from the storage.
+     */
+    @Override
+    public long extractEnergy(long maxExtract) {
+        return extractEnergy(maxExtract, false);
+    }
+
+    /**
+     * Set's the energy Storages block entity type
+     * <p> DO NOT USE {@link TypeTransformer#ObjectToType} ON THE GIVEN OBJECT</p>
+     * @param blockEntity the un-transformed object of the block entity
+     * @return The Energy storage reference
+     */
     public EnergyStorage setBlockEntityType(Object blockEntity) {
-        this.blockEntity = blockEntity;
+        this.blockEntity = TypeTransformer.ObjectToType.accept(blockEntity);
+        return this;
+    }
+
+    public EnergyStorage setMakeDirtyFunction(ICallBackVoidNoArg makeDirty) {
+        this.makeDirty = makeDirty;
         return this;
     }
 
@@ -117,5 +184,13 @@ public class EnergyStorage implements IEnergyContainer{
     @Override
     public boolean canReceive() {
         return this.maxReceive > 0;
+    }
+
+    public boolean isEmpty() {
+        return (energy == 0);
+    }
+
+    public boolean atMaxCapacity(){
+        return (energy == capacity);
     }
 }
