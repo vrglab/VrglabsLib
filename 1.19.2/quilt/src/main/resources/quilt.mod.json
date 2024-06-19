@@ -3,7 +3,7 @@
   "quilt_loader": {
     "group": "${group}",
     "id": "vrglabslib",
-    "version": "${version}",
+    "version": "${loader_safe_version}",
     "metadata": {
       "name": "Vrglabs Lib",
       "description": "Architectury based custom data Registration system and Utilities",
@@ -38,6 +38,6 @@
     ]
   },
   "mixin": [
-    "vrglabslib.mixins.json"
+
   ]
 }
