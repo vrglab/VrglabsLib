@@ -38,6 +38,6 @@
     ]
   },
   "mixin": [
-    "vrglabslib.mixins.json"
+
   ]
 }

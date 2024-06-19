@@ -1,43 +1,53 @@
 package team.reborn.energy.impl;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import dev.architectury.registry.registries.Registries;
-/*import net.minecraft.component.ComponentType;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;*/
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import org.jetbrains.annotations.ApiStatus;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyItem;
 
 @ApiStatus.Internal
 public class EnergyImpl {
-	/*public static final ComponentType<Long> ENERGY_COMPONENT = ComponentType.<Long>builder()
-		.codec(nonNegativeLong())
-		.packetCodec(PacketCodecs.VAR_LONG)
-		.build();
-
-	public static void init() {
-		Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of("team_reborn_energy", "energy"), ENERGY_COMPONENT);
+	static {
 		EnergyStorage.ITEM.registerFallback((stack, ctx) -> {
 			if (stack.getItem() instanceof SimpleEnergyItem energyItem) {
 				return SimpleEnergyItem.createStorage(ctx, energyItem.getEnergyCapacity(stack), energyItem.getEnergyMaxInput(stack), energyItem.getEnergyMaxOutput(stack));
+			} else if (stack.getItem() instanceof SimpleEnergyItem battery) {
+				return SimpleEnergyItem.createStorage(ctx, battery.getEnergyCapacity(stack), battery.getEnergyMaxInput(stack), battery.getEnergyMaxOutput(stack));
 			} else {
 				return null;
 			}
 		});
 	}
 
-	private static Codec<Long> nonNegativeLong() {
-		return Codec.LONG.validate((Long value) -> {
-			if (value >= 0) {
-				return DataResult.success(value);
-			}
+	public static final EnergyStorage EMPTY = new EnergyStorage() {
+		@Override
+		public boolean supportsInsertion() {
+			return false;
+		}
 
-			return DataResult.error(() -> "Energy value must be non-negative: " + value);
-		});
-	}*/
+		@Override
+		public long insert(long maxAmount, TransactionContext transaction) {
+			return 0;
+		}
+
+		@Override
+		public boolean supportsExtraction() {
+			return false;
+		}
+
+		@Override
+		public long extract(long maxAmount, TransactionContext transaction) {
+			return 0;
+		}
+
+		@Override
+		public long getAmount() {
+			return 0;
+		}
+
+		@Override
+		public long getCapacity() {
+			return 0;
+		}
+	};
 }

@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.client.render.VertexFormatElement;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +12,8 @@ import team.reborn.energy.api.base.DelegatingEnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyItem;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 import team.reborn.energy.api.base.SimpleSidedEnergyContainer;
-import team.reborn.energy.impl.EmptyEnergyStorage;
 import team.reborn.energy.impl.EnergyImpl;
 import team.reborn.energy.impl.SimpleItemEnergyStorageImpl;
-
-import java.util.Objects;
 
 /**
  * An object that can store energy.
@@ -35,7 +31,7 @@ import java.util.Objects;
  *
  * @see Transaction
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"unused", "deprecation", "UnstableApiUsage"})
 public interface EnergyStorage {
 	/**
 	 * Sided block access to energy storages.
@@ -56,7 +52,7 @@ public interface EnergyStorage {
 	 * On the client thread (i.e. with a client world), contents of queried EnergyStorages are unreliable and should not be modified.
 	 */
 	BlockApiLookup<EnergyStorage, @Nullable Direction> SIDED =
-			BlockApiLookup.get(Identifier.of("teamreborn", "sided_energy"), EnergyStorage.class, Direction.class);
+			BlockApiLookup.get(new Identifier("teamreborn:sided_energy"), EnergyStorage.class, Direction.class);
 
 	/**
 	 * Item access to energy storages.
@@ -72,21 +68,12 @@ public interface EnergyStorage {
 	 * Returned APIs should behave the same regardless of the logical side.
 	 */
 	ItemApiLookup<EnergyStorage, ContainerItemContext> ITEM =
-			ItemApiLookup.get(Identifier.of("teamreborn", "energy"), EnergyStorage.class, ContainerItemContext.class);
+			ItemApiLookup.get(new Identifier("teamreborn:energy"), EnergyStorage.class, ContainerItemContext.class);
 
 	/**
 	 * Always empty energy storage.
 	 */
-	EnergyStorage EMPTY = Objects.requireNonNull(EmptyEnergyStorage.EMPTY);
-
-	/**
-	 * Stock data component type for energy.
-	 *
-	 * <p><b>This component should only be used on item stacks from your mod.</b>
-	 * Otherwise, do not query it or assume it exists.
-	 * Inter-mod energy interactions should happen using {@link #ITEM}.</b>
-	 */
-	//ComponentType<Long> ENERGY_COMPONENT = EnergyImpl.ENERGY_COMPONENT;
+	EnergyStorage EMPTY = EnergyImpl.EMPTY;
 
 	/**
 	 * Return false if calling {@link #insert} will absolutely always return 0, or true otherwise or in doubt.

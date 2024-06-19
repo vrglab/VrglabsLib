@@ -60,7 +60,7 @@ public class EnergyStorage implements IEnergyContainer{
     protected long maxReceive;
     protected long maxExtract;
     public ICallBackVoidNoArg makeDirty;
-    protected Object actualEnergyInstance;
+    protected Object actualEnergyInstance, blockEntity;
 
     public EnergyStorage(long capacity) {
         this(capacity, capacity, capacity, 0);
@@ -79,7 +79,7 @@ public class EnergyStorage implements IEnergyContainer{
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.energy = Math.max(0 , Math.min(capacity, energy));
-        this.actualEnergyInstance = createStorageInstance.accept(capacity, maxReceive, maxExtract, energy, this);
+        this.actualEnergyInstance = createStorageInstance.accept(capacity, maxReceive, maxExtract, energy, this, blockEntity);
     }
 
     @Override
@@ -92,6 +92,11 @@ public class EnergyStorage implements IEnergyContainer{
     public long extractEnergy(long maxExtract, boolean simulate) {
         energy = (long) extractEnergyInstance.accept(actualEnergyInstance, maxExtract, simulate);
         return energy;
+    }
+
+    public EnergyStorage setBlockEntityType(Object blockEntity) {
+        this.blockEntity = blockEntity;
+        return this;
     }
 
     @Override

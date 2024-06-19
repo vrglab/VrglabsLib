@@ -25,7 +25,7 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
 
-    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000);
+    private final EnergyStorage energy_storage = EnergyStorage.createStorage(5000).setBlockEntityType(TypeTransformer.ObjectToType.accept(VlBlocks.BLOCK_ENTITY_TYPE));
 
 
     public TestBlockEntity( BlockPos pos, BlockState state) {
