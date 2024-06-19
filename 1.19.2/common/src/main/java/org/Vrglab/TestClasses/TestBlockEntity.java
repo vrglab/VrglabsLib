@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Helpers.ImplementedInventory;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -49,16 +50,15 @@ public class TestBlockEntity extends BlockEntity implements ImplementedInventory
         if(blockEntity instanceof TestBlockEntity) {
             TestBlockEntity entity = (TestBlockEntity)  blockEntity;
 
-           if(EnergyStorage.containEnergyStorage(world, blockPos.offset(Direction.EAST))) {
-               entity.energy_storage.receiveEnergy(1);
-               VLModInfo.LOGGER.info("Current status: " + entity.energy_storage.getEnergyStored());
-           } else if(EnergyStorage.containEnergyStorage(world, blockPos.offset(Direction.NORTH))) {
-               EnergyStorage storage = EnergyStorage.getStorageInWorld(world, blockPos, Direction.NORTH);
-               if(!entity.energy_storage.isEmpty() && !storage.atMaxCapacity()) {
-                   storage.receiveEnergy(1);
-                   entity.energy_storage.extractEnergy(1);
-                   VLModInfo.LOGGER.info("Storage: " + storage.getEnergyStored() + " Sender: " + entity.energy_storage.getEnergyStored());
-               }
+
+           if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.NORTH, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.EAST, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.WEST, 10)) {
+
+           }else if (!EnergyStorageUtils.pullEnergyFrom(entity, world, blockPos, Direction.SOUTH, 10)) {
+
            }
         }
     }

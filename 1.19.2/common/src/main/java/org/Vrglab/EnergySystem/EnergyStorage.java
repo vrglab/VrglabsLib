@@ -7,10 +7,11 @@ import net.minecraft.world.World;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallBackVoidNoArg;
+import org.Vrglab.Utils.VLModInfo;
+
+import static org.Vrglab.EnergySystem.EnergyStorageUtils.hasExternalStorage;
 
 public class EnergyStorage implements IEnergyContainer{
-
-    public static ICallBack createStorageInstance, extractEnergyInstance, receiveEnergyInstance;
 
     public static <T extends EnergyStorage> T createStorage(Class<T> clazz, long capacity) {
         try {
@@ -59,17 +60,36 @@ public class EnergyStorage implements IEnergyContainer{
         return createStorage(EnergyStorage.class, capacity, maxTransfer, maxExtract, energy);
     }
 
-    public static EnergyStorage getStorageInWorld(World world, BlockPos blockPos, Direction facing){
-        EnergyStorage storage = null;
+    public static IEnergyContainer getStorageInWorld(World world, BlockPos blockPos, Direction facing){
+        IEnergyContainer storage =  null;
         BlockEntity entity = world.getBlockEntity(blockPos.offset(facing));
         if(containEnergyStorage(entity)) {
             try {
-                storage = ((IEnergySupplier<?>)entity).getEnergyStorage();
+                if(entity != null && entity instanceof IEnergySupplier<?>) {
+                    storage = ((IEnergySupplier<?>)entity).getEnergyStorage();
+                } else if((boolean)hasExternalStorage.accept(entity)){
+                    if (EnergyStorageUtils.getCachedContainer(blockPos.offset(facing)) != null) {
+                        try{
+                            storage = EnergyStorageUtils.getCachedContainer(blockPos.offset(facing));
+                            if(((BlockEntity)((EnergyStorage)storage).blockEntity).isRemoved()) {
+                                EnergyStorageUtils.removeFromCache(blockPos.offset(facing));
+                                throw  new RuntimeException("Accessed Storage is removed");
+                            }
+                        } catch (Throwable t) {
+                            storage = (EnergyStorage)EnergyStorageUtils.wrapExternalStorage.accept(world, blockPos, facing, entity);
+                            EnergyStorageUtils.cacheEnergyContainer(blockPos.offset(facing), storage);
+                        }
+                    } else {
+                        storage = (EnergyStorage)EnergyStorageUtils.wrapExternalStorage.accept(world, blockPos, facing, entity);
+                        EnergyStorageUtils.cacheEnergyContainer(blockPos.offset(facing), storage);
+                    }
+                }
+
             } catch (Throwable t) {
 
             }
         }
-        return  storage;
+        return storage;
     }
 
     public static boolean containEnergyStorage(World world, BlockPos blockPos){
@@ -78,7 +98,7 @@ public class EnergyStorage implements IEnergyContainer{
     }
 
     public static boolean containEnergyStorage(BlockEntity entity){
-        if(entity != null && entity instanceof IEnergySupplier<?>) {
+        if(entity != null && entity instanceof IEnergySupplier<?> || (boolean)hasExternalStorage.accept(entity)) {
             try {
                 return true;
             } catch (Throwable t) {
@@ -113,18 +133,23 @@ public class EnergyStorage implements IEnergyContainer{
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.energy = Math.max(0 , Math.min(capacity, energy));
-        this.actualEnergyInstance = createStorageInstance.accept(capacity, maxReceive, maxExtract, energy, this, blockEntity);
+        this.actualEnergyInstance = EnergyStorageUtils.createStorageInstance.accept(capacity, maxReceive, maxExtract, energy, this, blockEntity);
+    }
+
+    public EnergyStorage(Object instance, long capacity, long maxReceive, long maxExtract, long energy) {
+        this(capacity, maxReceive, maxExtract, energy);
+        this.actualEnergyInstance = instance;
     }
 
     @Override
     public long receiveEnergy(long maxReceive, boolean simulate) {
-        energy += Long.valueOf(receiveEnergyInstance.accept(actualEnergyInstance, maxReceive, simulate).toString());
+        energy += Long.valueOf(EnergyStorageUtils.receiveEnergyInstance.accept(actualEnergyInstance, maxReceive, simulate).toString());
         return energy;
     }
 
     @Override
     public long extractEnergy(long maxExtract, boolean simulate) {
-        energy -= Long.valueOf(extractEnergyInstance.accept(actualEnergyInstance, maxExtract, simulate).toString());
+        energy -= Long.valueOf(EnergyStorageUtils.extractEnergyInstance.accept(actualEnergyInstance, maxExtract, simulate).toString());
         return energy;
     }
 
