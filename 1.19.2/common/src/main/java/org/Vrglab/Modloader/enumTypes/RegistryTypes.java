@@ -19,7 +19,10 @@ public enum RegistryTypes {
     BIOME_MODIFICATIONS(15),
     BLOCK_ENTITY_TYPE(16),
     SCREEN_HANDLER_TYPE(17),
-    HANDLED_SCREEN(18);
+    HANDLED_SCREEN(18),
+    RECIPE_SERIALIZER(19),
+    RECIPE_TYPE(20)
+    ;
 
 
     private final int getTypeId;

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "vrglabslib",
-  "version": "${version}",
+  "version": "${loader_safe_version}",
   "name": "Vrglabs Lib",
   "description": "Architectury based custom data Registration system and Utilities",
   "authors": [

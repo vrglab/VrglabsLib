@@ -1,6 +1,7 @@
 package org.Vrglab.forge.Utils;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Interner;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,26 +12,34 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -38,7 +47,9 @@ import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Networking.Network;
+import org.Vrglab.Utils.VLModInfo;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -61,6 +72,9 @@ public class ForgeRegistryCreator {
    };
 
     public static void Create(IEventBus eventBus, String modid) {
+
+        createEnergyyCallBacks();
+
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -78,7 +92,11 @@ public class ForgeRegistryCreator {
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ((RegistryObject)args[0]).get();
+                try {
+                    return ((RegistryObject)args[0]).get();
+                } catch (Throwable t) {
+                    return args[0];
+                }
             }
         };
 
@@ -117,6 +135,12 @@ public class ForgeRegistryCreator {
 
         DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
         BLOCK_ENTITY_TYPE.register(eventBus);
+
+        DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTRY = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, modid);
+        RECIPE_SERIALIZER_REGISTRY.register(eventBus);
+
+        DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTRY = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, modid);
+        RECIPE_TYPE_REGISTRY.register(eventBus);
 
         ICallBack Itemcallback = new ICallBack() {
             @Override
@@ -192,6 +216,20 @@ public class ForgeRegistryCreator {
             }
         };
 
+        ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_SERIALIZER_REGISTRY.register(args[0].toString(), ()->(RecipeSerializer)args[1]);
+            }
+        };
+
+        ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_TYPE_REGISTRY.register(args[0].toString(), ()->(RecipeType)args[1]);
+            }
+        };
+
 
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
@@ -202,6 +240,117 @@ public class ForgeRegistryCreator {
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(OreConfiguredFeatCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
         Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
+        Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
+        Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
+    }
+
+    private static void createEnergyyCallBacks() {
+        EnergyStorageUtils.createStorageInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return new net.minecraftforge.energy.EnergyStorage(Math.toIntExact((long)args[0]), Math.toIntExact((long)args[1]), Math.toIntExact((long)args[2]), Math.toIntExact((long)args[3])) {
+                    @Override
+                    public int receiveEnergy(int maxReceive, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.receiveEnergy(maxReceive, simulate);
+                    }
+
+                    @Override
+                    public int extractEnergy(int maxExtract, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.extractEnergy(maxExtract, simulate);
+                    }
+                };
+            }
+        };
+
+        EnergyStorageUtils.receiveEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.minecraftforge.energy.IEnergyStorage)args[0]).receiveEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
+            }
+        };
+
+        EnergyStorageUtils.extractEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.minecraftforge.energy.IEnergyStorage)args[0]).extractEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
+            }
+        };
+
+        EnergyStorageUtils.hasExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return  ((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]) instanceof ICapabilityProvider)||((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]).getCapability(ForgeCapabilities.ENERGY).resolve().get() != null);
+            }
+        };
+
+        EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                net.minecraftforge.energy.IEnergyStorage storage = ((BlockEntity)args[3]).getCapability(ForgeCapabilities.ENERGY).resolve().get();
+                Field maxReceiveField = null;
+                try {
+                    maxReceiveField = storage.getClass().getDeclaredField("maxReceive");
+                } catch (NoSuchFieldException e) {
+
+                }
+                int maxReceive = 0;
+                maxReceiveField.setAccessible(true);
+                try {
+                     maxReceive = (int) maxReceiveField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field maxExtractField = null;
+                try {
+                    maxExtractField = storage.getClass().getDeclaredField("maxExtract");
+                } catch (NoSuchFieldException e) {
+
+                }
+                maxExtractField.setAccessible(true);
+                int maxExtract = 0;
+                try {
+                    maxExtract = (int) maxExtractField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field capacityField = null;
+                try {
+                    capacityField = storage.getClass().getDeclaredField("capacity");
+                } catch (NoSuchFieldException e) {
+
+                }
+                capacityField.setAccessible(true);
+                int capacity = 0;
+                try {
+                    capacity = (int) capacityField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field energyField = null;
+                try {
+                    energyField = storage.getClass().getDeclaredField("energy");
+                } catch (NoSuchFieldException e) {
+                }
+                  energyField.setAccessible(true);
+                int energy = 0;
+                try {
+                    energy = (int) energyField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                return new EnergyStorage(storage, capacity, maxReceive, maxExtract, energy).setBlockEntityType(((BlockEntity)args[3])).setMakeDirtyFunction(()->((BlockEntity)args[3]).markDirty());
+            }
+        };
     }
 
     public static void CreateClient(String modid){
