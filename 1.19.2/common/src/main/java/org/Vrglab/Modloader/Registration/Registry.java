@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.village.TradeOffer;
@@ -45,12 +47,13 @@ public class Registry {
 
         public Object Obj = null;
     }
+
     private static Map<String, Map<Integer, ICallBack>> open_registeries = new HashMap<>();
     private static Map<String, Set<UnregisteredData>> ready_to_load_registeries = new HashMap<>();
 
     /**
      * Initializes a Modloader's Registry to be used for loading of objects
-     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, RegistryType, String)})</i></div>
+     * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, RegistryTypes, String)})</i></div>
      * @param _registery The registry code
      * @param _currentRegistryTypes the type of registry
      * @param modid the Mod ID
@@ -84,7 +87,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static void initRegistry(ICallBack _registery, RegistryType _currentRegistryTypes, String modid){
+    public static void initRegistry(ICallBack _registery, RegistryTypes _currentRegistryTypes, String modid){
         if(open_registeries.containsKey(modid)){
             open_registeries.get(modid).put(_currentRegistryTypes.getTypeId(), _registery);
         } else{
@@ -181,7 +184,7 @@ public class Registry {
      * code use {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType}
      * @param name The Block Entity name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Block Entity Instance
+     * @param aNew The ::new which gives us the Block Entity Instance
      * @param block The block to attach the entity to (NOT converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
      * @return The registered data
      *
@@ -196,7 +199,7 @@ public class Registry {
      * Register's a new Screen Handler for MC.
      * @param name The Screen Handler name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Screen Handler Instance
+     * @param aNew The ::new which gives us the Screen Handler Instance
      * @return The registered data (The return value of this Function CAN NOT be converted using {@link org.Vrglab.Modloader.CreationHelpers.TypeTransformer#ObjectToType})
      *
      * @author Arad Bozorgmehr
@@ -211,7 +214,7 @@ public class Registry {
      * <div>You can call this function within any init() functions</div>
      * @param name The name (aka ID)
      * @param Modid The Mod Id of the Registerar
-     * @param aNew The {@link ::new} which gives us the Handled Screen Instance
+     * @param aNew The ::new which gives us the Handled Screen Instance
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
@@ -286,9 +289,39 @@ public class Registry {
     }
 
     public static void AddBiomeModification(String name, String Modid, VinillaBiomeTypes biomeTypes, GenerationStep.Feature gen_step, Object Placed_ore) {
-        SimpleRegister(2,  Modid, name, biomeTypes, gen_step, Placed_ore);
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
     }
+
+    /**
+     *  Register's a new Recipe Serializer
+     *
+     * @param name The Villager Profession name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param serializer_instance The instance to the Recipe Serializer class
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static Object RegisterRecipeSerializer(String name, String Modid, RecipeSerializer serializer_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_SERIALIZER, Modid, name, serializer_instance);
+    }
+
+    /**
+     *  Register's a new Recipe Type
+     *
+     * @param name The Villager Profession name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param type_instance The instance to the Recipe Type class
+     * @return The registered data
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.1.0
+     */
+    public static Object RegisterRecipeType(String name, String Modid, RecipeType type_instance) {
+        return SimpleRegister(RegistryTypes.RECIPE_TYPE, Modid, name, type_instance);
+    }
+
 
     /**
      * Sends data to the modloader for something to be registered for MC

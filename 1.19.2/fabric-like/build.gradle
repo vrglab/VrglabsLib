@@ -12,4 +12,5 @@ dependencies {
     implementation("com.eliotlash.mclib:mclib:20")
 
     compileOnly(project(path: ':common', configuration: 'namedElements')) { transitive false }
+
 }
