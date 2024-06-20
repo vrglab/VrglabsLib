@@ -4,10 +4,18 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.*;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -36,6 +44,7 @@ import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Bootstrapper;
 import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
 import org.Vrglab.Modloader.enumTypes.BootstrapType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
@@ -76,6 +85,12 @@ public class NeoForgeRegistryCreator {
 
         DeferredRegister<VillagerProfession> PROFESSION_REGISTRY = DeferredRegister.create(Registries.VILLAGER_PROFESSION.getKey(), modid);
         PROFESSION_REGISTRY.register(eventBus);
+
+        DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTRY = DeferredRegister.create(Registries.RECIPE_SERIALIZER.getKey(), modid);
+        RECIPE_SERIALIZER_REGISTRY.register(eventBus);
+
+        DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTRY = DeferredRegister.create(Registries.RECIPE_TYPE.getKey(), modid);
+        RECIPE_TYPE_REGISTRY.register(eventBus);
 
 
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
@@ -150,6 +165,20 @@ public class NeoForgeRegistryCreator {
             }
         };
 
+        ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_SERIALIZER_REGISTRY.register(args[0].toString(), ()->(RecipeSerializer)args[1]);
+            }
+        };
+
+        ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return RECIPE_TYPE_REGISTRY.register(args[0].toString(), ()->(RecipeType)args[1]);
+            }
+        };
+
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);
@@ -157,10 +186,30 @@ public class NeoForgeRegistryCreator {
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
         Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
+        Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
+        Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
     public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
-        Registry.ForgeLikeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
+        Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
+    }
+
+    public static void CreateClient(String modid){
+        ICallBack HandledScreensRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+
+                HandledScreens.Provider provider = new HandledScreens.Provider() {
+                    @Override
+                    public Screen create(ScreenHandler handler, PlayerInventory playerInventory, Text title) {
+                        return ((IScreenHandledCreationFunction)args[2]).create((org.Vrglab.Screen.ScreenHandler) handler, playerInventory, title);
+                    }
+                };
+                HandledScreens.register((ScreenHandlerType)args[1], provider);
+                return null;
+            }
+        };
+        Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
     }
 
 

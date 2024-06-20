@@ -10,17 +10,8 @@ architectury {
 
 allprojects {
     group = rootProject.maven_group
-    version = "$project.name-$rootProject.mod_version"
-    repositories {
-        maven {
-            name = 'GeckoLib'
-            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-            content {
-                includeGroupByRegex("software\\.bernie.*")
-                includeGroup("com.eliotlash.mclib")
-            }
-        }
-    }
+    version = "$project.name-$rootProject.loader_safe_version-mc$rootProject.minecraft_version"
+
 }
 
 subprojects {

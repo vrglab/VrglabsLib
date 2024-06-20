@@ -65,21 +65,8 @@ public class FabricLikeRegisteryCreator {
     public static void Create(String modid) {
 
         setEnergyStorageStatics(modid);
-
-        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return ((Block)args[0]).getDefaultState();
-            }
-        };
-
-        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
-            }
-        };
-
+        setOreGenHelperStatics();
+        setNetworkStatics();
 
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
@@ -88,19 +75,7 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
-        Network.registerGlobalReceiver = new ICallbackVoid() {
-            @Override
-            public void accept(Object... args) {
-                ServerPlayNetworking.registerGlobalReceiver((Identifier) args[0], (a,b,c,d,e)->((ICallBack)args[1]).accept(a,b,c,d,e));
-            }
-        };
 
-        Network.clientSendPacket = new ICallbackVoid() {
-            @Override
-            public void accept(Object... args) {
-                ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
-            }
-        };
 
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
@@ -265,7 +240,6 @@ public class FabricLikeRegisteryCreator {
         }
     }
 
-
     private static void setEnergyStorageStatics(String modid) {
         EnergyStorageUtils.createStorageInstance = new ICallBack() {
             @Override
@@ -327,6 +301,38 @@ public class FabricLikeRegisteryCreator {
             public Object accept(Object... args) {
                 team.reborn.energy.api.EnergyStorage storage = team.reborn.energy.api.EnergyStorage.SIDED.find((World) args[0], (BlockPos) args[1], (Direction) args[2]);
                 return new EnergyStorage(storage, storage.getCapacity(), storage.getCapacity(), storage.getCapacity(), storage.getAmount());
+            }
+        };
+    }
+
+    private static void setOreGenHelperStatics() {
+        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((Block)args[0]).getDefaultState();
+            }
+        };
+
+        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
+            }
+        };
+    }
+
+    private static void setNetworkStatics() {
+        Network.registerGlobalReceiver = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+                ServerPlayNetworking.registerGlobalReceiver((Identifier) args[0], (a,b,c,d,e)->((ICallBack)args[1]).accept(a,b,c,d,e));
+            }
+        };
+
+        Network.clientSendPacket = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+                ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
             }
         };
     }

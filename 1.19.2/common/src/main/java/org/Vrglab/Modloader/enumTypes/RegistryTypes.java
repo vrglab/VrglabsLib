@@ -1,6 +1,6 @@
 package org.Vrglab.Modloader.enumTypes;
 
-public enum RegistryTypes implements RegistryType {
+public enum RegistryTypes implements IRegistryType {
     ITEM(0),
     BLOCK(1),
     ITEMLESS_BLOCK(2),
@@ -30,17 +30,7 @@ public enum RegistryTypes implements RegistryType {
         getTypeId = type;
     }
 
-    @Override
     public int getTypeId() {
         return getTypeId;
-    }
-
-    public static RegistryTypes fromTypeId(int typeId) {
-        for (RegistryTypes type : values()) {
-            if (type.getTypeId() == typeId) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("No enum constant with typeId " + typeId);
     }
 }
