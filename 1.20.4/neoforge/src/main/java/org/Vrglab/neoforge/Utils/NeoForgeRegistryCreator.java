@@ -160,7 +160,7 @@ public class NeoForgeRegistryCreator {
     }
 
     public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
-        Registry.ForgeLikeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
+        Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
     }
 
 

@@ -1,20 +1,36 @@
 package org.Vrglab.Modloader.enumTypes;
 
-public enum RegistryTypes {
-    ITEM,
-    BLOCK,
-    ITEMLESS_BLOCK,
-    ENTITY_BLOCK,
-    MENU,
-    RECIPE,
-    ENTITY,
-    TAG,
-    BIOM,
-    STRUCTURE,
-    POI,
-    PROFESSION,
-    TRADE,
-    CONFIGURED_FEAT_ORE,
-    PLACED_FEAT,
-    BIOME_MODIFICATIONS
+public enum RegistryTypes implements IRegistryType {
+    ITEM(0),
+    BLOCK(1),
+    ITEMLESS_BLOCK(2),
+    ENTITY_BLOCK(3),
+    MENU(4),
+    RECIPE(5),
+    ENTITY(6),
+    TAG(7),
+    BIOM(8),
+    STRUCTURE(9),
+    POI(10),
+    PROFESSION(11),
+    TRADE(12),
+    CONFIGURED_FEAT_ORE(13),
+    PLACED_FEAT(14),
+    BIOME_MODIFICATIONS(15),
+    BLOCK_ENTITY_TYPE(16),
+    SCREEN_HANDLER_TYPE(17),
+    HANDLED_SCREEN(18),
+    RECIPE_SERIALIZER(19),
+    RECIPE_TYPE(20)
+    ;
+
+
+    private final int getTypeId;
+    RegistryTypes(int type) {
+        getTypeId = type;
+    }
+
+    public int getTypeId() {
+        return getTypeId;
+    }
 }

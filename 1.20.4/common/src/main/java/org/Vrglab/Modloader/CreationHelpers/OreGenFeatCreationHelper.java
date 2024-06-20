@@ -1,8 +1,7 @@
 package org.Vrglab.Modloader.CreationHelpers;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.structure.rule.RuleTest;
+import net.minecraft.block.RedstoneBlock;
 import net.minecraft.structure.rule.TagMatchRuleTest;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.Vrglab.Modloader.Types.ICallBack;
