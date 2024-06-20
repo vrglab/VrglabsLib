@@ -57,7 +57,7 @@ import java.util.function.Supplier;
 public class ForgeRegistryCreator {
 
 
-   public static ICallBack TradeRegistryEventCallback = new ICallBack() {
+   private static ICallBack TradeRegistryEventCallback = new ICallBack() {
         @Override
         public Object accept(Object... args) {
             Object[] arg = (Object[]) args[0];
@@ -73,21 +73,9 @@ public class ForgeRegistryCreator {
 
     public static void Create(IEventBus eventBus, String modid) {
 
-        createEnergyyCallBacks();
-
-        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return ((RegistryObject<Block>)args[0]).get().getDefaultState();
-            }
-        };
-
-        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((int) args[0]), YOffset.aboveBottom((int) args[1]));
-            }
-        };
+        createEnergyCallBacks();
+        createOreGenStatics();
+        createNetworkStatics();
 
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
@@ -97,20 +85,6 @@ public class ForgeRegistryCreator {
                 } catch (Throwable t) {
                     return args[0];
                 }
-            }
-        };
-
-        Network.registerGlobalReceiver = new ICallbackVoid() {
-            @Override
-            public void accept(Object... args) {
-
-            }
-        };
-
-        Network.clientSendPacket = new ICallbackVoid() {
-            @Override
-            public void accept(Object... args) {
-
             }
         };
 
@@ -244,7 +218,29 @@ public class ForgeRegistryCreator {
         Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
-    private static void createEnergyyCallBacks() {
+    public static void CreateClient(String modid){
+        ICallBack HandledScreensRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+
+                HandledScreens.Provider provider = new HandledScreens.Provider() {
+                    @Override
+                    public Screen create(ScreenHandler handler, PlayerInventory playerInventory, Text title) {
+                        return ((IScreenHandledCreationFunction)args[2]).create((org.Vrglab.Screen.ScreenHandler) handler, playerInventory, title);
+                    }
+                };
+                HandledScreens.register((ScreenHandlerType)args[1], provider);
+                return null;
+            }
+        };
+        Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
+    }
+
+    public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
+        Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
+    }
+
+    private static void createEnergyCallBacks() {
         EnergyStorageUtils.createStorageInstance = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -306,7 +302,7 @@ public class ForgeRegistryCreator {
                 int maxReceive = 0;
                 maxReceiveField.setAccessible(true);
                 try {
-                     maxReceive = (int) maxReceiveField.get(storage);
+                    maxReceive = (int) maxReceiveField.get(storage);
                 } catch (IllegalAccessException e) {
 
                 }
@@ -341,7 +337,7 @@ public class ForgeRegistryCreator {
                     energyField = storage.getClass().getDeclaredField("energy");
                 } catch (NoSuchFieldException e) {
                 }
-                  energyField.setAccessible(true);
+                energyField.setAccessible(true);
                 int energy = 0;
                 try {
                     energy = (int) energyField.get(storage);
@@ -353,27 +349,36 @@ public class ForgeRegistryCreator {
         };
     }
 
-    public static void CreateClient(String modid){
-        ICallBack HandledScreensRegistryCallBack = new ICallBack() {
+    private static void createOreGenStatics() {
+
+        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-
-                HandledScreens.Provider provider = new HandledScreens.Provider() {
-                    @Override
-                    public Screen create(ScreenHandler handler, PlayerInventory playerInventory, Text title) {
-                        return ((IScreenHandledCreationFunction)args[2]).create((org.Vrglab.Screen.ScreenHandler) handler, playerInventory, title);
-                    }
-                };
-                HandledScreens.register((ScreenHandlerType)args[1], provider);
-                return null;
+                return ((RegistryObject<Block>)args[0]).get().getDefaultState();
             }
         };
-        Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
+
+        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((int) args[0]), YOffset.aboveBottom((int) args[1]));
+            }
+        };
     }
 
+    private static void createNetworkStatics() {
+        Network.registerGlobalReceiver = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
 
-    public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
-        Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);
+            }
+        };
+
+        Network.clientSendPacket = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+
+            }
+        };
     }
-
 }
