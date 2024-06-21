@@ -10,7 +10,7 @@
       "contributors": {
         "Me!": "Author"
       },
-      "icon": "assets/vrglabs_geckolib/icon.png"
+      "icon": "logo.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
