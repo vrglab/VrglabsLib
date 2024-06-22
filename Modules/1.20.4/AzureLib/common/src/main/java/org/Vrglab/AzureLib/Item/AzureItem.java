@@ -1,36 +1,27 @@
-package org.Vrglab.AzureLib.Armor;
+package org.Vrglab.AzureLib.Item;
 
 import mod.azure.azurelib.common.api.client.model.GeoModel;
-import mod.azure.azurelib.common.api.client.renderer.GeoArmorRenderer;
+import mod.azure.azurelib.common.api.client.renderer.GeoItemRenderer;
 import mod.azure.azurelib.common.api.common.animatable.GeoItem;
 import mod.azure.azurelib.common.internal.client.RenderProvider;
 import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
 import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class AzureArmor extends ArmorItem implements GeoItem {
+public abstract class AzureItem extends Item implements GeoItem {
     protected final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-    protected final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
-
-    public AzureArmor(ArmorMaterial armorMaterial, Type type, Properties properties) {
-        super(armorMaterial, type, properties);
+    private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+    public AzureItem(Properties properties) {
+        super(properties);
     }
-
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -48,13 +39,13 @@ public abstract class AzureArmor extends ArmorItem implements GeoItem {
     @Override
     public void createRenderer(Consumer<Object> consumer) {
         consumer.accept(new RenderProvider() {
-            private Renderer renderer;
+            private AzureItem.Renderer renderer;
 
             @Override
-            public @NotNull HumanoidModel<LivingEntity> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<LivingEntity> original) {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (renderer == null)
-                    return new Renderer<>(getModel().get());
-                renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+                    return new AzureItem.Renderer<>(getModel().get());
+
                 return this.renderer;
             }
         });
@@ -65,14 +56,15 @@ public abstract class AzureArmor extends ArmorItem implements GeoItem {
         return renderProvider;
     }
 
+
     /* ABSTRACT FUNCTIONS */
     public abstract ICallBack getControllers();
-    public abstract Supplier<GeoModel<? extends AzureArmor>> getModel();
+    public abstract Supplier<GeoModel<? extends AzureItem>> getModel();
 
 
     /* SUB CLASSES */
 
-    public class Renderer<T extends AzureArmor> extends GeoArmorRenderer<T> {
+    public class Renderer<T extends AzureItem> extends GeoItemRenderer<T> {
         public Renderer(GeoModel<T> model) {
             super(model);
         }
