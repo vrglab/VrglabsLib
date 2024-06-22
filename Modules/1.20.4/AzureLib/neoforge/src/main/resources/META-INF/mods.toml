@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
 #issueTrackerURL = ""
-license = "Insert License Here"
+license = "MIT"
 
 [[mods]]
 modId = "vrglabs_azurelib"
 version = "${version}"
 displayName = "Vrglabs AzureLib"
-authors = "Me!"
+authors = "Vrglab"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+VrglabsLib based custom Registeries and Utils for AzureLib
 '''
 logoFile = "logo.png"
 
@@ -34,5 +34,12 @@ versionRange = "[11.1.17,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[mixins]]
-config = "vrglabs_azurelib.mixins.json"
+[[dependencies.vrglabs_azurelib]]
+modId = "azurelib"
+type = "required"
+versionRange = "[2.1.12,)"
+ordering = "AFTER"
+side = "BOTH"
+
+#[[mixins]]
+#config = "vrglabs_azurelib.mixins.json"

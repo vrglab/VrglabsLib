@@ -3,15 +3,15 @@
   "id": "vrglabs_azurelib",
   "version": "${version}",
   "name": "Vrglabs AzureLib",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "VrglabsLib based custom Registeries and Utils for AzureLib",
   "authors": [
-    "Me!"
+    "Vrglab"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "logo.png",
   "environment": "*",
   "entrypoints": {
@@ -30,7 +30,9 @@
     "minecraft": "~1.20.4",
     "java": ">=17",
     "architectury": ">=11.1.17",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "azurelib": ">=2.1.12",
+    "vrglabslib": ">=1.0.0"
   },
   "suggests": {
     "another-mod": "*"

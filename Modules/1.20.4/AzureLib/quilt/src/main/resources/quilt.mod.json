@@ -6,9 +6,9 @@
     "version": "${version}",
     "metadata": {
       "name": "Vrglabs AzureLib",
-      "description": "This is an example description! Tell everyone what your mod is about!",
+      "description": "VrglabsLib based custom Registeries and Utils for AzureLib",
       "contributors": {
-        "Me!": "Author"
+        "Vrglab": "Author"
       },
       "icon": "logo.png"
     },
