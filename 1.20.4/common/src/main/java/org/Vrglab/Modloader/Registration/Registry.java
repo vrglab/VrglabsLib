@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  */
 public class Registry {
     private static class UnregisteredData{
-        public UnregisteredData(int registry_type, Object... args) {
+        public UnregisteredData(UUID registry_type, Object... args) {
             this.registry_type = registry_type;
             this.args = new ArrayList<>();
             for (Object argdata: args) {
@@ -41,13 +41,13 @@ public class Registry {
         }
 
         public List<Object> args;
-        public int registry_type;
+        public UUID registry_type;
         public boolean resolved;
 
         public Object Obj = null;
     }
 
-    private static Map<String, Map<Integer, ICallBack>> open_registeries = new HashMap<>();
+    private static Map<String, Map<UUID, ICallBack>> open_registeries = new HashMap<>();
     private static Map<String, Set<UnregisteredData>> ready_to_load_registeries = new HashMap<>();
 
     /**
@@ -60,7 +60,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static void initRegistry(ICallBack _registery, int _currentRegistryTypes, String modid){
+    public static void initRegistry(ICallBack _registery, UUID _currentRegistryTypes, String modid){
         if(open_registeries.containsKey(modid)){
             open_registeries.get(modid).put(_currentRegistryTypes, _registery);
         } else{
@@ -115,7 +115,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static void ForgeEventResolver(Object eventData, ICallBack resolver, int ResolveTypeOf, String modid){
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, UUID ResolveTypeOf, String modid){
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == ResolveTypeOf){
@@ -329,7 +329,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static Object SimpleRegister(int type, String Modid, Object... args){
+    public static Object SimpleRegister(UUID type, String Modid, Object... args){
         VLModInfo.LOGGER.info("Registering "+String.valueOf(type).toLowerCase() +" " +  args[0] + " for " + Modid);
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
             return open_registeries.get(Modid).get(type).accept(args);
