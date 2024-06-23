@@ -9,11 +9,9 @@ import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,6 +31,7 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.VillagerProfession;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
@@ -40,21 +39,14 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.EnergySystem.EnergyStorageUtils;
-import org.Vrglab.EnergySystem.IEnergySupplier;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
-import net.minecraft.world.gen.placementmodifier.*;
-import org.Vrglab.Modloader.CreationHelpers.*;
-import org.Vrglab.Modloader.Registration.GeckoLibRegistry;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.*;
-import org.Vrglab.Modloader.enumTypes.Geckolib.GeoRegistryTypes;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Networking.Network;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-import software.bernie.geckolib3.util.GeoArmorRegistryImpl;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.util.List;
@@ -227,17 +219,6 @@ public class FabricLikeRegisteryCreator {
             }
         };
         Registry.initRegistry(HandledScreensRegistryCallBack, RegistryTypes.HANDLED_SCREEN, modid);
-
-        if(Platform.isModLoaded("geckolib3")) {
-            ICallBack GeckoArmorRegistryCallBack = new ICallBack() {
-                @Override
-                public Object accept(Object... args) {
-                    GeoArmorRenderer.registerArmorRenderer(((Supplier<GeoArmorRenderer>) args[1]).get(), (Item)TypeTransformer.ObjectToType.accept(args[2]));
-                    return null;
-                }
-            };
-            Registry.initRegistry(GeckoArmorRegistryCallBack, GeoRegistryTypes.ARMOR, modid);
-        }
     }
 
     private static void setEnergyStorageStatics(String modid) {

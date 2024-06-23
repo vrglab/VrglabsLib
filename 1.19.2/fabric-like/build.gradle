@@ -8,8 +8,7 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-$rootProject.geckolib_minecraft_version:$rootProject.geckolib_version"
-    implementation("com.eliotlash.mclib:mclib:20")
+
 
     compileOnly(project(path: ':common', configuration: 'namedElements')) { transitive false }
 
