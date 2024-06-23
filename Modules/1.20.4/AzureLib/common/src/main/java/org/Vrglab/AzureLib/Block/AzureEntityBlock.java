@@ -26,7 +26,7 @@ public abstract class AzureEntityBlock extends BaseEntityBlock implements GeoBlo
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        List<AnimationController> controllerList = (List<AnimationController>)getControllers();
+        List<AnimationController> controllerList = (List<AnimationController>)getControllers().accept(controllers);
         for (AnimationController controller: controllerList) {
             controllers.add(controller);
         }

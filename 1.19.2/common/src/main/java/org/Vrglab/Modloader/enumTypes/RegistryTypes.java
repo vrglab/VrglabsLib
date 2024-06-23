@@ -1,36 +1,38 @@
 package org.Vrglab.Modloader.enumTypes;
 
+import java.util.UUID;
+
 public enum RegistryTypes implements IRegistryType {
-    ITEM(0),
-    BLOCK(1),
-    ITEMLESS_BLOCK(2),
-    ENTITY_BLOCK(3),
-    MENU(4),
-    RECIPE(5),
-    ENTITY(6),
-    TAG(7),
-    BIOM(8),
-    STRUCTURE(9),
-    POI(10),
-    PROFESSION(11),
-    TRADE(12),
-    CONFIGURED_FEAT_ORE(13),
-    PLACED_FEAT(14),
-    BIOME_MODIFICATIONS(15),
-    BLOCK_ENTITY_TYPE(16),
-    SCREEN_HANDLER_TYPE(17),
-    HANDLED_SCREEN(18),
-    RECIPE_SERIALIZER(19),
-    RECIPE_TYPE(20)
+    ITEM(UUID.randomUUID()),
+    BLOCK(UUID.randomUUID()),
+    ITEMLESS_BLOCK(UUID.randomUUID()),
+    ENTITY_BLOCK(UUID.randomUUID()),
+    MENU(UUID.randomUUID()),
+    RECIPE(UUID.randomUUID()),
+    ENTITY(UUID.randomUUID()),
+    TAG(UUID.randomUUID()),
+    BIOM(UUID.randomUUID()),
+    STRUCTURE(UUID.randomUUID()),
+    POI(UUID.randomUUID()),
+    PROFESSION(UUID.randomUUID()),
+    TRADE(UUID.randomUUID()),
+    CONFIGURED_FEAT_ORE(UUID.randomUUID()),
+    PLACED_FEAT(UUID.randomUUID()),
+    BIOME_MODIFICATIONS(UUID.randomUUID()),
+    BLOCK_ENTITY_TYPE(UUID.randomUUID()),
+    SCREEN_HANDLER_TYPE(UUID.randomUUID()),
+    HANDLED_SCREEN(UUID.randomUUID()),
+    RECIPE_SERIALIZER(UUID.randomUUID()),
+    RECIPE_TYPE(UUID.randomUUID())
     ;
 
 
-    private final int getTypeId;
-    RegistryTypes(int type) {
+    private final UUID getTypeId;
+    RegistryTypes(UUID type) {
         getTypeId = type;
     }
 
-    public int getTypeId() {
+    public UUID getTypeId() {
         return getTypeId;
     }
 }

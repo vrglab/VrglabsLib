@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "vrglabs_azurelib",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "Vrglabs AzureLib",
-  "description": "VrglabsLib based custom Registeries and Utils for AzureLib",
+  "description": "Utility classes for AzureLib for using with VrglabsLib",
   "authors": [
     "Vrglab"
   ],

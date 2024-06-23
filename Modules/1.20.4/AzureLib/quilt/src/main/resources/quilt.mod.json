@@ -3,10 +3,10 @@
   "quilt_loader": {
     "group": "${group}",
     "id": "vrglabs_azurelib",
-    "version": "${version}",
+    "version": "${mod_version}",
     "metadata": {
       "name": "Vrglabs AzureLib",
-      "description": "VrglabsLib based custom Registeries and Utils for AzureLib",
+      "description": "Utility classes for AzureLib for using with VrglabsLib",
       "contributors": {
         "Vrglab": "Author"
       },
@@ -38,6 +38,6 @@
     ]
   },
   "mixin": [
-    "vrglabs_azurelib.mixins.json"
+
   ]
 }

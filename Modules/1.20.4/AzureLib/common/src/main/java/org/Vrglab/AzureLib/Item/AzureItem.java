@@ -30,7 +30,7 @@ public abstract class AzureItem extends Item implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        List<AnimationController> controllerList = (List<AnimationController>)getControllers();
+        List<AnimationController> controllerList = (List<AnimationController>)getControllers().accept(controllers);
         for (AnimationController controller: controllerList) {
             controllers.add(controller);
         }
@@ -44,8 +44,7 @@ public abstract class AzureItem extends Item implements GeoItem {
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (renderer == null)
-                    return new AzureItem.Renderer<>(getModel().get());
-
+                    renderer = new AzureItem.Renderer<>(getModel().get());
                 return this.renderer;
             }
         });

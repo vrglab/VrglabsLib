@@ -39,7 +39,7 @@ public abstract class AzureArmor extends ArmorItem implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        List<AnimationController> controllerList = (List<AnimationController>)getControllers();
+        List<AnimationController> controllerList = (List<AnimationController>)getControllers().accept(controllers);
         for (AnimationController controller: controllerList) {
             controllers.add(controller);
         }
@@ -53,7 +53,7 @@ public abstract class AzureArmor extends ArmorItem implements GeoItem {
             @Override
             public @NotNull HumanoidModel<LivingEntity> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<LivingEntity> original) {
                 if (renderer == null)
-                    return new Renderer<>(getModel().get());
+                    renderer = new Renderer<>(getModel().get());
                 renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
                 return this.renderer;
             }

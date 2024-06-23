@@ -5,11 +5,11 @@ license = "MIT"
 
 [[mods]]
 modId = "vrglabs_azurelib"
-version = "${version}"
+version = "${mod_version}"
 displayName = "Vrglabs AzureLib"
 authors = "Vrglab"
 description = '''
-VrglabsLib based custom Registeries and Utils for AzureLib
+Utility classes for AzureLib for using with VrglabsLib
 '''
 logoFile = "logo.png"
 
