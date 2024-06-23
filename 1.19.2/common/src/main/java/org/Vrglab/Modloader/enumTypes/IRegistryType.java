@@ -1,5 +1,7 @@
 package org.Vrglab.Modloader.enumTypes;
 
+import java.util.UUID;
+
 public interface IRegistryType {
-    int getTypeId();
+    UUID getTypeId();
 }
