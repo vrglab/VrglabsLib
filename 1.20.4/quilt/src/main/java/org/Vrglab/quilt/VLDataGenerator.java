@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.registry.RegistryBuilder;
-import org.Vrglab.Utils.Modinfo;
+import org.Vrglab.Utils.VLModInfo;
 import org.Vrglab.fabriclike.Utils.FabricLikeRegisteryCreator;
 
 public class VLDataGenerator implements DataGeneratorEntrypoint {
@@ -30,6 +30,6 @@ public class VLDataGenerator implements DataGeneratorEntrypoint {
      */
     @Override
     public void buildRegistry(RegistryBuilder registryBuilder) {
-        FabricLikeRegisteryCreator.boostrap(registryBuilder, Modinfo.MOD_ID);
+        FabricLikeRegisteryCreator.boostrap(registryBuilder, VLModInfo.MOD_ID);
     }
 }

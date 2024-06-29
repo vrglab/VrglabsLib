@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "vrglabs_azurelib"
+version = "${mod_version}"
+displayName = "Vrglabs AzureLib"
+authors = "Vrglab"
+description = '''
+Utility classes for AzureLib for using with VrglabsLib
+'''
+logoFile = "logo.png"
+
+[[dependencies.vrglabs_azurelib]]
+modId = "neoforge"
+type = "required"
+versionRange = "[20.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.vrglabs_azurelib]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.20.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.vrglabs_azurelib]]
+modId = "architectury"
+type = "required"
+versionRange = "[11.1.17,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.vrglabs_azurelib]]
+modId = "azurelib"
+type = "required"
+versionRange = "[2.1.12,)"
+ordering = "AFTER"
+side = "BOTH"
+
+#[[mixins]]
+#config = "vrglabs_azurelib.mixins.json"
