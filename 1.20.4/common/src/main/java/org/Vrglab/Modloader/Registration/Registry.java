@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.sound.SoundEvent;
@@ -154,7 +155,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterBlock(String name, String Modid, Supplier aNew, Item.Settings settings) {
+    public static Object RegisterBlock(String name, String Modid, Supplier aNew, Supplier<Item.Settings> settings) {
         return SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
     }
 
@@ -302,6 +303,20 @@ public class Registry {
         return SimpleRegister(RegistryTypes.RECIPE_TYPE, Modid, name, type_instance);
     }
 
+
+    /**
+     *  Register's a new Creative mode tab
+     *
+     * @param name The tab name (aka ID)
+     * @param Modid The Mod Id of the Registerar
+     * @param tab The instance to the tab
+     *
+     * @author Arad Bozorgmehr
+     * @since 1.0.0-mc1.20.4
+     */
+    public static <T extends ItemGroup> Object RegisterCreativeModeTab(String name, String Modid, T tab) {
+       return SimpleRegister(RegistryTypes.CREATIVE_MODE_TAB,  Modid, name, tab);
+    }
 
     /**
      * Sends data to the modloader for something to be registered for MC

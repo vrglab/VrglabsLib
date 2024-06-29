@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.*;
@@ -42,6 +43,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
+import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Bootstrapper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
@@ -74,6 +76,9 @@ public class NeoForgeRegistryCreator {
 
 
     public static void Create(IEventBus eventBus, String modid) {
+        DeferredRegister<ItemGroup> ITEM_GROUP_REGISTRY = DeferredRegister.create(Registries.ITEM_GROUP.getKey(), modid);
+        ITEM_GROUP_REGISTRY.register(eventBus);
+
         DeferredRegister.Items ITEM_REGISTRY = DeferredRegister.createItems(modid);
         ITEM_REGISTRY.register(eventBus);
 
@@ -92,6 +97,12 @@ public class NeoForgeRegistryCreator {
         DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTRY = DeferredRegister.create(Registries.RECIPE_TYPE.getKey(), modid);
         RECIPE_TYPE_REGISTRY.register(eventBus);
 
+        TypeTransformer.ObjectToType = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((DeferredHolder)args[0]).get();
+            }
+        };
 
         OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
@@ -118,7 +129,7 @@ public class NeoForgeRegistryCreator {
             @Override
             public Object accept(Object... args) {
                 DeferredHolder<Block, ?> b = BLOCK_REGISTRY.register(args[0].toString(), (Supplier<? extends Block>) args[1]);
-               ITEM_REGISTRY.register(args[0].toString(), ()->new BlockItem(b.get(), (Item.Settings) args[2]));
+               ITEM_REGISTRY.register(args[0].toString(), ()->new BlockItem(b.get(), ((Supplier<Item.Settings>) args[2]).get()));
                return b;
             }
         };
@@ -179,6 +190,14 @@ public class NeoForgeRegistryCreator {
             }
         };
 
+        ICallBack CreativeModeTabcallback = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ITEM_GROUP_REGISTRY.register(args[0].toString(), ()->(ItemGroup)args[1]);
+            }
+        };
+
+        Registry.initRegistry(CreativeModeTabcallback, RegistryTypes.CREATIVE_MODE_TAB, modid);
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);

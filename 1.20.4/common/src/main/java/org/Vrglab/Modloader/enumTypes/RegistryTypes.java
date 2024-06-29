@@ -23,7 +23,8 @@ public enum RegistryTypes implements IRegistryType {
     SCREEN_HANDLER_TYPE(UUID.randomUUID()),
     HANDLED_SCREEN(UUID.randomUUID()),
     RECIPE_SERIALIZER(UUID.randomUUID()),
-    RECIPE_TYPE(UUID.randomUUID())
+    RECIPE_TYPE(UUID.randomUUID()),
+    CREATIVE_MODE_TAB(UUID.randomUUID())
     ;
 
 
