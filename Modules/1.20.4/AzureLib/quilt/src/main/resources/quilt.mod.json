@@ -16,6 +16,9 @@
     "entrypoints": {
       "init": [
         "org.Vrglab.AzureLib.quilt.VlAzureLibModQuilt"
+      ],
+      "client": [
+        "mod.azure.azurelib.fabric.ClientListener"
       ]
     },
     "depends": [
@@ -38,6 +41,7 @@
     ]
   },
   "mixin": [
-
-  ]
+    "vrglabs_azurelib.mixins.json"
+  ],
+  "accessWidener": "vrglabs_azurelib.aw"
 }

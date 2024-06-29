@@ -29,11 +29,12 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
-    modImplementation "mod.azure.azurelib:azurelib-fabric-1.20.4:2.1.12"
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
     modImplementation "org.Vrglab:vrglabslib:fabric-$rootProject.vrglabs_lib_version-mc$rootProject.minecraft_version"
+
+    modApi "com.terraformersmc:modmenu:9.0.0"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

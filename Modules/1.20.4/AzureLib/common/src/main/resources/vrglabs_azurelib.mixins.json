@@ -1,11 +1,18 @@
 {
   "required": true,
-  "package": "org.Vrglab.AzureLib.Mixins",
+  "package": "mod.azure.azurelib.common.internal.mixins",
   "compatibilityLevel": "JAVA_19",
   "minVersion": "0.8",
   "client": [
+    "FabricMixinHumanoidArmorLayer",
+    "ItemRendererAccessor",
+    "MinecraftMixin",
+    "MixinItemRenderer",
+    "TextureManagerMixin",
+    "AccessorWarningScreen"
   ],
   "mixins": [
+    "PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1

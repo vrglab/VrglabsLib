@@ -20,6 +20,9 @@
     ],
     "client": [
       "org.Vrglab.AzureLib.fabric.client.VlAzureLibModFabricClient"
+    ],
+    "modmenu": [
+      "mod.azure.azurelib.fabric.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -31,7 +34,6 @@
     "java": ">=17",
     "architectury": ">=11.1.17",
     "fabric-api": "*",
-    "azurelib": ">=2.1.12",
     "vrglabslib": ">=1.0.0"
   },
   "suggests": {
