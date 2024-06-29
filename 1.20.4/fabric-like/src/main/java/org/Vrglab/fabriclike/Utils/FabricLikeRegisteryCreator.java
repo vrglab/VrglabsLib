@@ -71,7 +71,7 @@ public class FabricLikeRegisteryCreator {
             @Override
             public Object accept(Object... args) {
                 Block b = net.minecraft.registry.Registry.register(Registries.BLOCK, new Identifier(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
-                net.minecraft.registry.Registry.register(Registries.ITEM, new Identifier(modid, args[0].toString()), new BlockItem(b, (Item.Settings) args[2]));
+                net.minecraft.registry.Registry.register(Registries.ITEM, new Identifier(modid, args[0].toString()), new BlockItem(b, ((Supplier<Item.Settings>) args[2]).get()));
                 return b;
             }
         };
@@ -157,6 +157,14 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
+        ICallBack ItemGroupRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return net.minecraft.registry.Registry.register(Registries.ITEM_GROUP, new Identifier(modid, args[0].toString()), (ItemGroup)args[1]);
+            }
+        };
+
+        Registry.initRegistry(ItemGroupRegistryCallBack, RegistryTypes.CREATIVE_MODE_TAB, modid);
         Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
