@@ -79,9 +79,8 @@ processResources {
 }
 
 shadowJar {
-    filesMatching('quilt.mod.json') {
-        expand rootProject.properties
-    }
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
 }
 
 remapJar {
