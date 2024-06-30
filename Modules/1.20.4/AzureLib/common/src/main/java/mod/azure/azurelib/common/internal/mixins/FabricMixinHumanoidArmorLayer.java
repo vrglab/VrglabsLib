@@ -3,7 +3,6 @@ package mod.azure.azurelib.common.internal.mixins;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.azure.azurelib.common.api.common.animatable.GeoItem;
 import mod.azure.azurelib.common.internal.client.RenderProvider;
-import mod.azure.azurelib.common.internal.common.AzureLib;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
@@ -38,6 +37,5 @@ public abstract class FabricMixinHumanoidArmorLayer<T extends LivingEntity, A ex
 
     @ModifyArg(method = "renderArmorPiece", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/HumanoidModel;ZFFFLjava/lang/String;)V"), index = 4)
     public A injectArmor(A humanoidModel){
-        AzureLib.LOGGER.info("INJECTION CODE IS RUNNING");
         return this.gl_storedItemStack.getItem() instanceof GeoItem ? (A) RenderProvider.of(this.gl_storedItemStack).getGenericArmorModel(this.gl_storedEntity, this.gl_storedItemStack, this.gl_storedSlot, (HumanoidModel<LivingEntity>) humanoidModel) : humanoidModel;    }
 }
