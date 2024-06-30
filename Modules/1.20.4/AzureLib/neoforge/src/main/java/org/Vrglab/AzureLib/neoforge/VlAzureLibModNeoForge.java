@@ -28,6 +28,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.Vrglab.AzureLib.VlAzureLibMod;
+import org.Vrglab.neoforge.Utils.NeoForgeRegistryCreator;
 
 import java.util.function.Supplier;
 
@@ -38,13 +39,14 @@ public final class VlAzureLibModNeoForge {
 
     public VlAzureLibModNeoForge(IEventBus modEventBus) {
         instance = this;
-        VlAzureLibMod.init();
         modEventBus.addListener(this::registerPackets);
         AzureLibMod.config = AzureLibMod.registerConfig(AzureLibConfig.class, ConfigFormats.json()).getConfigInstance();
         modEventBus.addListener(this::init);
         AzureEnchantments.ENCHANTMENTS.register(modEventBus);
         AzureBlocks.BLOCKS.register(modEventBus);
         AzureEntities.TILE_TYPES.register(modEventBus);
+        NeoForgeRegistryCreator.Create(modEventBus, AzureLib.MOD_ID);
+        VlAzureLibMod.init();
     }
 
     private void init(FMLCommonSetupEvent event) {
