@@ -70,6 +70,8 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionQuilt')
     common(project(path: ':fabric-like', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric-like', configuration: 'transformProductionQuilt')
+
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
 processResources {

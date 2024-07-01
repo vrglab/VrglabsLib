@@ -31,6 +31,7 @@ import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
+import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
 import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
@@ -42,14 +43,20 @@ import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Networking.Network;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class FabricLikeRegisteryCreator {
 
     public static void Create(String modid) {
+        createAutoRegistry();
         setEnergyStorageStatics(modid);
         setOreGenHelperStatics();
         setNetworkStatics();
@@ -288,6 +295,32 @@ public class FabricLikeRegisteryCreator {
             @Override
             public void accept(Object... args) {
                 ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
+            }
+        };
+    }
+
+    private static void createAutoRegistry() {
+        AutoRegistryLoader.collectAnnotatedFieldsForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Reflections reflections = new Reflections(
+                        new ConfigurationBuilder()
+                                .forPackage(args[0].toString())
+                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
+                                .setScanners(Scanners.FieldsAnnotated));
+                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>)args[1]);
+            }
+        };
+
+        AutoRegistryLoader.collectAnnotatedTypesForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Reflections reflections = new Reflections(
+                        new ConfigurationBuilder()
+                                .forPackage(args[0].toString())
+                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
+                                .setScanners(Scanners.TypesAnnotated));
+                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
             }
         };
     }
