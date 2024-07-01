@@ -32,6 +32,7 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.moddiscovery.MinecraftLocator;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -41,6 +42,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforgespi.language.ModFileScanData;
+import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
@@ -51,8 +54,16 @@ import org.Vrglab.Modloader.enumTypes.BootstrapType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
+import org.Vrglab.Utils.VLModInfo;
+import org.objectweb.asm.Type;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class NeoForgeRegistryCreator {
@@ -76,6 +87,9 @@ public class NeoForgeRegistryCreator {
 
 
     public static void Create(IEventBus eventBus, String modid) {
+        createAutoRegistry(modid);
+
+
         DeferredRegister<ItemGroup> ITEM_GROUP_REGISTRY = DeferredRegister.create(Registries.ITEM_GROUP.getKey(), modid);
         ITEM_GROUP_REGISTRY.register(eventBus);
 
@@ -242,5 +256,78 @@ public class NeoForgeRegistryCreator {
             var config_feat_lookup = r.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
             return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[1]), (List<PlacementModifier>)args[2]));
         }, BootstrapType.PLACED_FEAT, modid));
+    }
+
+    private static void createAutoRegistry(String modid){
+        AutoRegistryLoader.collectAnnotatedFieldsForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                List<ModFileScanData.AnnotationData> annotations = ModList.get().getAllScanData().stream()
+                        .map(ModFileScanData::getAnnotations)
+                        .flatMap(Collection::stream)
+                        .filter(a -> a.annotationType().equals(Type.getType((Class<? extends Annotation>)args[1])))
+                        .toList();
+
+
+                Set<Field> fields = new HashSet<>();
+
+                annotations.stream()
+                        .filter(data -> data.targetType() == ElementType.FIELD)
+                        .forEach(data -> {
+                            // Check mod ID
+                            String modId = modid;
+                            if (modId == null) {
+                                VLModInfo.LOGGER.error("Missing class AutoRegister annotation for field {}", data.memberName());
+                                return;
+                            }
+
+                            // Get containing class
+                            Class<?> clazz;
+                            try {
+                                clazz = Class.forName(data.clazz().getClassName(), false, AutoRegistryLoader.class.getClassLoader());
+                            } catch (ClassNotFoundException e) {
+                                VLModInfo.LOGGER.error("Unable to find class containing AutoRegister field {}. This shouldn't happen!", data.memberName());
+                                VLModInfo.LOGGER.error("If you're using AutoRegister on a field, make sure the containing class is also using the AutoRegister annotation with your mod ID as the value.");
+                                throw new RuntimeException(e);
+                            }
+
+                            // Get field
+                            Field f;
+                            try {
+                                f = clazz.getDeclaredField(data.memberName());
+                            } catch (NoSuchFieldException e) {
+                                VLModInfo.LOGGER.error("Unable to find AutoRegister field with name {} in class {}. This shouldn't happen!", data.memberName(), clazz.getName());
+                                throw new RuntimeException(e);
+                            }
+                            fields.add(f);
+                        });
+                return fields;
+            }
+        };
+
+        AutoRegistryLoader.collectAnnotatedTypesForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                List<ModFileScanData.AnnotationData> annotations = ModList.get().getAllScanData().stream()
+                        .map(ModFileScanData::getAnnotations)
+                        .flatMap(Collection::stream)
+                        .filter(a -> a.annotationType().equals(Type.getType((Class<? extends Annotation>)args[1])))
+                        .toList();
+
+                Set<Class> types = new HashSet<>();
+
+                annotations.stream()
+                        .filter(data -> data.targetType() == ElementType.TYPE)
+                        .forEach(data -> {
+                            try {
+                                types.add( Class.forName(data.clazz().getClassName(), false, AutoRegistryLoader.class.getClassLoader()));
+                            } catch (ClassNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+
+                return types;
+            }
+        };
     }
 }

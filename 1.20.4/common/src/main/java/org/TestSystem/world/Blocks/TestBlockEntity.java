@@ -8,8 +8,6 @@ import org.Vrglab.Utils.Utils;
 
 public class TestBlockEntity extends BlockEntity {
     public TestBlockEntity(BlockPos pos, BlockState state) {
-        super(Utils.convertToMcSafeType(TestBlocks.TEST_ENTITY_BLOCK_TYPE), pos, state);
+        super(TestBlocks.TEST_ENTITY_BLOCK_TYPE.getRegisteredObject(), pos, state);
     }
-
-
 }
