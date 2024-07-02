@@ -69,8 +69,10 @@ public class Registry {
             open_registeries.get(modid).put(_currentRegistryTypes, _registery);
         }
         if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
+            VLModInfo.LOGGER.warn("Registry " +_currentRegistryTypes + " for " +  modid + " has unresolved cached object's for registering, Registering objects now ");
             for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
                 if(!data.resolved && data.registry_type == _currentRegistryTypes){
+                    VLModInfo.LOGGER.info("Registring " + _currentRegistryTypes + "  " +  data.args.toArray()[0] + " for " + modid);
                     data.Obj = _registery.accept(data.args.toArray());
                     data.resolved = true;
                 }
@@ -345,10 +347,12 @@ public class Registry {
      * @since 1.1.0
      */
     public static Object SimpleRegister(UUID type, String Modid, Object... args){
-        VLModInfo.LOGGER.info("Registering "+String.valueOf(type).toLowerCase() +" " +  args[0] + " for " + Modid);
-        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
+        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type)) {
+            VLModInfo.LOGGER.info("Registering " +type + "  " +  args[0] + " for " + Modid);
             return open_registeries.get(Modid).get(type).accept(args);
+        }
         else {
+            VLModInfo.LOGGER.error("Registry "+ type + " is not yet initialized caching object " +  args[0] + " in mod " + Modid + " for later registration");
             UnregisteredData data = new UnregisteredData(type, args);
             if(!ready_to_load_registeries.containsKey(Modid)) {
                 ready_to_load_registeries.put(Modid, new HashSet<>());

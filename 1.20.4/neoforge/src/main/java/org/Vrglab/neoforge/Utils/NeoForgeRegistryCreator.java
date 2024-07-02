@@ -35,11 +35,11 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.moddiscovery.MinecraftLocator;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.capabilities.*;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -300,14 +300,14 @@ public class NeoForgeRegistryCreator {
         EnergyStorageUtils.hasExternalStorage = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return  ((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]) instanceof ICapabilityProvider<?,?,?>)||((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]).getCapability(ForgeCapabilities.ENERGY).resolve().get() != null);
+                return  ((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]) instanceof ICapabilityProvider)||((((BlockEntity)args[0]) != null) && ((BlockCapability)args[0]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK) != null);
             }
         };
 
         EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                net.neoforged.neoforge.energy.IEnergyStorage storage = ((BlockEntity)args[3]).getCapability(Capabilities.EnergyStorage.ENTITY).resolve().get();
+                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage)((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
                 Field maxReceiveField = null;
                 try {
                     maxReceiveField = storage.getClass().getDeclaredField("maxReceive");
