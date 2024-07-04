@@ -16,7 +16,7 @@ public class TestItems {
 
     public static Object[] getAll(){
         List<Object> objectList = new ArrayList<>();
-        objectList.add(TEST_ITEM);
+        objectList.add(TEST_ITEM.getRegisteredObject());
         return objectList.toArray();
     }
 
