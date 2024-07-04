@@ -13,7 +13,8 @@ import java.util.function.Supplier;
 
 public class RegistryBlockEntityType<T extends BlockEntity> extends AutoRegisteryObject<BlockEntityType<T>>{
 
-    public RegistryBlockEntityType(IBlockEntityLoaderFunction aNew, RegistryBlock block) {
+    public RegistryBlockEntityType(String modid, IBlockEntityLoaderFunction aNew, RegistryBlock block) {
+        this.modid = modid;
         supplier = new Supplier<BlockEntityType<T>>() {
             @Override
             public BlockEntityType<T> get() {

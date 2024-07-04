@@ -8,6 +8,7 @@ import org.Vrglab.AutoRegisteration.Annotations.RegisterBlockEntityType;
 import org.Vrglab.AutoRegisteration.Annotations.RegisterItem;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
+import org.Vrglab.AutoRegisteration.Objects.RegistryItem;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
@@ -37,16 +38,20 @@ public class AutoRegistryLoader {
         Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterItem.class, packageName, modId);
         annotatedFields.forEach(field -> {
             RegisterItem annotation = field.getAnnotation(RegisterItem.class);
-            Registry.RegisterItem(annotation.ItemName(), modId, new Supplier<Item>() {
-                @Override
-                public Item get() {
-                    try {
-                        return (Item)field.get(null);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
+            try {
+                field.setAccessible(true);
+                RegistryItem rg = ((RegistryItem)field.get(null));
+
+                if(rg.getModid().equals(modId))
+                    Registry.RegisterItem(annotation.ItemName(), modId, new Supplier<Item>() {
+                        @Override
+                        public Item get() {
+                            return (Item)rg.getRegisteredObject();
+                        }
+                    });
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -57,14 +62,15 @@ public class AutoRegistryLoader {
             try {
                 field.setAccessible(true);
                 RegistryBlock rg = ((RegistryBlock)field.get(null));
-                Registry.RegisterBlock(annotation.Name(), modId, new Supplier<Block>() {
-                    @Override
-                    public Block get() {
-                        if(rg.getRegisteredObject() == null)
-                            rg.setRegisteredObject();
-                      return (Block) rg.getRegisteredObject();
-                    }
-                }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
+                if(rg.getModid().equals(modId))
+                    Registry.RegisterBlock(annotation.Name(), modId, new Supplier<Block>() {
+                        @Override
+                        public Block get() {
+                            if(rg.getRegisteredObject() == null)
+                                rg.setRegisteredObject();
+                          return (Block) rg.getRegisteredObject();
+                        }
+                    }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +83,8 @@ public class AutoRegistryLoader {
             RegisterBlockEntityType annotation = field.getAnnotation(RegisterBlockEntityType.class);
             try {
                 RegistryBlockEntityType rg = ((RegistryBlockEntityType)field.get(null));
-                rg.setRegistryData(Registry.RegisterBlockEntityType(annotation.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), rg.getArgs().get("block")));
+                if(rg.getModid().equals(modId))
+                    rg.setRegistryData(Registry.RegisterBlockEntityType(annotation.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), rg.getArgs().get("block")));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

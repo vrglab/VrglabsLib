@@ -8,6 +8,8 @@ public abstract class AutoRegisteryObject<T> {
     protected T registeredObject;
     protected Object rawData;
     protected Supplier<T> supplier;
+
+    protected String modid;
     protected Map<String, Object> args;
 
     public Supplier<T> getSupplier() {
@@ -16,6 +18,10 @@ public abstract class AutoRegisteryObject<T> {
 
     public Map<String, Object> getArgs() {
         return args;
+    }
+
+    public String getModid() {
+        return modid;
     }
 
     public boolean isResolved() {

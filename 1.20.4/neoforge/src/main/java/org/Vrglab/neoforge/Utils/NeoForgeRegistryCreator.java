@@ -278,9 +278,8 @@ public class NeoForgeRegistryCreator {
                 List<ModFileScanData.AnnotationData> annotations = ModList.get().getAllScanData().stream()
                         .map(ModFileScanData::getAnnotations)
                         .flatMap(Collection::stream)
-                        .filter(a -> a.annotationType().equals(Type.getType((Class<? extends Annotation>)args[1])))
+                        .filter(a ->  a.annotationType().equals(Type.getType((Class<? extends Annotation>)args[1])))
                         .toList();
-
 
                 Set<Field> fields = new HashSet<>();
 
