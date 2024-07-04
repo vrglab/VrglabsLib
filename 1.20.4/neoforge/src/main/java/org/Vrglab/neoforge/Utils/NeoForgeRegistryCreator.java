@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerInventory;
@@ -44,19 +46,25 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
+import org.Vrglab.EnergySystem.EnergyStorage;
+import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Bootstrapper;
 import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
+import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
 import org.Vrglab.Modloader.enumTypes.BootstrapType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
+import org.Vrglab.Networking.Network;
 import org.Vrglab.Utils.VLModInfo;
 import org.objectweb.asm.Type;
 
+import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
@@ -90,6 +98,17 @@ public class NeoForgeRegistryCreator {
         createAutoRegistry(modid);
 
 
+
+        TypeTransformer.ObjectToType = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((DeferredHolder)args[0]).get();
+            }
+        };
+        createEnergyCallBacks();
+        createOreGenStatics();
+        createNetworkStatics();
+
         DeferredRegister<ItemGroup> ITEM_GROUP_REGISTRY = DeferredRegister.create(Registries.ITEM_GROUP.getKey(), modid);
         ITEM_GROUP_REGISTRY.register(eventBus);
 
@@ -105,32 +124,14 @@ public class NeoForgeRegistryCreator {
         DeferredRegister<VillagerProfession> PROFESSION_REGISTRY = DeferredRegister.create(Registries.VILLAGER_PROFESSION.getKey(), modid);
         PROFESSION_REGISTRY.register(eventBus);
 
+        DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE.getKey(), modid);
+        BLOCK_ENTITY_TYPE.register(eventBus);
+
         DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_REGISTRY = DeferredRegister.create(Registries.RECIPE_SERIALIZER.getKey(), modid);
         RECIPE_SERIALIZER_REGISTRY.register(eventBus);
 
         DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTRY = DeferredRegister.create(Registries.RECIPE_TYPE.getKey(), modid);
         RECIPE_TYPE_REGISTRY.register(eventBus);
-
-        TypeTransformer.ObjectToType = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return ((DeferredHolder)args[0]).get();
-            }
-        };
-
-        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return ((Block)((DeferredBlock)args[0]).get()).getDefaultState();
-            }
-        };
-
-        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
-            }
-        };
 
         ICallBack Itemcallback = new ICallBack() {
             @Override
@@ -190,6 +191,13 @@ public class NeoForgeRegistryCreator {
             }
         };
 
+        ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return BLOCK_ENTITY_TYPE.register(args[0].toString(), ()->BlockEntityType.Builder.create((blockPos,blockState)->((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState), ((Block)((DeferredBlock)args[2]).get())).build(null));
+            }
+        };
+
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -215,6 +223,7 @@ public class NeoForgeRegistryCreator {
         Registry.initRegistry(Itemcallback, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockcallback, RegistryTypes.ITEMLESS_BLOCK, modid);
         Registry.initRegistry(Blockcallback, RegistryTypes.BLOCK, modid);
+        Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
         Registry.initRegistry(POIcallback, RegistryTypes.POI, modid);
         Registry.initRegistry(Professioncallback, RegistryTypes.PROFESSION, modid);
         Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
@@ -327,6 +336,148 @@ public class NeoForgeRegistryCreator {
                         });
 
                 return types;
+            }
+        };
+    }
+
+    private static void createEnergyCallBacks() {
+        EnergyStorageUtils.createStorageInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return new net.neoforged.neoforge.energy.EnergyStorage(Math.toIntExact((long)args[0]), Math.toIntExact((long)args[1]), Math.toIntExact((long)args[2]), Math.toIntExact((long)args[3])) {
+                    @Override
+                    public int receiveEnergy(int maxReceive, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.receiveEnergy(maxReceive, simulate);
+                    }
+
+                    @Override
+                    public int extractEnergy(int maxExtract, boolean simulate) {
+                        try {
+                            ((EnergyStorage)args[4]).makeDirty.accept();
+                        } catch (Throwable t) {
+
+                        }
+                        return super.extractEnergy(maxExtract, simulate);
+                    }
+                };
+            }
+        };
+
+        EnergyStorageUtils.receiveEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.neoforged.neoforge.energy.IEnergyStorage)args[0]).receiveEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
+            }
+        };
+
+        EnergyStorageUtils.extractEnergyInstance = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((net.neoforged.neoforge.energy.IEnergyStorage)args[0]).extractEnergy(Math.toIntExact((long)args[1]), (boolean)args[2]);
+            }
+        };
+
+        EnergyStorageUtils.hasExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return  ((((BlockEntity)args[0]) != null) && ((BlockEntity)args[0]) instanceof ICapabilityProvider)||((((BlockEntity)args[0]) != null) && ((BlockCapability)args[0]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK) != null);
+            }
+        };
+
+        EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage)((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
+                Field maxReceiveField = null;
+                try {
+                    maxReceiveField = storage.getClass().getDeclaredField("maxReceive");
+                } catch (NoSuchFieldException e) {
+
+                }
+                int maxReceive = 0;
+                maxReceiveField.setAccessible(true);
+                try {
+                    maxReceive = (int) maxReceiveField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field maxExtractField = null;
+                try {
+                    maxExtractField = storage.getClass().getDeclaredField("maxExtract");
+                } catch (NoSuchFieldException e) {
+
+                }
+                maxExtractField.setAccessible(true);
+                int maxExtract = 0;
+                try {
+                    maxExtract = (int) maxExtractField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field capacityField = null;
+                try {
+                    capacityField = storage.getClass().getDeclaredField("capacity");
+                } catch (NoSuchFieldException e) {
+
+                }
+                capacityField.setAccessible(true);
+                int capacity = 0;
+                try {
+                    capacity = (int) capacityField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                Field energyField = null;
+                try {
+                    energyField = storage.getClass().getDeclaredField("energy");
+                } catch (NoSuchFieldException e) {
+                }
+                energyField.setAccessible(true);
+                int energy = 0;
+                try {
+                    energy = (int) energyField.get(storage);
+                } catch (IllegalAccessException e) {
+
+                }
+                return new EnergyStorage(storage, capacity, maxReceive, maxExtract, energy).setBlockEntityType(((BlockEntity)args[3])).setMakeDirtyFunction(()->((BlockEntity)args[3]).markDirty());
+            }
+        };
+    }
+
+    private static void createOreGenStatics() {
+
+        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return ((Block)((DeferredBlock)args[0]).get()).getDefaultState();
+            }
+        };
+
+        PlacementModifierCreationHelper.getHeightModifications = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
+            }
+        };
+    }
+
+    private static void createNetworkStatics() {
+        Network.registerGlobalReceiver = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+
+            }
+        };
+
+        Network.clientSendPacket = new ICallbackVoid() {
+            @Override
+            public void accept(Object... args) {
+
             }
         };
     }
