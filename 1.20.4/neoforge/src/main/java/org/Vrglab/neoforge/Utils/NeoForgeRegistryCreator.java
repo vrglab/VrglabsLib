@@ -42,6 +42,7 @@ import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -395,7 +396,7 @@ public class NeoForgeRegistryCreator {
         EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage)((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
+                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage) ((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
                 Field maxReceiveField = null;
                 try {
                     maxReceiveField = storage.getClass().getDeclaredField("maxReceive");
