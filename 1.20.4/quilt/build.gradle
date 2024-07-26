@@ -71,7 +71,7 @@ dependencies {
     common(project(path: ':fabric-like', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric-like', configuration: 'transformProductionQuilt')
 
-    implementation 'org.reflections:reflections:0.10.2'
+    modImplementation "org.Vrglab.Reflections:mc_reflections:quilt-$rootProject.vrglab_reflections_version-mc$rootProject.minecraft_version"
 }
 
 processResources {
