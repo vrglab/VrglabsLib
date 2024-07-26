@@ -12,6 +12,7 @@ import org.Vrglab.AutoRegisteration.Objects.RegistryItem;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -114,6 +115,8 @@ public class AutoRegistryLoader {
         return (Set<Class>) collectAnnotatedTypesForMod.accept(packageName, annotation, modid);
     }
 
+    @ApiStatus.Internal
     public static ICallBack collectAnnotatedTypesForMod;
+    @ApiStatus.Internal
     public static ICallBack collectAnnotatedFieldsForMod;
 }
