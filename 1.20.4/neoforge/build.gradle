@@ -52,6 +52,8 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
 
+    modImplementation "org.Vrglab.Reflections:mc_reflections:neoforge-$rootProject.vrglab_reflections_version-mc$rootProject.minecraft_version"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

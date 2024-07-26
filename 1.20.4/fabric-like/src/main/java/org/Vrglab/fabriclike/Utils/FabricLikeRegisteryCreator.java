@@ -43,10 +43,10 @@ import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Networking.Network;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
+import org.Vrglab.Reflections.Reflections;
+import org.Vrglab.Reflections.scanners.Scanners;
+import org.Vrglab.Reflections.util.ConfigurationBuilder;
+import org.Vrglab.Reflections.util.FilterBuilder;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.lang.annotation.Annotation;
