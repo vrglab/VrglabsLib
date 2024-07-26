@@ -15,17 +15,17 @@ import java.util.List;
 public class TestBlocks {
 
     @RegisterBlock(Name = "test_block")
-    public static RegistryBlock<Block> TEST_BLOCK = new RegistryBlock<>(()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));
+    public static RegistryBlock<Block> TEST_BLOCK = new RegistryBlock<>(TestMod.MODID, ()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));
     public static Object TEST_ITEMLESS_BLOCK = Registry.RegisterItemlessBlock("test_itemless_block", TestMod.MODID, ()->new Block(AbstractBlock.Settings.create()));
 
     @RegisterBlock(Name = "test_poi_block")
-    public static RegistryBlock<Block> TEST_POI_BLOCK = new RegistryBlock<>(()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));
+    public static RegistryBlock<Block> TEST_POI_BLOCK = new RegistryBlock<>(TestMod.MODID, ()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));
 
     @RegisterBlock(Name = "test_entity_block")
-    public static RegistryBlock<TestEntityBlockHolder> TEST_ENTITY_BLOCK = new RegistryBlock<>(()->TestMod.basicItemSettings(), ()->new TestEntityBlockHolder(AbstractBlock.Settings.create()));
+    public static RegistryBlock<TestEntityBlockHolder> TEST_ENTITY_BLOCK = new RegistryBlock<>(TestMod.MODID, ()->TestMod.basicItemSettings(), ()->new TestEntityBlockHolder(AbstractBlock.Settings.create()));
 
     @RegisterBlockEntityType(Name = "test_entity_block_type")
-    public static RegistryBlockEntityType<TestBlockEntity> TEST_ENTITY_BLOCK_TYPE = new RegistryBlockEntityType<>(TestBlockEntity::new, TEST_ENTITY_BLOCK);
+    public static RegistryBlockEntityType<TestBlockEntity> TEST_ENTITY_BLOCK_TYPE = new RegistryBlockEntityType<>(TestMod.MODID, TestBlockEntity::new, TEST_ENTITY_BLOCK);
 
     public static Object[] getAll(){
         List<Object> objectList = new ArrayList<>();

@@ -5,11 +5,13 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -39,6 +41,7 @@ import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Bootstrapper;
 import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Modloader.Types.ICallBack;
@@ -150,6 +153,20 @@ public class FabricLikeRegisteryCreator {
             }
         };
 
+        ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                FabricBlockEntityTypeBuilder.Factory factory = new FabricBlockEntityTypeBuilder.Factory() {
+                    @Override
+                    public BlockEntity create(BlockPos blockPos, BlockState blockState) {
+                        return ((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState);
+                    }
+                };
+                return net.minecraft.registry.Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
+            }
+        };
+
+
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
@@ -174,6 +191,7 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(ItemGroupRegistryCallBack, RegistryTypes.CREATIVE_MODE_TAB, modid);
         Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
         Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
+        Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
         Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
         Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
         Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
