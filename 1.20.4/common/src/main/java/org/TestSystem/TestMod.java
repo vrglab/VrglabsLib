@@ -16,8 +16,8 @@ public class TestMod {
     public static final String MODID = "vrglabslib";
 
     public static void init(){
-        //CreativeModeTabs.init();
         AutoRegistryLoader.LoadAllInPackage("org.TestSystem", TestMod.MODID);
+        CreativeModeTabs.init();
     }
 
     public static Item.Settings basicItemSettings() {

@@ -85,7 +85,7 @@ public class AutoRegistryLoader {
             try {
                 RegistryBlockEntityType rg = ((RegistryBlockEntityType)field.get(null));
                 if(rg.getModid().equals(modId))
-                    rg.setRegistryData(Registry.RegisterBlockEntityType(annotation.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), rg.getArgs().get("block")));
+                    rg.setRegistryData(Registry.RegisterBlockEntityType(annotation.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), (rg.getArgs().get("block") instanceof RegistryBlock) ? (((RegistryBlock)rg.getArgs().get("block")).getRegisteredObject()) : rg.getArgs().get("block")));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
