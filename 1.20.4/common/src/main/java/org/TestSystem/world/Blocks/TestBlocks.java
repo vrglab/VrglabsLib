@@ -5,8 +5,10 @@ import net.minecraft.block.Block;
 import org.TestSystem.TestMod;
 import org.Vrglab.AutoRegisteration.Annotations.RegisterBlock;
 import org.Vrglab.AutoRegisteration.Annotations.RegisterBlockEntityType;
+import org.Vrglab.AutoRegisteration.Annotations.RegisterItemlessBlock;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
+import org.Vrglab.AutoRegisteration.Objects.RegistryItemlessBlock;
 import org.Vrglab.Modloader.Registration.Registry;
 
 import java.util.ArrayList;
@@ -16,7 +18,9 @@ public class TestBlocks {
 
     @RegisterBlock(Name = "test_block")
     public static RegistryBlock<Block> TEST_BLOCK = new RegistryBlock<>(TestMod.MODID, ()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));
-    public static Object TEST_ITEMLESS_BLOCK = Registry.RegisterItemlessBlock("test_itemless_block", TestMod.MODID, ()->new Block(AbstractBlock.Settings.create()));
+
+    @RegisterItemlessBlock(Name = "test_itemless_block")
+    public static RegistryItemlessBlock<Block> TEST_ITEMLESS_BLOCK = new RegistryItemlessBlock<>(TestMod.MODID,  ()->new Block(AbstractBlock.Settings.create()));
 
     @RegisterBlock(Name = "test_poi_block")
     public static RegistryBlock<Block> TEST_POI_BLOCK = new RegistryBlock<>(TestMod.MODID, ()->TestMod.basicItemSettings(), ()->new Block(AbstractBlock.Settings.create()));

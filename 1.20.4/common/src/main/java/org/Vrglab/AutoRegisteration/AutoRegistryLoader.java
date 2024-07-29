@@ -2,13 +2,11 @@ package org.Vrglab.AutoRegisteration;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import org.Vrglab.AutoRegisteration.Annotations.AwakenOnLoad;
-import org.Vrglab.AutoRegisteration.Annotations.RegisterBlock;
-import org.Vrglab.AutoRegisteration.Annotations.RegisterBlockEntityType;
-import org.Vrglab.AutoRegisteration.Annotations.RegisterItem;
+import org.Vrglab.AutoRegisteration.Annotations.*;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
 import org.Vrglab.AutoRegisteration.Objects.RegistryItem;
+import org.Vrglab.AutoRegisteration.Objects.RegistryItemlessBlock;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
@@ -26,6 +24,7 @@ public class AutoRegistryLoader {
     public static void LoadAllInPackage(String packageName, String modid) {
         loadItemsInPackage(packageName, modid);
         loadBlocksInPackage(packageName, modid);
+        loadItemlessBlocksInPackage(packageName, modid);
         loadBlockEntityTypesInPackage(packageName, modid);
         callInitsInPackage(packageName, modid);
     }
@@ -72,6 +71,28 @@ public class AutoRegistryLoader {
                           return (Block) rg.getRegisteredObject();
                         }
                     }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private static void loadItemlessBlocksInPackage(String packageName, String modId) {
+        Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterItemlessBlock.class, packageName, modId);
+        annotatedFields.forEach(field -> {
+            RegisterItemlessBlock annotation = field.getAnnotation(RegisterItemlessBlock.class);
+            try {
+                field.setAccessible(true);
+                RegistryItemlessBlock rg = ((RegistryItemlessBlock)field.get(null));
+                if(rg.getModid().equals(modId))
+                    Registry.RegisterItemlessBlock(annotation.Name(), modId, new Supplier<Block>() {
+                        @Override
+                        public Block get() {
+                            if(rg.getRegisteredObject() == null)
+                                rg.setRegisteredObject();
+                            return (Block) rg.getRegisteredObject();
+                        }
+                    });
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
