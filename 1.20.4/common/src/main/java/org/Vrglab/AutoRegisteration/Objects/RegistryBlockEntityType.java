@@ -26,13 +26,4 @@ public class RegistryBlockEntityType<T extends BlockEntity> extends AutoRegister
         this.args.put("new", aNew);
         this.args.put("block", block);
     }
-
-    public void setRegistryData(Object data) {
-        rawData = data;
-    }
-
-    @Override
-    public BlockEntityType<T> getRegisteredObject() {
-        return (BlockEntityType<T>)TypeTransformer.ObjectToType.accept(rawData);
-    }
 }

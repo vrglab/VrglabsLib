@@ -1,5 +1,8 @@
 package org.Vrglab.AutoRegisteration.Objects;
 
+import net.minecraft.block.entity.BlockEntityType;
+import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
+
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -29,6 +32,14 @@ public abstract class AutoRegisteryObject<T> {
     }
 
     public T getRegisteredObject() {
-        return registeredObject;
+        return (T) TypeTransformer.ObjectToType.accept(rawData);
+    }
+
+    public void setRegistryData(Object data) {
+        rawData = data;
+    }
+
+    public Object getRawData() {
+        return rawData;
     }
 }

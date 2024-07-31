@@ -14,8 +14,4 @@ public class RegistryBlock<T extends Block> extends AutoRegisteryObject<T> {
         this.args = new HashMap<>();
         this.args.put("item.settings", settings);
     }
-
-    public void setRegisteredObject(){
-        this.registeredObject = supplier.get();
-    }
 }

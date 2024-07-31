@@ -12,7 +12,7 @@ public class CreativeModeTabs {
     public static Object TEST_GROUP = Registry.RegisterCreativeModeTab("test_tab", TestMod.MODID,
             CreativeModeTabBuilder.create()
                     .setDisplayText("test_tab")
-                    .setIcon(TestItems.TEST_ITEM.getRegisteredObject())
+                    .setIcon(TestItems.TEST_ITEM.getRawData())
                     .setEntries(TestItems.getAll(), TestBlocks.getAll())
                     .build()
     );
