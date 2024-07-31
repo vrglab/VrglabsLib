@@ -34,6 +34,8 @@ import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
 import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
@@ -339,6 +341,14 @@ public class FabricLikeRegisteryCreator {
                                 .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
                                 .setScanners(Scanners.TypesAnnotated));
                 return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
+            }
+        };
+
+        AutoRegistryLoader.entityTypeBlockSelector = new ICallBack() {
+
+            @Override
+            public Object accept(Object... args) {
+                return ((RegistryBlock)((RegistryBlockEntityType)args[0]).getArgs().get("block")).getRegisteredObject();
             }
         };
     }

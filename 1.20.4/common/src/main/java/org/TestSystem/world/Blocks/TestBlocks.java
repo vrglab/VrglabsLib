@@ -33,9 +33,9 @@ public class TestBlocks {
 
     public static Object[] getAll(){
         List<Object> objectList = new ArrayList<>();
-        objectList.add(TEST_BLOCK.getRegisteredObject());
-        objectList.add(TEST_POI_BLOCK.getRegisteredObject());
-        objectList.add(TEST_ENTITY_BLOCK.getRegisteredObject());
+        objectList.add(TEST_BLOCK.getRawData());
+        objectList.add(TEST_POI_BLOCK.getRawData());
+        objectList.add(TEST_ENTITY_BLOCK.getRawData());
         return objectList.toArray();
     }
 

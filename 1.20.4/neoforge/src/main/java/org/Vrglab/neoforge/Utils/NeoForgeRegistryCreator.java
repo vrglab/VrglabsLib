@@ -50,6 +50,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
 import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
@@ -339,6 +341,14 @@ public class NeoForgeRegistryCreator {
                         });
 
                 return types;
+            }
+        };
+
+        AutoRegistryLoader.entityTypeBlockSelector = new ICallBack() {
+
+            @Override
+            public Object accept(Object... args) {
+                return ((RegistryBlock)((RegistryBlockEntityType)args[0]).getArgs().get("block")).getRawData();
             }
         };
     }

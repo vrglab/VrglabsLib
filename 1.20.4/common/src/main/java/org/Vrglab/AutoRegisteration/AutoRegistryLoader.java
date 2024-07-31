@@ -28,75 +28,61 @@ public class AutoRegistryLoader {
         callInitsInPackage(packageName, modid);
     }
 
-    public static void LoadAllInPackage(String packageName, String modid, ClassLoader _loader) {
-        loader = _loader;
-        loadBlocksInPackage(packageName, modid);
-    }
-
-    private static void loadItemsInPackage(String packageName, String modId) {
+    public static void loadItemsInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             RegistryItem rg = ((RegistryItem)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
-            return Registry.RegisterItem(rt.ItemName(), modId, new Supplier<Item>() {
-                @Override
-                public Item get() {
-                    if(rg.getRegisteredObject() == null)
-                        rg.setRegisteredObject();
-                    return (Item)rg.getRegisteredObject();
-                }
-            });
+            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, rg.getSupplier());
+            rg.setRegistryData(return_val);
+            return return_val;
         });
     }
 
-    private static void loadBlocksInPackage(String packageName, String modId) {
+    public static void loadBlocksInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
             RegistryBlock rg = ((RegistryBlock)args[0]);
             RegisterBlock rt = ((RegisterBlock)args[1]);
-            return Registry.RegisterBlock(rt.Name(), modId, new Supplier<Block>() {
-                @Override
-                public Block get() {
-                    if(rg.getRegisteredObject() == null)
-                        rg.setRegisteredObject();
-                    return (Block) rg.getRegisteredObject();
-                }
-            }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
+            Object return_val = Registry.RegisterBlock(rt.Name(), modId, rg.getSupplier(), (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
+            rg.setRegistryData(return_val);
+            return return_val;
         });
     }
 
-    private static void loadItemlessBlocksInPackage(String packageName, String modId) {
+    public static void loadItemlessBlocksInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
             RegistryItemlessBlock rg = ((RegistryItemlessBlock)args[0]);
             RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
-            return Registry.RegisterItemlessBlock(rt.Name(), modId, new Supplier<Block>() {
-                @Override
-                public Block get() {
-                    if(rg.getRegisteredObject() == null)
-                        rg.setRegisteredObject();
-                    return (Block) rg.getRegisteredObject();
-                }
-            });
+            Object return_val = Registry.RegisterItemlessBlock(rt.Name(), modId, rg.getSupplier());
+            rg.setRegistryData(return_val);
+            return return_val;
         });
     }
 
-    private static void loadBlockEntityTypesInPackage(String packageName, String modId) {
+    public static void loadBlockEntityTypesInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterBlockEntityType.class, (args) -> {
             RegistryBlockEntityType rg = ((RegistryBlockEntityType)args[0]);
             RegisterBlockEntityType rt = ((RegisterBlockEntityType)args[1]);
-            Object return_val = Registry.RegisterBlockEntityType(rt.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), (rg.getArgs().get("block") instanceof RegistryBlock) ? (((RegistryBlock)rg.getArgs().get("block")).getRegisteredObject()) : rg.getArgs().get("block"));
+            Object return_val = Registry.RegisterBlockEntityType(
+                    rt.Name(),
+                    modId,
+                    (IBlockEntityLoaderFunction) rg.getArgs().get("new"),
+                    (rg.getArgs().get("block") instanceof RegistryBlock) ? (entityTypeBlockSelector.accept(rg)) : rg.getArgs().get("block")
+            );
             rg.setRegistryData(return_val);
             return return_val;
         });
     }
 
     private static void callInitsInPackage(String packageName, String modId) {
-        Set<Class> annotatedType = getTypesAnnotatedIn(AwakenOnLoad.class, packageName, modId);
+        // this function should probably be deleted
+        /*Set<Class> annotatedType = getTypesAnnotatedIn(AwakenOnLoad.class, packageName, modId);
         annotatedType.forEach(type -> {
             try {
                 type.getMethod("init").invoke(null);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
-        });
+        });*/
     }
 
     private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack Resolver) {
@@ -127,4 +113,6 @@ public class AutoRegistryLoader {
     public static ICallBack collectAnnotatedTypesForMod;
     @ApiStatus.Internal
     public static ICallBack collectAnnotatedFieldsForMod;
+    @ApiStatus.Internal
+    public static ICallBack entityTypeBlockSelector;
 }
