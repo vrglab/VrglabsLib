@@ -9,6 +9,9 @@ public class RegistryItem<T extends Item> extends AutoRegisteryObject<T> {
     public RegistryItem(String modid, Supplier<T> getItem) {
         this.supplier = getItem;
         this.modid = modid;
-        registeredObject = this.supplier.get();
+    }
+
+    public void setRegisteredObject() {
+        this.registeredObject = this.supplier.get();
     }
 }

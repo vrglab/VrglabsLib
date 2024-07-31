@@ -3,15 +3,14 @@ package org.Vrglab.AutoRegisteration;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import org.Vrglab.AutoRegisteration.Annotations.*;
-import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
-import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
-import org.Vrglab.AutoRegisteration.Objects.RegistryItem;
-import org.Vrglab.AutoRegisteration.Objects.RegistryItemlessBlock;
+import org.Vrglab.AutoRegisteration.Objects.*;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.Types.ICallbackVoid;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -35,81 +34,57 @@ public class AutoRegistryLoader {
     }
 
     private static void loadItemsInPackage(String packageName, String modId) {
-        Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterItem.class, packageName, modId);
-        annotatedFields.forEach(field -> {
-            RegisterItem annotation = field.getAnnotation(RegisterItem.class);
-            try {
-                field.setAccessible(true);
-                RegistryItem rg = ((RegistryItem)field.get(null));
-
-                if(rg.getModid().equals(modId))
-                    Registry.RegisterItem(annotation.ItemName(), modId, new Supplier<Item>() {
-                        @Override
-                        public Item get() {
-                            return (Item)rg.getRegisteredObject();
-                        }
-                    });
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
+            RegistryItem rg = ((RegistryItem)args[0]);
+            RegisterItem rt = ((RegisterItem)args[1]);
+            return Registry.RegisterItem(rt.ItemName(), modId, new Supplier<Item>() {
+                @Override
+                public Item get() {
+                    if(rg.getRegisteredObject() == null)
+                        rg.setRegisteredObject();
+                    return (Item)rg.getRegisteredObject();
+                }
+            });
         });
     }
 
     private static void loadBlocksInPackage(String packageName, String modId) {
-        Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterBlock.class, packageName, modId);
-        annotatedFields.forEach(field -> {
-            RegisterBlock annotation = field.getAnnotation(RegisterBlock.class);
-            try {
-                field.setAccessible(true);
-                RegistryBlock rg = ((RegistryBlock)field.get(null));
-                if(rg.getModid().equals(modId))
-                    Registry.RegisterBlock(annotation.Name(), modId, new Supplier<Block>() {
-                        @Override
-                        public Block get() {
-                            if(rg.getRegisteredObject() == null)
-                                rg.setRegisteredObject();
-                          return (Block) rg.getRegisteredObject();
-                        }
-                    }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
+            RegistryBlock rg = ((RegistryBlock)args[0]);
+            RegisterBlock rt = ((RegisterBlock)args[1]);
+            return Registry.RegisterBlock(rt.Name(), modId, new Supplier<Block>() {
+                @Override
+                public Block get() {
+                    if(rg.getRegisteredObject() == null)
+                        rg.setRegisteredObject();
+                    return (Block) rg.getRegisteredObject();
+                }
+            }, (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
         });
     }
 
     private static void loadItemlessBlocksInPackage(String packageName, String modId) {
-        Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterItemlessBlock.class, packageName, modId);
-        annotatedFields.forEach(field -> {
-            RegisterItemlessBlock annotation = field.getAnnotation(RegisterItemlessBlock.class);
-            try {
-                field.setAccessible(true);
-                RegistryItemlessBlock rg = ((RegistryItemlessBlock)field.get(null));
-                if(rg.getModid().equals(modId))
-                    Registry.RegisterItemlessBlock(annotation.Name(), modId, new Supplier<Block>() {
-                        @Override
-                        public Block get() {
-                            if(rg.getRegisteredObject() == null)
-                                rg.setRegisteredObject();
-                            return (Block) rg.getRegisteredObject();
-                        }
-                    });
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
+            RegistryItemlessBlock rg = ((RegistryItemlessBlock)args[0]);
+            RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
+            return Registry.RegisterItemlessBlock(rt.Name(), modId, new Supplier<Block>() {
+                @Override
+                public Block get() {
+                    if(rg.getRegisteredObject() == null)
+                        rg.setRegisteredObject();
+                    return (Block) rg.getRegisteredObject();
+                }
+            });
         });
     }
 
     private static void loadBlockEntityTypesInPackage(String packageName, String modId) {
-        Set<Field> annotatedFields = getFieldsAnnotatedIn(RegisterBlockEntityType.class, packageName, modId);
-        annotatedFields.forEach(field -> {
-            RegisterBlockEntityType annotation = field.getAnnotation(RegisterBlockEntityType.class);
-            try {
-                RegistryBlockEntityType rg = ((RegistryBlockEntityType)field.get(null));
-                if(rg.getModid().equals(modId))
-                    rg.setRegistryData(Registry.RegisterBlockEntityType(annotation.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), (rg.getArgs().get("block") instanceof RegistryBlock) ? (((RegistryBlock)rg.getArgs().get("block")).getRegisteredObject()) : rg.getArgs().get("block")));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        LoadingResolver(packageName, modId, RegisterBlockEntityType.class, (args) -> {
+            RegistryBlockEntityType rg = ((RegistryBlockEntityType)args[0]);
+            RegisterBlockEntityType rt = ((RegisterBlockEntityType)args[1]);
+            Object return_val = Registry.RegisterBlockEntityType(rt.Name(), modId, (IBlockEntityLoaderFunction) rg.getArgs().get("new"), (rg.getArgs().get("block") instanceof RegistryBlock) ? (((RegistryBlock)rg.getArgs().get("block")).getRegisteredObject()) : rg.getArgs().get("block"));
+            rg.setRegistryData(return_val);
+            return return_val;
         });
     }
 
@@ -124,7 +99,19 @@ public class AutoRegistryLoader {
         });
     }
 
-
+    private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack Resolver) {
+        Set<Field> annotatedFields = getFieldsAnnotatedIn(annotation, packageName, modId);
+        annotatedFields.forEach(field -> {
+            Annotation anno = field.getAnnotation(annotation);
+            try {
+                AutoRegisteryObject rg = ((AutoRegisteryObject)field.get(null));
+                if(rg.getModid().equals(modId))
+                    Resolver.accept(rg, anno);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
     /** HELPER METHODS AND REFLECTION FUNCTIONS **/
 
