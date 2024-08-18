@@ -11,6 +11,13 @@ architectury {
 allprojects {
     group = rootProject.maven_group
     version = "$project.name-$rootProject.loader_safe_version-mc$rootProject.minecraft_version"
+    repositories {
+        mavenCentral()
+        maven {
+            name "Vrglab Maven"
+            url "https://maven.thevrglab.com"
+        }
+    }
 }
 
 subprojects {

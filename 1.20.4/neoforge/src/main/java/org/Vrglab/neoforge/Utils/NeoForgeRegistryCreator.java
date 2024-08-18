@@ -34,8 +34,11 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.moddiscovery.MinecraftLocator;
-import net.neoforged.neoforge.capabilities.*;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
@@ -45,6 +48,10 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforgespi.language.ModFileScanData;
+import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
+import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
 import org.Vrglab.EnergySystem.EnergyStorage;
 import org.Vrglab.EnergySystem.EnergyStorageUtils;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
@@ -60,9 +67,21 @@ import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Networking.Network;
+import org.Vrglab.Reflections.Reflections;
+import org.Vrglab.Reflections.scanners.Scanners;
+import org.Vrglab.Reflections.util.ConfigurationBuilder;
+import org.Vrglab.Reflections.util.FilterBuilder;
+import org.Vrglab.Utils.VLModInfo;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class NeoForgeRegistryCreator {
@@ -86,6 +105,9 @@ public class NeoForgeRegistryCreator {
 
 
     public static void Create(IEventBus eventBus, String modid) {
+        createAutoRegistry(modid);
+
+
 
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
@@ -255,6 +277,40 @@ public class NeoForgeRegistryCreator {
         }, BootstrapType.PLACED_FEAT, modid));
     }
 
+    private static void createAutoRegistry(String modid){
+        AutoRegistryLoader.collectAnnotatedFieldsForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Reflections reflections = new Reflections(
+                        new ConfigurationBuilder()
+                                .forPackage(args[0].toString())
+                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
+                                .setScanners(Scanners.FieldsAnnotated));
+                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>)args[1]);
+            }
+        };
+
+        AutoRegistryLoader.collectAnnotatedTypesForMod = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Reflections reflections = new Reflections(
+                        new ConfigurationBuilder()
+                                .forPackage(args[0].toString())
+                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
+                                .setScanners(Scanners.TypesAnnotated));
+                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
+            }
+        };
+
+        AutoRegistryLoader.entityTypeBlockSelector = new ICallBack() {
+
+            @Override
+            public Object accept(Object... args) {
+                return ((RegistryBlock)((RegistryBlockEntityType)args[0]).getArgs().get("block")).getRawData();
+            }
+        };
+    }
+
     private static void createEnergyCallBacks() {
         EnergyStorageUtils.createStorageInstance = new ICallBack() {
             @Override
@@ -307,7 +363,7 @@ public class NeoForgeRegistryCreator {
         EnergyStorageUtils.wrapExternalStorage = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage)((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
+                net.neoforged.neoforge.energy.IEnergyStorage storage = (IEnergyStorage) ((BlockCapability)args[3]).getCapability(((BlockEntity)args[0]).getWorld(), ((BlockEntity)args[0]).getPos(), ((BlockEntity)args[0]).getCachedState(), ((BlockEntity)args[0]), Capabilities.EnergyStorage.BLOCK);
                 Field maxReceiveField = null;
                 try {
                     maxReceiveField = storage.getClass().getDeclaredField("maxReceive");

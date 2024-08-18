@@ -62,6 +62,8 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
     common(project(path: ':fabric-like', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric-like', configuration: 'transformProductionFabric')
+
+    modImplementation "org.Vrglab.Reflections:mc_reflections:fabric-$rootProject.vrglab_reflections_version-mc$rootProject.minecraft_version"
 }
 
 processResources {
