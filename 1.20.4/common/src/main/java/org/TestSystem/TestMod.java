@@ -17,7 +17,6 @@ public class TestMod {
 
     public static void init(){
         AutoRegistryLoader.LoadAllInPackage("org.TestSystem", TestMod.MODID);
-        CreativeModeTabs.init();
     }
 
     public static Item.Settings basicItemSettings() {

@@ -8,6 +8,8 @@ import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
+import org.Vrglab.Utils.Utils;
+import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.annotation.Annotation;
@@ -74,15 +76,16 @@ public class AutoRegistryLoader {
     }
 
     private static void callInitsInPackage(String packageName, String modId) {
-        // this function should probably be deleted
-        /*Set<Class> annotatedType = getTypesAnnotatedIn(AwakenOnLoad.class, packageName, modId);
+        Set<Class> annotatedType = getTypesAnnotatedIn(InitializableClass.class, packageName, modId);
         annotatedType.forEach(type -> {
             try {
                 type.getMethod("init").invoke(null);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                VLModInfo.LOGGER.error(e.getMessage());
             }
-        });*/
+        });
     }
 
     private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack Resolver) {
