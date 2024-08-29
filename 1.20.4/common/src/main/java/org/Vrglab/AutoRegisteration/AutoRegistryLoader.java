@@ -2,6 +2,7 @@ package org.Vrglab.AutoRegisteration;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import org.Vrglab.AutoRegisteration.Annotations.*;
 import org.Vrglab.AutoRegisteration.Objects.*;
 import org.Vrglab.Modloader.Registration.Registry;
@@ -28,6 +29,7 @@ public class AutoRegistryLoader {
         loadItemlessBlocksInPackage(packageName, modid);
         loadBlockEntityTypesInPackage(packageName, modid);
         callInitsInPackage(packageName, modid);
+        loadCMTInPackage(packageName, modid);
     }
 
     public static void loadItemsInPackage(String packageName, String modId) {
@@ -79,6 +81,7 @@ public class AutoRegistryLoader {
         Set<Class> annotatedType = getTypesAnnotatedIn(InitializableClass.class, packageName, modId);
         annotatedType.forEach(type -> {
             try {
+                type.getMethod("init").setAccessible(true);
                 type.getMethod("init").invoke(null);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
@@ -88,11 +91,22 @@ public class AutoRegistryLoader {
         });
     }
 
+    public static void loadCMTInPackage(String packageName, String modId) {
+        LoadingResolver(packageName, modId, RegisterCMT.class, (args) -> {
+            RegistryCMT rg = ((RegistryCMT)args[0]);
+            RegisterCMT rt = ((RegisterCMT)args[1]);
+            Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), modId, (ItemGroup)rg.getRawData());
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+    }
+
     private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack Resolver) {
         Set<Field> annotatedFields = getFieldsAnnotatedIn(annotation, packageName, modId);
         annotatedFields.forEach(field -> {
             Annotation anno = field.getAnnotation(annotation);
             try {
+                field.setAccessible(true);
                 AutoRegisteryObject rg = ((AutoRegisteryObject)field.get(null));
                 if(rg.getModid().equals(modId))
                     Resolver.accept(rg, anno);
