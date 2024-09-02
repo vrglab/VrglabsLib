@@ -2,6 +2,7 @@ package org.Vrglab.quilt;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import org.Vrglab.fabriclike.Utils.FabricLikeRegisteryCreator;
 
@@ -16,7 +17,7 @@ public class VLWorldGen extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup registries, Entries entries) {
-        FabricLikeRegisteryCreator.configureBootstrappables(registries, entries);
+        FabricLikeRegisteryCreator.configureBootstrapped(registries, entries, RegistryKeys.CONFIGURED_FEATURE, RegistryKeys.PLACED_FEATURE);
     }
 
     @Override
