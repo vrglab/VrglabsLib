@@ -20,7 +20,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -205,9 +204,10 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
-    public static void configureBootstrappables(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries) {
-        entries.addAll(Wrapper.getWrapperOrThrow(RegistryKeys.CONFIGURED_FEATURE));
-        entries.addAll(Wrapper.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE));
+    public static void configureBootstrapped(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries, RegistryKey... keys) {
+        for (RegistryKey key : keys) {
+            entries.addAll(Wrapper.getWrapperOrThrow(key));
+        }
     }
 
     public static void boostrap(RegistryBuilder builder, String modid) {
