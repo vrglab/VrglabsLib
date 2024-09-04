@@ -10,9 +10,8 @@ import java.util.function.Supplier;
 public class RegistryBiomeFeat extends AutoRegisteryObject<List<OreFeatureConfig.Target>> {
 
     public RegistryBiomeFeat(String modid, int size, Supplier<OreGenFeatCreationHelper> creationHelper) {
-        this.modid = modid;
+        super(modid);
         this.supplier = ()-> creationHelper.get().build();
-        this.args = new HashMap<>();
         this.args.put("size", size);
     }
 }

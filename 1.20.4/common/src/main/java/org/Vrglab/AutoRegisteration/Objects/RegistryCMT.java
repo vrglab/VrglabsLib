@@ -8,14 +8,13 @@ import java.util.function.Supplier;
 public class RegistryCMT<T extends ItemGroup> extends AutoRegisteryObject<T> {
 
     public RegistryCMT(String modid, T group_built) {
+        super(modid);
         this.supplier = new Supplier<T>() {
             @Override
             public T get() {
                 return (T)group_built;
             }
         };
-        this.modid = modid;
-        this.args = new HashMap<>();
         this.rawData = group_built;
     }
 }
