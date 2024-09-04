@@ -14,4 +14,16 @@ public class RegistryBlock<T extends Block> extends AutoRegisteryObject<T> {
         this.args = new HashMap<>();
         this.args.put("item.settings", settings);
     }
+
+    public RegistryBlock(String modid, Item.Settings settings, Supplier<T> getBlock) {
+        this.supplier = getBlock;
+        this.modid = modid;
+        this.args = new HashMap<>();
+        this.args.put("item.settings", new Supplier<Item.Settings>() {
+            @Override
+            public Item.Settings get() {
+                return settings;
+            }
+        });
+    }
 }
