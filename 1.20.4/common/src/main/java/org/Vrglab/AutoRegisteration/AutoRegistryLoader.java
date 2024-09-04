@@ -1,16 +1,17 @@
 package org.Vrglab.AutoRegisteration;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.world.gen.GenerationStep;
+import org.TestSystem.TestMod;
 import org.Vrglab.AutoRegisteration.Annotations.*;
 import org.Vrglab.AutoRegisteration.Objects.*;
+import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IAutoLoadResolver;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.Types.ICallbackVoid;
-import org.Vrglab.Utils.Utils;
+import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -57,6 +58,30 @@ public class AutoRegistryLoader {
             );
             rg.setRegistryData(return_val);
             return return_val;
+        });
+
+        /** BIOME FEAT **/
+        LoadingResolver(packageName, modid, RegisterBiomeFeat.class, RegistryBiomeFeat.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterOreConfiguredFeature(rt.Name(), modid, rg.getSupplier(),  (int)rg.getArgs().get("size"));
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+
+        /** PLACED FEAT **/
+        LoadingResolver(packageName, modid, RegisterPlacedFeat.class, RegistryPlacedFeat.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterPlacedFeature(rt.Name(), modid, ((RegistryBiomeFeat)rg.getArgs().get("conf_feat")).getRawData(),
+                    ((PlacementModifierCreationHelper)rg.getArgs().get("pl_helper")).build());
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+
+        /** BIOME MOD **/
+        LoadingResolver(packageName, modid, RegisterBiomeModification.class, RegistryBiomeModification.class, (rg, rt) -> {
+             Registry.AddBiomeModification(rt.Name(), TestMod.MODID, (VinillaBiomeTypes)rg.getArgs().get("biome_type"),
+                    (GenerationStep.Feature)rg.getArgs().get("gen_step"),
+                    ((RegistryPlacedFeat)rg.getArgs().get("placed_feat")).getRawData()
+            );
+            return null;
         });
 
         /** CLASS INIT FUNCTIONS **/
