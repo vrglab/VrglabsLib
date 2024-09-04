@@ -98,9 +98,11 @@ public class AutoRegistryLoader {
             T anno = field.getAnnotation(annotation);
             try {
                 field.setAccessible(true);
-                B rg = ((B)field.get(null));
-                if(rg.getModid().equals(modId))
-                    Resolver.accept(rg, anno);
+                if(field.getType().equals(registry)) {
+                    B rg = ((B)field.get(null));
+                    if(rg.getModid().equals(modId))
+                        Resolver.accept(rg, anno);
+                }
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
