@@ -21,8 +21,8 @@ public class TestBiomMods {
 
     @RegisterBiomeFeat(Name = "biom_mod_con_feat_test")
     public static RegistryBiomeFeat CON_FEAT = new RegistryBiomeFeat(TestMod.MODID,
-            OreGenFeatCreationHelper.create().addMatchCase(GenReplaceables.STONE_ORE_REPLACEABLES, TestBlocks.TEST_BLOCK.getRawData()),
-            1
+            1,
+            () -> OreGenFeatCreationHelper.create().addMatchCase(GenReplaceables.STONE_ORE_REPLACEABLES, TestBlocks.TEST_BLOCK.getRawData())
             );
 
     @RegisterPlacedFeat(Name = "biom_mod_placed_feat_test")
