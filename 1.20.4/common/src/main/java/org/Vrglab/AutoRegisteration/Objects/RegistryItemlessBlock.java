@@ -9,9 +9,8 @@ import java.util.function.Supplier;
 public class RegistryItemlessBlock <T extends Block> extends AutoRegisteryObject<T> {
 
     public RegistryItemlessBlock(String modid, Supplier<T> getBlock) {
+        super(modid);
         this.supplier = getBlock;
-        this.modid = modid;
-        this.args = new HashMap<>();
     }
 
     public void setRegisteredObject(){

@@ -14,7 +14,8 @@ import java.util.function.Supplier;
 public class RegistryBlockEntityType<T extends BlockEntity> extends AutoRegisteryObject<BlockEntityType<T>>{
 
     public RegistryBlockEntityType(String modid, IBlockEntityLoaderFunction aNew, RegistryBlock block) {
-        this.modid = modid;
+        super(modid);
+
         supplier = new Supplier<BlockEntityType<T>>() {
             @Override
             public BlockEntityType<T> get() {
@@ -22,7 +23,6 @@ public class RegistryBlockEntityType<T extends BlockEntity> extends AutoRegister
             }
         };
 
-        this.args = new HashMap<>();
         this.args.put("new", aNew);
         this.args.put("block", block);
     }
