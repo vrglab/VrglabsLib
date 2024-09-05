@@ -87,7 +87,6 @@ public class AutoRegistryLoader {
 
             Object return_val = Registry.RegisterProfession(rt.Name(), modid, poi.getId(), immutableItems, immutableBlocks, ((SoundEvent)rg.getArgs().get("immutableItems")));
             rg.setRegistryData(return_val);
-            rg.SetRawData(return_val);
             return return_val;
         });
 

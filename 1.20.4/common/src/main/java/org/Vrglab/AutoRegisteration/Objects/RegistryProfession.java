@@ -12,8 +12,4 @@ public class RegistryProfession extends AutoRegisteryObject<VillagerProfession> 
         this.args.put("event", event);
         this.args.put("poi", poi);
     }
-
-    public void SetRawData(Object prof) {
-        this.rawData = prof;
-    }
 }
