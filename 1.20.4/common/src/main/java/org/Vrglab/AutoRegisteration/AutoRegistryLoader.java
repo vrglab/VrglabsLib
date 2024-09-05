@@ -62,6 +62,19 @@ public class AutoRegistryLoader {
             return return_val;
         });
 
+        /** SCREEN HANDLER TYPE **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryScreenHandlerType.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterScreenHandlerType(rt.Name(), modid, (IScreenHandlerTypeCreationFunction) rg.getArgs().get("handler"));
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+
+        /** HANDLED SCREEN **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryHandledScreen.class, (rg, rt) -> {
+            Registry.RegisterHandledScreen(rt.Name(), modid, ((RegistryScreenHandlerType)rg.getArgs().get("handler")).getRawData(), ((IScreenHandledCreationFunction)rg.getArgs().get("handler")));
+            return null;
+        });
+
         /** POI **/
         LoadingResolver(packageName, modid, RegisterPOI.class, RegistryPOI.class, (rg, rt) -> {
             Object return_val = Registry.RegisterPOI(rt.Name(), modid, ((RegistryBlock<?>)rg.getArgs().get("block")).getRawData(), ((int)rg.getArgs().get("tickcount")), ((int)rg.getArgs().get("searchdistance")));
@@ -87,19 +100,6 @@ public class AutoRegistryLoader {
                     ((RegistryProfession)rg.getArgs().get("profession")).getRawData(),
                     ((int)rg.getArgs().get("level")),
                     ((TradeOffer[])rg.getArgs().get("offers")));
-            return null;
-        });
-
-        /** SCREEN HANDLER TYPE **/
-        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryScreenHandlerType.class, (rg, rt) -> {
-            Object return_val = Registry.RegisterScreenHandlerType(rt.Name(), modid, (IScreenHandlerTypeCreationFunction) rg.getArgs().get("handler"));
-            rg.setRegistryData(return_val);
-            return return_val;
-        });
-
-        /** HANDLED SCREEN **/
-        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryHandledScreen.class, (rg, rt) -> {
-            Registry.RegisterHandledScreen(rt.Name(), modid, ((RegistryScreenHandlerType)rg.getArgs().get("handler")).getRawData(), ((IScreenHandledCreationFunction)rg.getArgs().get("handler")));
             return null;
         });
 
