@@ -1,18 +1,18 @@
 package org.Vrglab.AutoRegisteration;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.village.TradeOffer;
 import net.minecraft.world.gen.GenerationStep;
 import org.TestSystem.TestMod;
 import org.Vrglab.AutoRegisteration.Annotations.*;
 import org.Vrglab.AutoRegisteration.Objects.*;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.Types.IAutoLoadResolver;
-import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
-import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.enumTypes.ConFeatType;
-import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
+import org.Vrglab.Modloader.Types.*;
+import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -59,6 +59,45 @@ public class AutoRegistryLoader {
             );
             rg.setRegistryData(return_val);
             return return_val;
+        });
+
+        /** POI **/
+        LoadingResolver(packageName, modid, RegisterPOI.class, RegistryPOI.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterPOI(rt.Name(), modid, ((RegistryBlock<?>)rg.getArgs().get("block")).getRawData(), ((int)rg.getArgs().get("tickcount")), ((int)rg.getArgs().get("searchdistance")));
+            rg.setRegistryData(return_val);
+            rg.setId(rt.Name());
+            return return_val;
+        });
+
+        /** PROFESSION **/
+        LoadingResolver(packageName, modid, RegisterProfession.class, RegistryProfession.class, (rg, rt) -> {
+            RegistryBlock[] rg_blocks = ((RegistryBlock<?>[])rg.getArgs().get("immutableBlocks"));
+            RegistryItem[] rg_items = ((RegistryItem[])rg.getArgs().get("immutableItems"));
+            RegistryPOI poi = ((RegistryPOI)rg.getArgs().get("poi"));
+
+            Item[] immutableItems = new Item[rg_blocks.length];
+            Block[] immutableBlocks = new Block[rg_blocks.length];
+
+            for (int i = 0; i < rg_items.length; i++) {
+                immutableItems[i] = (Item)rg_items[i].getRawData();
+            }
+            for (int i = 0; i < rg_blocks.length; i++) {
+                immutableBlocks[i] = (Block)rg_blocks[i].getRawData();
+            }
+
+            Object return_val = Registry.RegisterProfession(rt.Name(), modid, poi.getId(), immutableItems, immutableBlocks, ((SoundEvent)rg.getArgs().get("immutableItems")));
+            rg.setRegistryData(return_val);
+            rg.SetRawData(return_val);
+            return return_val;
+        });
+
+        /** TRADES **/
+        LoadingResolver(packageName, modid, RegisterPOI.class, RegistryVillagerTrade.class, (rg, rt) -> {
+            Registry.RegisterVillagerTrade(rt.Name(), modid,
+                    ((RegistryProfession)rg.getArgs().get("profession")).getRawData(),
+                    ((int)rg.getArgs().get("level")),
+                    ((TradeOffer[])rg.getArgs().get("offers")));
+            return null;
         });
 
         /** BIOME FEAT **/
