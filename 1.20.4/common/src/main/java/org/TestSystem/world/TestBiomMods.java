@@ -3,24 +3,23 @@ package org.TestSystem.world;
 import net.minecraft.world.gen.GenerationStep;
 import org.TestSystem.TestMod;
 import org.TestSystem.world.Blocks.TestBlocks;
-import org.Vrglab.AutoRegisteration.Annotations.InitializableClass;
-import org.Vrglab.AutoRegisteration.Annotations.RegisterBiomeFeat;
+import org.Vrglab.AutoRegisteration.Annotations.RegisterConFeat;
 import org.Vrglab.AutoRegisteration.Annotations.RegisterBiomeModification;
 import org.Vrglab.AutoRegisteration.Annotations.RegisterPlacedFeat;
-import org.Vrglab.AutoRegisteration.Objects.RegistryBiomeFeat;
+import org.Vrglab.AutoRegisteration.Objects.RegistryConFeat;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBiomeModification;
 import org.Vrglab.AutoRegisteration.Objects.RegistryPlacedFeat;
 import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
-import org.Vrglab.Modloader.Registration.Registry;
+import org.Vrglab.Modloader.enumTypes.ConFeatType;
 import org.Vrglab.Modloader.enumTypes.GenReplaceables;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 
 
 public class TestBiomMods {
 
-    @RegisterBiomeFeat(Name = "biom_mod_con_feat_test")
-    public static RegistryBiomeFeat CON_FEAT = new RegistryBiomeFeat(TestMod.MODID,
+    @RegisterConFeat(Name = "biom_mod_con_feat_test", Type = ConFeatType.OreGen)
+    public static RegistryConFeat CON_FEAT = new RegistryConFeat(TestMod.MODID,
             1,
             () -> OreGenFeatCreationHelper.create().addMatchCase(GenReplaceables.STONE_ORE_REPLACEABLES, TestBlocks.TEST_BLOCK.getRawData())
             );

@@ -11,6 +11,7 @@ import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IAutoLoadResolver;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.enumTypes.ConFeatType;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
@@ -61,15 +62,18 @@ public class AutoRegistryLoader {
         });
 
         /** BIOME FEAT **/
-        LoadingResolver(packageName, modid, RegisterBiomeFeat.class, RegistryBiomeFeat.class, (rg, rt) -> {
-            Object return_val = Registry.RegisterOreConfiguredFeature(rt.Name(), modid, rg.getSupplier(),  (int)rg.getArgs().get("size"));
-            rg.setRegistryData(return_val);
-            return return_val;
+        LoadingResolver(packageName, modid, RegisterConFeat.class, RegistryConFeat.class, (rg, rt) -> {
+            if(rt.Type() == ConFeatType.OreGen) {
+                Object return_val = Registry.RegisterOreConfiguredFeature(rt.Name(), modid, rg.getSupplier(),  (int)rg.getArgs().get("size"));
+                rg.setRegistryData(return_val);
+                return return_val;
+            }
+            return null;
         });
 
         /** PLACED FEAT **/
         LoadingResolver(packageName, modid, RegisterPlacedFeat.class, RegistryPlacedFeat.class, (rg, rt) -> {
-            Object return_val = Registry.RegisterPlacedFeature(rt.Name(), modid, ((RegistryBiomeFeat)rg.getArgs().get("conf_feat")).getRawData(),
+            Object return_val = Registry.RegisterPlacedFeature(rt.Name(), modid, ((RegistryConFeat)rg.getArgs().get("conf_feat")).getRawData(),
                     ((PlacementModifierCreationHelper)rg.getArgs().get("pl_helper")).build());
             rg.setRegistryData(return_val);
             return return_val;
