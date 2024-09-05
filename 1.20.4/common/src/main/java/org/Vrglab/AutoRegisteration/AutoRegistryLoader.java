@@ -85,7 +85,7 @@ public class AutoRegistryLoader {
                 immutableBlocks[i] = (Block)rg_blocks[i].getRawData();
             }
 
-            Object return_val = Registry.RegisterProfession(rt.Name(), modid, poi.getId(), immutableItems, immutableBlocks, ((SoundEvent)rg.getArgs().get("immutableItems")));
+            Object return_val = Registry.RegisterProfession(rt.Name(), modid, poi.getId(), immutableItems, immutableBlocks, ((SoundEvent)rg.getArgs().get("event")));
             rg.setRegistryData(return_val);
             return return_val;
         });
