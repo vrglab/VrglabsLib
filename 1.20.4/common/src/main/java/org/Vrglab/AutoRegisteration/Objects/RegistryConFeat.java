@@ -6,7 +6,7 @@ import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class RegistryConFeat extends AutoRegisteryObject<List<OreFeatureConfig.Target>> {
+public class RegistryConFeat extends AutoRegisteryObject {
 
     public RegistryConFeat(String modid, int size, Supplier<OreGenFeatCreationHelper> creationHelper) {
         super(modid);
