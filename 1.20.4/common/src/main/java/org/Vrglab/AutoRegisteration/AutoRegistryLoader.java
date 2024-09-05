@@ -8,9 +8,7 @@ import org.Vrglab.AutoRegisteration.Annotations.*;
 import org.Vrglab.AutoRegisteration.Objects.*;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
-import org.Vrglab.Modloader.Types.IAutoLoadResolver;
-import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
-import org.Vrglab.Modloader.Types.ICallBack;
+import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.ConFeatType;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
 import org.Vrglab.Utils.VLModInfo;
@@ -59,6 +57,19 @@ public class AutoRegistryLoader {
             );
             rg.setRegistryData(return_val);
             return return_val;
+        });
+
+        /** SCREEN HANDLER TYPE **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryScreenHandlerType.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterScreenHandlerType(rt.Name(), modid, (IScreenHandlerTypeCreationFunction) rg.getArgs().get("handler"));
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+
+        /** HANDLED SCREEN **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryHandledScreen.class, (rg, rt) -> {
+            Registry.RegisterHandledScreen(rt.Name(), modid, ((RegistryScreenHandlerType)rg.getArgs().get("handler")).getRawData(), ((IScreenHandledCreationFunction)rg.getArgs().get("handler")));
+            return null;
         });
 
         /** BIOME FEAT **/
