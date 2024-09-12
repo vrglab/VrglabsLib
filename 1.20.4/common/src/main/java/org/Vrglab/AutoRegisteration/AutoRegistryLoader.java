@@ -13,6 +13,7 @@ import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.*;
+import org.Vrglab.Utils.Utils;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -71,20 +72,9 @@ public class AutoRegistryLoader {
 
         /** PROFESSION **/
         LoadingResolver(packageName, modid, RegisterProfession.class, RegistryProfession.class, (rg, rt) -> {
-            RegistryBlock[] rg_blocks = ((RegistryBlock<?>[])rg.getArgs().get("immutableBlocks"));
-            RegistryItem[] rg_items = ((RegistryItem[])rg.getArgs().get("immutableItems"));
             RegistryPOI poi = ((RegistryPOI)rg.getArgs().get("poi"));
-
-            Item[] immutableItems = new Item[rg_blocks.length];
-            Block[] immutableBlocks = new Block[rg_blocks.length];
-
-            for (int i = 0; i < rg_items.length; i++) {
-                immutableItems[i] = (Item)rg_items[i].getRawData();
-            }
-            for (int i = 0; i < rg_blocks.length; i++) {
-                immutableBlocks[i] = (Block)rg_blocks[i].getRawData();
-            }
-
+            Item[] immutableItems = Utils.convertAGOToRD(((RegistryItem[])rg.getArgs().get("immutableItems")), new Item[0]);
+            Block[] immutableBlocks = Utils.convertAGOToRD(((RegistryBlock[])rg.getArgs().get("immutableBlocks")), new Block[0]);
             Object return_val = Registry.RegisterProfession(rt.Name(), modid, poi.getId(), immutableItems, immutableBlocks, ((SoundEvent)rg.getArgs().get("event")));
             rg.setRegistryData(return_val);
             return return_val;
@@ -92,6 +82,7 @@ public class AutoRegistryLoader {
 
         /** TRADES **/
         LoadingResolver(packageName, modid, RegisterPOI.class, RegistryVillagerTrade.class, (rg, rt) -> {
+            rg.setMcSafeConvertable(false);
             Registry.RegisterVillagerTrade(rt.Name(), modid,
                     ((RegistryProfession)rg.getArgs().get("profession")).getRawData(),
                     ((int)rg.getArgs().get("level")),

@@ -12,6 +12,7 @@ public abstract class AutoRegisteryObject<T> {
     protected T registeredObject;
     protected Object rawData;
     protected Supplier<T> supplier;
+    protected boolean mcSafe_convertable = true;
 
     protected String modid;
     protected Map<String, Object> args;
@@ -39,10 +40,22 @@ public abstract class AutoRegisteryObject<T> {
 
     public T getRegisteredObject() {
         if(registeredObject == null) {
-            registeredObject = (T) TypeTransformer.ObjectToType.accept(rawData);
+            if(mcSafe_convertable) {
+                registeredObject = (T) TypeTransformer.ObjectToType.accept(rawData);
+            } else {
+                registeredObject = (T) rawData;
+            }
             resolved = true;
         }
         return registeredObject;
+    }
+
+    public boolean isMcSafeConvertable() {
+        return mcSafe_convertable;
+    }
+
+    public void setMcSafeConvertable(boolean mcSafe_convertable) {
+        this.mcSafe_convertable = mcSafe_convertable;
     }
 
     public void setRegistryData(Object data) {

@@ -102,19 +102,15 @@ public class NeoForgeRegistryCreator {
    };
 
 
-
-
     public static void Create(IEventBus eventBus, String modid) {
-        createAutoRegistry(modid);
-
-
-
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 return ((DeferredHolder)args[0]).get();
             }
         };
+
+        createAutoRegistry(modid);
         createEnergyCallBacks();
         createOreGenStatics();
         createNetworkStatics();

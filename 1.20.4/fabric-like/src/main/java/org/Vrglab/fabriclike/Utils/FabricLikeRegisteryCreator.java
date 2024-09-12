@@ -60,17 +60,17 @@ import java.util.function.Supplier;
 public class FabricLikeRegisteryCreator {
 
     public static void Create(String modid) {
-        createAutoRegistry();
-        setEnergyStorageStatics(modid);
-        setOreGenHelperStatics();
-        setNetworkStatics();
-
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 return args[0];
             }
         };
+
+        createAutoRegistry();
+        setEnergyStorageStatics(modid);
+        setOreGenHelperStatics();
+        setNetworkStatics();
 
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
