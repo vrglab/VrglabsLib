@@ -103,6 +103,19 @@ public class AutoRegistryLoader {
             return null;
         });
 
+        /** SCREEN HANDLER TYPE **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryScreenHandlerType.class, (rg, rt) -> {
+            Object return_val = Registry.RegisterScreenHandlerType(rt.Name(), modid, (IScreenHandlerTypeCreationFunction) rg.getArgs().get("handler"));
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
+
+        /** HANDLED SCREEN **/
+        LoadingResolver(packageName, modid, RegisterScreenHandlerType.class, RegistryHandledScreen.class, (rg, rt) -> {
+            Registry.RegisterHandledScreen(rt.Name(), modid, ((RegistryScreenHandlerType)rg.getArgs().get("handler")).getRawData(), ((IScreenHandledCreationFunction)rg.getArgs().get("handler")));
+            return null;
+        });
+
         /** BIOME FEAT **/
         LoadingResolver(packageName, modid, RegisterConFeat.class, RegistryConFeat.class, (rg, rt) -> {
             if(rt.Type() == ConFeatType.OreGen) {
