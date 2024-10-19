@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.registry.RegistryBuilder;
 import org.Vrglab.Utils.VLModInfo;
+import org.Vrglab.fabric.datagen.VLWorldGen;
+import org.Vrglab.fabric.datagen.VlModelProvider;
 import org.Vrglab.fabriclike.Utils.FabricLikeRegisteryCreator;
 
 public class VLDataGenerator implements DataGeneratorEntrypoint {
@@ -16,6 +18,7 @@ public class VLDataGenerator implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
+        pack.addProvider(VlModelProvider::new);
         pack.addProvider(VLWorldGen::new);
     }
 
