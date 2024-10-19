@@ -16,6 +16,7 @@ import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
 import org.Vrglab.Modloader.Types.IScreenHandlerTypeCreationFunction;
+import org.Vrglab.Modloader.enumTypes.DataGenType;
 import org.Vrglab.Modloader.enumTypes.IRegistryType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
 import org.Vrglab.Modloader.enumTypes.VinillaBiomeTypes;
@@ -141,7 +142,9 @@ public class Registry {
      * @since 1.0.0
      */
     public static Object RegisterItem(String name, String Modid, Supplier aNew) {
-        return SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew);
+        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew);
+        DataGenRegistry.RegisterItem(Modid, data);
+        return data;
     }
 
     /**
@@ -158,7 +161,9 @@ public class Registry {
      * @since 1.0.0
      */
     public static Object RegisterBlock(String name, String Modid, Supplier aNew, Supplier<Item.Settings> settings) {
-        return SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
+        Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
+        DataGenRegistry.RegisterBlock(Modid, data);
+        return data;
     }
 
     /**
