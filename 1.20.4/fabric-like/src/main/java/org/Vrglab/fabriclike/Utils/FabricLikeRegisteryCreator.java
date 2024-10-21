@@ -13,6 +13,9 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.data.client.BlockStateModelGenerator;
+import net.minecraft.data.client.ItemModelGenerator;
+import net.minecraft.data.client.Models;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -41,6 +44,7 @@ import org.Vrglab.Modloader.CreationHelpers.OreGenFeatCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.PlacementModifierCreationHelper;
 import org.Vrglab.Modloader.CreationHelpers.TypeTransformer;
 import org.Vrglab.Modloader.Registration.Bootstrapper;
+import org.Vrglab.Modloader.Registration.DataGenRegistry;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
@@ -51,6 +55,8 @@ import org.Vrglab.Reflections.Reflections;
 import org.Vrglab.Reflections.scanners.Scanners;
 import org.Vrglab.Reflections.util.ConfigurationBuilder;
 import org.Vrglab.Reflections.util.FilterBuilder;
+import org.Vrglab.Utils.Utils;
+import org.Vrglab.Utils.VLModInfo;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.lang.annotation.Annotation;
@@ -208,6 +214,30 @@ public class FabricLikeRegisteryCreator {
         for (RegistryKey key : keys) {
             entries.addAll(Wrapper.getWrapperOrThrow(key));
         }
+    }
+
+    public static void callBlockDataGen(BlockStateModelGenerator blockStateModelGenerator, String modid) {
+        ICallBack BlockDatagen = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                blockStateModelGenerator.registerSimpleCubeAll(Utils.convertToMcSafeType(args[0]));
+                return null;
+            }
+        };
+
+        DataGenRegistry.initRegistery(BlockDatagen, DataGenType.Block, modid);
+    }
+
+    public static void callItemDataGen(ItemModelGenerator itemModelGenerator, String modid) {
+        ICallBack Itemdatagen = new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                itemModelGenerator.register(Utils.convertToMcSafeType(args[0]), Models.GENERATED);
+                return null;
+            }
+        };
+
+        DataGenRegistry.initRegistery(Itemdatagen, DataGenType.Item, modid);
     }
 
     public static void boostrap(RegistryBuilder builder, String modid) {
