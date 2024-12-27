@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "vrglabslib",
+    "version": "${loader_safe_version}",
+    "metadata": {
+      "name": "Vrglabs Lib",
+      "description": "Architectury based custom data Registration system and Utilities",
+      "contributors": {
+        "Vrglab": "Author"
+      },
+      "icon": "logo.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "org.Vrglab.quilt.VLModQuilt"
+      ],
+      "fabric-datagen": [
+        "org.Vrglab.quilt.VLDataGenerator"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=1.20.4"
+      },
+      {
+        "id": "architectury",
+        "version": ">=11.1.17"
+      }
+    ]
+  },
+  "mixin": [
+
+  ]
+}
