@@ -88,7 +88,9 @@ public interface SimpleEnergyItem {
 	 * @return The currently stored energy, ignoring the count and without checking the current item.
 	 */
 	static long getStoredEnergyUnchecked(ItemStack stack) {
-		return getStoredEnergyUnchecked(stack.getNbt());
+		//TODO: this implementation no longer works and needs replacement
+		//return getStoredEnergyUnchecked(stack.getNbt());
+		return 0;
 	}
 
 	/**
@@ -102,11 +104,12 @@ public interface SimpleEnergyItem {
 	 * Set the energy, ignoring the count and without checking the current item.
 	 */
 	static void setStoredEnergyUnchecked(ItemStack stack, long newAmount) {
-		if (newAmount == 0) {
+		//TODO: this implementation no longer works and needs replacement
+		/*if (newAmount == 0) {
 			// Make sure newly crafted energy containers stack with emptied ones.
 			stack.removeSubNbt(ENERGY_KEY);
 		} else {
 			stack.getOrCreateNbt().putLong(ENERGY_KEY, newAmount);
-		}
+		}*/
 	}
 }

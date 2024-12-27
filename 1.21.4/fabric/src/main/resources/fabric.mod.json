@@ -30,10 +30,10 @@
     "vrglabslib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.11",
-    "minecraft": "~1.20.4",
-    "java": ">=17",
-    "architectury": ">=11.1.17",
+    "fabricloader": ">=0.16.9",
+    "minecraft": "~1.21.3",
+    "java": ">=21",
+    "architectury": ">=14.0.4",
     "fabric-api": "*"
   },
   "suggests": {

@@ -52,7 +52,7 @@ public interface EnergyStorage {
 	 * On the client thread (i.e. with a client world), contents of queried EnergyStorages are unreliable and should not be modified.
 	 */
 	BlockApiLookup<EnergyStorage, @Nullable Direction> SIDED =
-			BlockApiLookup.get(new Identifier("teamreborn:sided_energy"), EnergyStorage.class, Direction.class);
+			BlockApiLookup.get(Identifier.of("teamreborn:sided_energy"), EnergyStorage.class, Direction.class);
 
 	/**
 	 * Item access to energy storages.
@@ -68,7 +68,7 @@ public interface EnergyStorage {
 	 * Returned APIs should behave the same regardless of the logical side.
 	 */
 	ItemApiLookup<EnergyStorage, ContainerItemContext> ITEM =
-			ItemApiLookup.get(new Identifier("teamreborn:energy"), EnergyStorage.class, ContainerItemContext.class);
+			ItemApiLookup.get(Identifier.of("teamreborn:energy"), EnergyStorage.class, ContainerItemContext.class);
 
 	/**
 	 * Always empty energy storage.
