@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "vrglabslib",
+  "version": "${loader_safe_version}",
+  "name": "Vrglabs Lib",
+  "description": "Architectury based custom data Registration system and Utilities",
+  "authors": [
+    "Vrglab"
+  ],
+  "contact": {
+    "issues": "https://github.com/vrglab/VrglabsLib/issues",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/vrglabs-lib",
+    "sources": "https://github.com/vrglab/VrglabsLib"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.Vrglab.fabric.VLModFabric"
+    ],
+    "client": [
+      "org.Vrglab.fabric.client.ExampleModFabricClient"
+    ],
+    "fabric-datagen": [
+      "org.Vrglab.fabric.VLDataGenerator"
+    ]
+  },
+  "mixins": [
+    "vrglabslib.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
+    "architectury": ">=11.1.17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
