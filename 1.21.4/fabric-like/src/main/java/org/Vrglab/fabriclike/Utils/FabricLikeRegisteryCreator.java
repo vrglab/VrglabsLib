@@ -13,9 +13,9 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Models;
+import net.minecraft.client.data.BlockStateModelGenerator;
+import net.minecraft.client.data.ItemModelGenerator;
+import net.minecraft.client.data.Models;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -81,36 +81,36 @@ public class FabricLikeRegisteryCreator {
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.ITEM, new Identifier(modid, args[0].toString()), ((Supplier<Item>)args[1]).get());
+                return net.minecraft.registry.Registry.register(Registries.ITEM, CreateNewId(modid, args[0].toString()), ((Supplier<Item>)args[1]).get());
             }
         };
         ICallBack BlockRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                Block b = net.minecraft.registry.Registry.register(Registries.BLOCK, new Identifier(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
-                net.minecraft.registry.Registry.register(Registries.ITEM, new Identifier(modid, args[0].toString()), new BlockItem(b, ((Supplier<Item.Settings>) args[2]).get()));
+                Block b = net.minecraft.registry.Registry.register(Registries.BLOCK, CreateNewId(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
+                net.minecraft.registry.Registry.register(Registries.ITEM, CreateNewId(modid, args[0].toString()), new BlockItem(b, ((Supplier<Item.Settings>) args[2]).get()));
                 return b;
             }
         };
         ICallBack ItemlessBlockRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.BLOCK, new Identifier(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
+                return net.minecraft.registry.Registry.register(Registries.BLOCK, CreateNewId(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
             }
         };
         ICallBack POIRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return PointOfInterestHelper.register(new Identifier(modid, args[0].toString()), (int)args[1], (int)args[2], (Block)args[3]);
+                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), (int)args[1], (int)args[2], (Block)args[3]);
             }
         };
 
         ICallBack ProfesionRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(modid, args[0].toString()),
-                        VillagerProfessionBuilder.create().id(new Identifier(modid, args[0].toString()))
-                                .workstation(RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), new Identifier(modid, args[1].toString())))
+                return net.minecraft.registry.Registry.register(Registries.VILLAGER_PROFESSION, CreateNewId(modid, args[0].toString()),
+                        VillagerProfessionBuilder.create().id(CreateNewId(modid, args[0].toString()))
+                                .workstation(RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), CreateNewId(modid, args[1].toString())))
                                 .harvestableItems(args[2] == null ? null: (Item[])args[2]).secondaryJobSites(args[3] == null ? null: (Block[])args[3])
                                 .workSound((args.length >= 5 && args[4] == null) ? null : (SoundEvent)args[4]).build());
             }
@@ -132,7 +132,7 @@ public class FabricLikeRegisteryCreator {
         ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(modid, args[0].toString()));
+                RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, CreateNewId(modid, args[0].toString()));
                 Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, r, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
                 return r;
             }
@@ -141,7 +141,7 @@ public class FabricLikeRegisteryCreator {
         ICallBack PlacedFeatCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(modid, args[0].toString()));
+                RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, CreateNewId(modid, args[0].toString()));
                 Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid, r, args[1], args[2]);
                 return r;
             }
@@ -169,7 +169,7 @@ public class FabricLikeRegisteryCreator {
                         return ((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState);
                     }
                 };
-                return net.minecraft.registry.Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
+                return net.minecraft.registry.Registry.register(Registries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
             }
         };
 
@@ -177,21 +177,21 @@ public class FabricLikeRegisteryCreator {
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(modid, args[0].toString()), (RecipeSerializer)args[1]);
+                return net.minecraft.registry.Registry.register(Registries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), (RecipeSerializer)args[1]);
             }
         };
 
         ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.RECIPE_TYPE, new Identifier(modid, args[0].toString()), (RecipeType) args[1]);
+                return net.minecraft.registry.Registry.register(Registries.RECIPE_TYPE, CreateNewId(modid, args[0].toString()), (RecipeType) args[1]);
             }
         };
 
         ICallBack ItemGroupRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.ITEM_GROUP, new Identifier(modid, args[0].toString()), (ItemGroup)args[1]);
+                return net.minecraft.registry.Registry.register(Registries.ITEM_GROUP, CreateNewId(modid, args[0].toString()), (ItemGroup)args[1]);
             }
         };
 
@@ -210,9 +210,14 @@ public class FabricLikeRegisteryCreator {
         Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
+    public static Identifier CreateNewId(String modid, String pathId ){
+        Identifier id = Identifier.of(modid, pathId);
+        return id;
+    }
+
     public static void configureBootstrapped(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries, RegistryKey... keys) {
         for (RegistryKey key : keys) {
-            entries.addAll(Wrapper.getWrapperOrThrow(key));
+            entries.addAll(Wrapper.getOrThrow(key));
         }
     }
 
@@ -337,14 +342,16 @@ public class FabricLikeRegisteryCreator {
         Network.registerGlobalReceiver = new ICallbackVoid() {
             @Override
             public void accept(Object... args) {
-                ServerPlayNetworking.registerGlobalReceiver((Identifier) args[0], (a, b, c, d, e)->((ICallBack)args[1]).accept(a,b,c,d,e));
+                //TODO: Fix networking
+                //ServerPlayNetworking.registerGlobalReceiver((Identifier) args[0], (a, b, c, d, e)->((ICallBack)args[1]).accept(a,b,c,d,e));
             }
         };
 
         Network.clientSendPacket = new ICallbackVoid() {
             @Override
             public void accept(Object... args) {
-                ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
+                //TODO: Fix networking
+                //ClientPlayNetworking.send((Identifier) args[0], (PacketByteBuf) args[1]);
             }
         };
     }
