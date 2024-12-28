@@ -34,21 +34,14 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.moddiscovery.MinecraftLocator;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.world.BiomeModifier;
-import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.Vrglab.AutoRegisteration.AutoRegistryLoader;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlock;
 import org.Vrglab.AutoRegisteration.Objects.RegistryBlockEntityType;
@@ -178,7 +171,7 @@ public class NeoForgeRegistryCreator {
         ICallBack Professioncallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                RegistryKey<PointOfInterestType> poi =  RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), new Identifier(modid, args[1].toString()));
+                RegistryKey<PointOfInterestType> poi =  RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), Identifier.of(modid, args[1].toString()));
                 return PROFESSION_REGISTRY.register(args[0].toString(), ()->new VillagerProfession(modid+"."+args[0].toString(), entry->entry.matchesKey(poi), entry->entry.matchesKey(poi), args[2] == null ? ImmutableSet.of() : ImmutableSet.copyOf(((Item[])args[2])), args[3] == null ? ImmutableSet.of() : ImmutableSet.copyOf(((Block[])args[3])), args[4] == null ? null : (SoundEvent)args[4]));
             }
         };
@@ -186,7 +179,7 @@ public class NeoForgeRegistryCreator {
         ICallBack OreGenRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(modid, args[0].toString()));
+                RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(modid, args[0].toString()));
                 Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, r, args[1], ((Supplier<List<OreFeatureConfig.Target>>) args[2]),  (int)args[3]);
                 return r;
             }
@@ -195,7 +188,7 @@ public class NeoForgeRegistryCreator {
         ICallBack PlacedFeatCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(modid, args[0].toString()));
+                RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(modid, args[0].toString()));
                 Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid, r, args[1], args[2]);
                 return r;
             }
@@ -204,7 +197,9 @@ public class NeoForgeRegistryCreator {
         ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return BLOCK_ENTITY_TYPE.register(args[0].toString(), ()->BlockEntityType.Builder.create((blockPos,blockState)->((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState), ((Block)((DeferredBlock)args[2]).get())).build(null));
+                //TODO: this implementation no longer works and needs replacement
+                //return BLOCK_ENTITY_TYPE.register(args[0].toString(), ()->BlockEntityType.BlockEntityFactory.create((blockPos,blockState)->((IBlockEntityLoaderFunction)args[1]).create(blockPos, blockState), ((Block)((DeferredBlock)args[2]).get())).build(null));
+                return null;
             }
         };
 
@@ -257,7 +252,8 @@ public class NeoForgeRegistryCreator {
                         return ((IScreenHandledCreationFunction)args[2]).create((org.Vrglab.Screen.ScreenHandler) handler, playerInventory, title);
                     }
                 };
-                HandledScreens.register((ScreenHandlerType)args[1], provider);
+                //TODO: this implementation no longer works and needs replacement
+                //HandledScreens.register((ScreenHandlerType)args[1], provider);
                 return null;
             }
         };
