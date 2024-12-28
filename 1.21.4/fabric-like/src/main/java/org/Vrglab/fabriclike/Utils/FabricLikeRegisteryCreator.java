@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -48,6 +49,7 @@ import org.Vrglab.Modloader.Registration.DataGenRegistry;
 import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
+import org.Vrglab.Modloader.Types.IClampedCallBack;
 import org.Vrglab.Modloader.enumTypes.*;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Networking.Network;
@@ -81,21 +83,24 @@ public class FabricLikeRegisteryCreator {
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.ITEM, CreateNewId(modid, args[0].toString()), ((Supplier<Item>)args[1]).get());
+                Identifier id = CreateNewId(modid, args[0].toString());
+                return net.minecraft.registry.Registry.register(Registries.ITEM, id, (((IClampedCallBack<Item>)args[1]).accept(Utils.MakeSafeSettings((((Supplier<Item.Settings>)args[2]).get()), RegistryTypes.ITEM, id))));
             }
         };
         ICallBack BlockRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                Block b = net.minecraft.registry.Registry.register(Registries.BLOCK, CreateNewId(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
-                net.minecraft.registry.Registry.register(Registries.ITEM, CreateNewId(modid, args[0].toString()), new BlockItem(b, ((Supplier<Item.Settings>) args[2]).get()));
+                Identifier id = CreateNewId(modid, args[0].toString());
+                Block b = net.minecraft.registry.Registry.register(Registries.BLOCK, id, (((IClampedCallBack<Block>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<AbstractBlock.Settings>)args[3]).get(), RegistryTypes.BLOCK, id))));
+                net.minecraft.registry.Registry.register(Registries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings((((Supplier<Item.Settings>)args[2]).get()), RegistryTypes.BLOCK, id)));
                 return b;
             }
         };
         ICallBack ItemlessBlockRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return net.minecraft.registry.Registry.register(Registries.BLOCK, CreateNewId(modid, args[0].toString()), ((Supplier<Block>)args[1]).get());
+                Identifier id = CreateNewId(modid, args[0].toString());
+                return net.minecraft.registry.Registry.register(Registries.BLOCK, id, ((IClampedCallBack<Block>)args[1]).accept(Utils.MakeSafeSettings((((Supplier<AbstractBlock.Settings>)args[2]).get()), RegistryTypes.ITEM, id)));
             }
         };
         ICallBack POIRegistryCallBack = new ICallBack() {

@@ -1,5 +1,6 @@
 package org.Vrglab.Modloader.Registration;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
@@ -12,10 +13,7 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
-import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
-import org.Vrglab.Modloader.Types.ICallBack;
-import org.Vrglab.Modloader.Types.IScreenHandledCreationFunction;
-import org.Vrglab.Modloader.Types.IScreenHandlerTypeCreationFunction;
+import org.Vrglab.Modloader.Types.*;
 import org.Vrglab.Modloader.enumTypes.DataGenType;
 import org.Vrglab.Modloader.enumTypes.IRegistryType;
 import org.Vrglab.Modloader.enumTypes.RegistryTypes;
@@ -141,8 +139,8 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterItem(String name, String Modid, Supplier aNew) {
-        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew);
+    public static Object RegisterItem(String name, String Modid, IClampedCallBack<Item> aNew, Supplier<Item.Settings> settings) {
+        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
         DataGenRegistry.RegisterItem(Modid, data);
         return data;
     }
@@ -160,8 +158,8 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterBlock(String name, String Modid, Supplier aNew, Supplier<Item.Settings> settings) {
-        Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings);
+    public static Object RegisterBlock(String name, String Modid, IClampedCallBack<Block> aNew, Supplier<Item.Settings> settings, Supplier<AbstractBlock.Settings> blockSettings) {
+        Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings, blockSettings);
         DataGenRegistry.RegisterBlock(Modid, data);
         return data;
     }
@@ -223,8 +221,8 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterItemlessBlock(String name, String Modid, Supplier aNew) {
-        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew);
+    public static Object RegisterItemlessBlock(String name, String Modid, IClampedCallBack<Block> aNew, Supplier<AbstractBlock.Settings> settingsSupplier) {
+        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew, settingsSupplier);
     }
 
     /**
