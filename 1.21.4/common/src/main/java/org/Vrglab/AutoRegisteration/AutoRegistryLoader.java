@@ -1,5 +1,6 @@
 package org.Vrglab.AutoRegisteration;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import org.Vrglab.AutoRegisteration.Annotations.*;
@@ -8,6 +9,7 @@ import org.Vrglab.Modloader.Registration.Registry;
 import org.Vrglab.Modloader.Types.IBlockEntityLoaderFunction;
 import org.Vrglab.Modloader.Types.ICallBack;
 import org.Vrglab.Modloader.Types.ICallbackVoid;
+import org.Vrglab.Modloader.Types.IClampedCallBack;
 import org.Vrglab.Utils.Utils;
 import org.Vrglab.Utils.VLModInfo;
 import org.jetbrains.annotations.ApiStatus;
@@ -34,7 +36,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             RegistryItem rg = ((RegistryItem)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
-            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, rg.getSupplier());
+            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, (IClampedCallBack<Item>) rg.getArgs().get("item"), (Supplier<Item.Settings>) rg.getArgs().get("settingsItem"));
             rg.setRegistryData(return_val);
             return return_val;
         });
@@ -44,7 +46,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
             RegistryBlock rg = ((RegistryBlock)args[0]);
             RegisterBlock rt = ((RegisterBlock)args[1]);
-            Object return_val = Registry.RegisterBlock(rt.Name(), modId, rg.getSupplier(), (Supplier<Item.Settings>)rg.getArgs().get("item.settings"));
+            Object return_val = Registry.RegisterBlock(rt.Name(), modId, (IClampedCallBack<Block>) rg.getArgs().get("block"), (Supplier<Item.Settings>)rg.getArgs().get("item.settings"), (Supplier<AbstractBlock.Settings>)rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
             return return_val;
         });
@@ -54,7 +56,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
             RegistryItemlessBlock rg = ((RegistryItemlessBlock)args[0]);
             RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
-            Object return_val = Registry.RegisterItemlessBlock(rt.Name(), modId, rg.getSupplier());
+            Object return_val = Registry.RegisterItemlessBlock(rt.Name(), modId, (IClampedCallBack<Block>) rg.getArgs().get("block"), (Supplier<AbstractBlock.Settings>) rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
             return return_val;
         });
