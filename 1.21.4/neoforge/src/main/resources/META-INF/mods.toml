@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[2,)"
+loaderVersion = "[4,)"
 issueTrackerURL = "https://github.com/vrglab/VrglabsLib/issues"
 license = "MIT"
 
@@ -16,21 +16,21 @@ logoFile = "logo.png"
 [[dependencies.vrglabslib]]
 modId = "neoforge"
 type = "required"
-versionRange = "[20.4,)"
+versionRange = "[21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.20.4,)"
+versionRange = "[1.21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.vrglabslib]]
 modId = "architectury"
 type = "required"
-versionRange = "[11.1.17,)"
+versionRange = "[15.0.1,)"
 ordering = "AFTER"
 side = "BOTH"
 
