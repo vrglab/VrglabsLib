@@ -59,8 +59,10 @@ dependencies {
 }
 
 processResources {
-    filesMatching('META-INF/mods.toml') {
-        expand rootProject.properties
+    eachFile {
+        if(it.relativePath == "META-INF/neoforge.mods.toml") {
+            expand project.properties
+        }
     }
 }
 
