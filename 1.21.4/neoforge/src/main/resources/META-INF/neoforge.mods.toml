@@ -5,7 +5,7 @@ license = "MIT"
 
 [[mods]]
 modId = "vrglabslib"
-version = "${loader_safe_version}"
+version = "1.0.0"
 displayName = "Vrglabs Lib"
 authors = "Vrglab"
 description = '''
