@@ -1,5 +1,6 @@
 package org.Vrglab.VrglabsLib.Fabric;
 
+import mod.TestMod.TestModeEntry;
 import mod.azure.azurelib.AzureLib;
 import net.fabricmc.api.ModInitializer;
 import org.Vrglab.VrglabsLib.Core.Constants;
@@ -11,6 +12,7 @@ public class FabricEntryPoint implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        VrglabsFabricInitializer.Initialize(Constants.MOD_ID, "example");
+        TestModeEntry.Init();
+        VrglabsFabricInitializer.Initialize(TestModeEntry.MODID, "mod.TestMod");
     }
 }

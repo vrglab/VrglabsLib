@@ -237,7 +237,8 @@ public abstract class Vfs {
 
             @Override
             public Dir createDir(URL url) throws Exception {
-                return new UnionUrls(url);
+                UnionUrls union = new UnionUrls(url);
+                return union;
             }
         },
 

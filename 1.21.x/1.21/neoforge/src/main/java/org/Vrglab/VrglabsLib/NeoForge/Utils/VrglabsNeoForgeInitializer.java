@@ -35,6 +35,7 @@ import org.Vrglab.Reflections.util.FilterBuilder;
 import org.Vrglab.VrglabsLib.API.AutoRegistry.AutoRegistryLoader;
 import org.Vrglab.VrglabsLib.API.AutoRegistry.World.BlockEntity;
 import org.Vrglab.VrglabsLib.API.Callbacks.ICallBack;
+import org.Vrglab.VrglabsLib.API.Callbacks.IClampedCallBack;
 import org.Vrglab.VrglabsLib.API.Helpers.OreGenFeatCreationHelper;
 import org.Vrglab.VrglabsLib.API.Helpers.PlacementModifierCreationHelper;
 import org.Vrglab.VrglabsLib.API.Helpers.TypeTransformer;
@@ -42,6 +43,7 @@ import org.Vrglab.VrglabsLib.API.Registries.Bootstrapper;
 import org.Vrglab.VrglabsLib.API.Registries.Registry;
 import org.Vrglab.VrglabsLib.API.Registries.RegistryTypes;
 import org.Vrglab.VrglabsLib.Core.VrglabsInitializer;
+import org.Vrglab.VrglabsLib.Utils.Utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -116,7 +118,22 @@ public class VrglabsNeoForgeInitializer {
         ICallBack Itemcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ITEM_REGISTRY.register(args[0].toString(), (Supplier<? extends Item>) args[1]);
+
+                Supplier< ? extends Item> supplier = new Supplier<Item>() {
+
+                    /**
+                     * Gets a result.
+                     *
+                     * @return a result
+                     */
+                    @Override
+                    public Item get() {
+                        Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.ITEM, ResourceLocation.parse(args[0].toString()));
+                        return ((IClampedCallBack<Item>)args[1]).accept(properties);
+                    }
+                };
+
+                return ITEM_REGISTRY.register(args[0].toString(), supplier);
             }
         };
 

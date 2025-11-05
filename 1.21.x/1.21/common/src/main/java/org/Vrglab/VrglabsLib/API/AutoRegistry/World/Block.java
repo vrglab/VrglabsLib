@@ -1,6 +1,7 @@
 package org.Vrglab.VrglabsLib.API.AutoRegistry.World;
 
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.Vrglab.VrglabsLib.API.Callbacks.IClampedCallBack;
 

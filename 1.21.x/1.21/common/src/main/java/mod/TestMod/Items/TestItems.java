@@ -1,0 +1,20 @@
+package mod.TestMod.Items;
+
+import mod.TestMod.TestModeEntry;
+import org.Vrglab.VrglabsLib.API.AutoRegistry.Annotations.RegisterItem;
+import org.Vrglab.VrglabsLib.API.AutoRegistry.World.Item;
+
+public class TestItems {
+
+    @RegisterItem(ItemName = "testitem")
+    public static Item.SimpleItem ITEM = new Item.SimpleItem(TestModeEntry.MODID,
+
+            (arg)->new net.minecraft.world.item.Item((net.minecraft.world.item.Item.Properties) arg[0])
+    ,
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(16)
+    );
+
+    public static void Init() {
+
+    }
+}

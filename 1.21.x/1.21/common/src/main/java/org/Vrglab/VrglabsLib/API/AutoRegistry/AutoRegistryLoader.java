@@ -33,7 +33,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             Item rg = ((Item)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
-            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, (IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item"), (Supplier<net.minecraft.world.item.Item.Properties>) (net.minecraft.world.item.Item.Properties)rg.getArgs().get("settingsItem"));
+            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")), (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"));
             rg.setRegistryData(return_val);
             return return_val;
         });

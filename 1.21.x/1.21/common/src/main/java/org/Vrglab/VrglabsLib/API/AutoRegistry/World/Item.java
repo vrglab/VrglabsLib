@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class Item<T extends net.minecraft.world.item.Item> extends AutoRegistryObject<T> {
-    public Item(String modid, IClampedCallBack<T> getItem, Supplier<Properties> settingsItem) {
+    public Item(String modid, IClampedCallBack<T> getItem, Supplier<net.minecraft.world.item.Item.Properties> settingsItem) {
         this.modid = modid;
         this.args = new HashMap<>();
         this.args.put("item", getItem);
@@ -15,7 +15,10 @@ public class Item<T extends net.minecraft.world.item.Item> extends AutoRegistryO
     }
 
 
-    public static class Properties extends net.minecraft.world.item.Item.Properties {
+    public static class SimpleItem extends org.Vrglab.VrglabsLib.API.AutoRegistry.World.Item<net.minecraft.world.item.Item> {
 
+        public SimpleItem(String modid, IClampedCallBack<net.minecraft.world.item.Item> getItem, Supplier<net.minecraft.world.item.Item.Properties> settingsItem) {
+            super(modid, getItem, settingsItem);
+        }
     }
 }
