@@ -9,19 +9,45 @@ public class UnionUrls implements Vfs.Dir {
     private final File file;
 
     public UnionUrls(URL url) {
-        this.url = url;
-        file = new File(url.getFile().split("%")[0]);
+        URL _newURL = null;
+        try {
+            String scheme = url.getProtocol();
+            String host = url.getHost();
+            int port = url.getPort();
+            String path = url.getPath();
+
+            path = path.replaceAll("([\\\\\\\\/]%[^\\\\\\\\/!]+![/\\\\\\\\]?)$", "");
+            path = path.replace("%27", "'").replace("%20", " ");
+
+            _newURL = new URL(scheme, host, port, path);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to convert path to URL: " + url, e);
+        }
+
+
+
+        this.url = _newURL;
+        file = new File(_newURL.getFile());
+
     }
 
     @Override
     public String getPath() {
-        return url.getPath().split("%")[0];
+        return url.getPath();
     }
 
     @Override
     public Iterable<Vfs.File> getFiles() {
         try {
-            return new JarInputDir(file.toURI().toURL()).getFiles();
+            if (file.isFile()) {
+                return new JarInputDir(file.toURI().toURL()).getFiles();
+            }
+
+            if (file.isDirectory()) {
+                return new SystemDir(file).getFiles();
+            }
+
+            return null;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

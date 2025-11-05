@@ -20,7 +20,7 @@ public class VrglabsInitializer {
     public static void InitializeAutoregistration(String ModId, String modPackage)
     {
         Constants.LOG.info("Initializing Autoregistration");
-        AutoRegistryLoader.LoadAllInPackage(ModId, modPackage);
+        AutoRegistryLoader.LoadAllInPackage(modPackage, ModId);
     }
 
     public static void InitializeAzureLib(Object... args)

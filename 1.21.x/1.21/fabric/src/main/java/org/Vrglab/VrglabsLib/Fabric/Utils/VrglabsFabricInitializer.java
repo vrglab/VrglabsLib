@@ -61,8 +61,8 @@ public class VrglabsFabricInitializer {
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
 
-                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Settings>)args[2]).get(), RegistryTypes.ITEM, id);
-                Item itemToRegister = ((IClampedCallBack<Item>)args[1]).accept();
+                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.ITEM, id);
+                Item itemToRegister = ((IClampedCallBack<Item>)args[1]).accept(properties);
 
                 return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
             }
