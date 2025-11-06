@@ -1,6 +1,6 @@
 package org.Vrglab.VrglabsLib.Fabric.Platform.Services;
 
-import mod.azure.azurelib.AzureLib;
+import org.Vrglab.azure.azurelib.AzureLib;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;

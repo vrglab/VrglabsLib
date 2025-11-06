@@ -1,10 +1,7 @@
 package org.Vrglab.VrglabsLib.Core;
 
-import mod.azure.azurelib.AzureLib;
 import org.Vrglab.VrglabsLib.API.AutoRegistry.AutoRegistryLoader;
 import org.Vrglab.VrglabsLib.platform.Services;
-
-import java.util.ServiceLoader;
 
 public class VrglabsInitializer {
 

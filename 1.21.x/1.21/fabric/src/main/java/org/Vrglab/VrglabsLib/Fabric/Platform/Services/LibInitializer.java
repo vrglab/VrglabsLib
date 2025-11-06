@@ -1,15 +1,15 @@
 package org.Vrglab.VrglabsLib.Fabric.Platform.Services;
 
-import mod.azure.azurelib.AzureLib;
-import mod.azure.azurelib.AzureLibMod;
-import mod.azure.azurelib.common.config.TestingConfig;
-import mod.azure.azurelib.common.config.format.ConfigFormats;
-import mod.azure.azurelib.common.config.io.ConfigIO;
-import mod.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.SendConfigDataPacket;
-import mod.azure.azurelib.fabric.platform.FabricAzureLibNetwork;
+import org.Vrglab.azure.azurelib.AzureLib;
+import org.Vrglab.azure.azurelib.AzureLibMod;
+import org.Vrglab.azure.azurelib.common.config.TestingConfig;
+import org.Vrglab.azure.azurelib.common.config.format.ConfigFormats;
+import org.Vrglab.azure.azurelib.common.config.io.ConfigIO;
+import org.Vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
+import org.Vrglab.azure.azurelib.fabric.platform.FabricAzureLibNetwork;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.Vrglab.VrglabsLib.platform.services.ILibInitializer;
