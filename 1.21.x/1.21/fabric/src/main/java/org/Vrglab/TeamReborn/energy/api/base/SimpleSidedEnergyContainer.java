@@ -1,10 +1,10 @@
-package org.Vrglab.TeamReborn.energy.api.base;
+package org.vrglab.TeamReborn.energy.api.base;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.Direction;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
 /**

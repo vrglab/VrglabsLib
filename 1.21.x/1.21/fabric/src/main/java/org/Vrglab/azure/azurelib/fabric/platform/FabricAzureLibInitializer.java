@@ -1,4 +1,4 @@
-package org.Vrglab.azure.azurelib.fabric.platform;
+package org.vrglab.azure.azurelib.fabric.platform;
 
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-import org.Vrglab.azure.azurelib.AzureLib;
-import org.Vrglab.azure.azurelib.common.cache.AzureLibCache;
-import org.Vrglab.azure.azurelib.common.platform.services.AzureLibInitializer;
+import org.vrglab.azure.azurelib.AzureLib;
+import org.vrglab.azure.azurelib.common.cache.AzureLibCache;
+import org.vrglab.azure.azurelib.common.platform.services.AzureLibInitializer;
 
 public class FabricAzureLibInitializer implements AzureLibInitializer {
 

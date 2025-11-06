@@ -1,15 +1,14 @@
-package org.Vrglab.TeamReborn.energy.impl;
+package org.vrglab.TeamReborn.energy.impl;
 
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
-import org.Vrglab.TeamReborn.energy.api.base.DelegatingEnergyStorage;
-import org.Vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.api.base.DelegatingEnergyStorage;
+import org.vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
 import org.jetbrains.annotations.ApiStatus;
 
 /**

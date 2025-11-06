@@ -1,4 +1,4 @@
-package org.Vrglab.TeamReborn.energy.api;
+package org.vrglab.TeamReborn.energy.api;
 
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
-import org.Vrglab.TeamReborn.energy.impl.EmptyEnergyStorage;
-import org.Vrglab.TeamReborn.energy.impl.EnergyImpl;
+import org.vrglab.TeamReborn.energy.impl.EmptyEnergyStorage;
+import org.vrglab.TeamReborn.energy.impl.EnergyImpl;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -40,7 +40,7 @@ public interface EnergyStorage {
 	 * <p>The system is push based. That means that power sources are responsible for pushing power to nearby machines.
 	 * Machines and wires should NOT pull power from other sources.
 	 *
-	 * <p>{@link org.Vrglab.TeamReborn.energy.api.base.SimpleEnergyStorage} and {@link org.Vrglab.TeamReborn.energy.api.base.SimpleSidedEnergyContainer} are provided as base implementations.
+	 * <p>{@link org.vrglab.TeamReborn.energy.api.base.SimpleEnergyStorage} and {@link org.vrglab.TeamReborn.energy.api.base.SimpleSidedEnergyContainer} are provided as base implementations.
 	 *
 	 * <p>When the operations supported by an energy storage change,
 	 * that is if the return value of {@link EnergyStorage#supportsInsertion} or {@link EnergyStorage#supportsExtraction} changes,
@@ -57,11 +57,11 @@ public interface EnergyStorage {
 	 * Item access to energy storages.
 	 * Querying should always happen through {@link ContainerItemContext#find}.
 	 *
-	 * <p>{@link org.Vrglab.TeamReborn.energy.impl.SimpleItemEnergyStorageImpl} is provided as an implementation example.
-	 * Instances of it can be optained through {@link org.Vrglab.TeamReborn.energy.api.base.SimpleEnergyItem#createStorage}.
+	 * <p>{@link org.vrglab.TeamReborn.energy.impl.SimpleItemEnergyStorageImpl} is provided as an implementation example.
+	 * Instances of it can be optained through {@link org.vrglab.TeamReborn.energy.api.base.SimpleEnergyItem#createStorage}.
 	 * Custom implementations should treat the context as a wrapper around a single slot,
 	 * and always check the current item variant and amount before any operation, like {@code SimpleItemEnergyStorageImpl} does it.
-	 * The check can be handled by {@link org.Vrglab.TeamReborn.energy.api.base.DelegatingEnergyStorage}.
+	 * The check can be handled by {@link org.vrglab.TeamReborn.energy.api.base.DelegatingEnergyStorage}.
 	 *
 	 * <p>This may be queried both client-side and server-side.
 	 * Returned APIs should behave the same regardless of the logical side.

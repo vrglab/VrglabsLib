@@ -1,9 +1,9 @@
-package org.Vrglab.TeamReborn.energy.api.base;
+package org.vrglab.TeamReborn.energy.api.base;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
 
 /**
  * A base energy storage implementation with fixed capacity, and per-operation insertion and extraction limits.

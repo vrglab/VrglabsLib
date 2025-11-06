@@ -1,4 +1,4 @@
-package org.Vrglab.azure.azurelib.fabric.platform;
+package org.vrglab.azure.azurelib.fabric.platform;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import org.Vrglab.azure.azurelib.AzureLib;
-import org.Vrglab.azure.azurelib.common.platform.services.IPlatformHelper;
+import org.vrglab.azure.azurelib.AzureLib;
+import org.vrglab.azure.azurelib.common.platform.services.IPlatformHelper;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 

@@ -1,4 +1,4 @@
-package org.Vrglab.azure.azurelib.fabric.platform;
+package org.vrglab.azure.azurelib.fabric.platform;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -13,10 +13,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-import org.Vrglab.azure.azurelib.common.network.AbstractPacket;
-import org.Vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
-import org.Vrglab.azure.azurelib.common.platform.Services;
-import org.Vrglab.azure.azurelib.common.platform.services.AzureLibNetwork;
+import org.vrglab.azure.azurelib.common.network.AbstractPacket;
+import org.vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
+import org.vrglab.azure.azurelib.common.platform.Services;
+import org.vrglab.azure.azurelib.common.platform.services.AzureLibNetwork;
 
 public class FabricAzureLibNetwork implements AzureLibNetwork {
 

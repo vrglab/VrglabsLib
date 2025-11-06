@@ -1,4 +1,4 @@
-package org.Vrglab.azure.azurelib.fabric.platform;
+package org.vrglab.azure.azurelib.fabric.platform;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
@@ -11,8 +11,8 @@ import net.minecraft.world.item.SpawnEggItem;
 
 import java.util.function.Supplier;
 
-import org.Vrglab.azure.azurelib.AzureLib;
-import org.Vrglab.azure.azurelib.common.platform.services.CommonRegistry;
+import org.vrglab.azure.azurelib.AzureLib;
+import org.vrglab.azure.azurelib.common.platform.services.CommonRegistry;
 
 public class FabricCommonRegistry implements CommonRegistry {
 
