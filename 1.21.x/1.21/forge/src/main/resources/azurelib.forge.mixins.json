@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.Vrglab.azure.azurelib.common.internal.mixins",
+  "compatibilityLevel": "JAVA_18",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "AbstractContainerMenuMixin_AzItemIDFix",
+    "ItemStackMixin_AzItemStackIdentityRegistry",
+    "PlayerListMixin"
+  ],
+  "client": [
+    "BlockEntityMixin_AzBlockEntityAnimatorCache",
+    "EntityMixin_AzEntityAnimatorCache",
+    "ItemStackMixin_AzItemAnimatorCache",
+    "MinecraftMixin",
+    "MixinItemRenderer",
+    "TextureManagerMixin"
+  ]
+}

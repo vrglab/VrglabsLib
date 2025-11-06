@@ -1,7 +1,6 @@
 package org.Vrglab.VrglabsLib.NeoForge.Platform.Services;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -10,15 +9,15 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import mod.azure.azurelib.AzureLib;
-import mod.azure.azurelib.AzureLibMod;
-import mod.azure.azurelib.common.config.TestingConfig;
-import mod.azure.azurelib.common.config.format.ConfigFormats;
-import mod.azure.azurelib.common.config.io.ConfigIO;
-import mod.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
-import mod.azure.azurelib.common.network.packet.SendConfigDataPacket;
+import org.Vrglab.azure.azurelib.AzureLib;
+import org.Vrglab.azure.azurelib.AzureLibMod;
+import org.Vrglab.azure.azurelib.common.config.TestingConfig;
+import org.Vrglab.azure.azurelib.common.config.format.ConfigFormats;
+import org.Vrglab.azure.azurelib.common.config.io.ConfigIO;
+import org.Vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
+import org.Vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
 import org.Vrglab.VrglabsLib.platform.services.ILibInitializer;
 
 public class LibInitializer implements ILibInitializer {

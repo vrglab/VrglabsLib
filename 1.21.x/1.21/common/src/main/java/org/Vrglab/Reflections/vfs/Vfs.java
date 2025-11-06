@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
  * <p>for example:
  * <pre>
  *      Vfs.Dir dir = Vfs.fromURL(url);
- *      Iterable<Vfs.File> files = dir.getFiles();
+ *      Iterable< Vfs.File > files = dir.getFiles();
  *      for (Vfs.File file : files) {
  *          InputStream is = file.openInputStream();
  *      }
