@@ -1,4 +1,4 @@
-package org.Vrglab.TeamReborn.energy.api;
+package org.vrglab.TeamReborn.energy.api;
 
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;

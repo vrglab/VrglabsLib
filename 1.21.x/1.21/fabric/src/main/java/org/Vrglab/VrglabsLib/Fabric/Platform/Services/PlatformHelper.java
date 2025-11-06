@@ -1,12 +1,12 @@
-package org.Vrglab.VrglabsLib.Fabric.Platform.Services;
+package org.vrglab.vrglabsLib.Fabric.Platform.Services;
 
-import org.Vrglab.azure.azurelib.AzureLib;
+import org.vrglab.azure.azurelib.AzureLib;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import org.Vrglab.VrglabsLib.platform.services.IPlatformHelper;
+import org.vrglab.vrglabsLib.platform.services.IPlatformHelper;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;

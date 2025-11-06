@@ -1,8 +1,8 @@
-package org.Vrglab.VrglabsLib.Fabric;
+package org.vrglab.vrglabsLib.Fabric;
 
 import mod.TestMod.TestModeEntry;
 import net.fabricmc.api.ModInitializer;
-import org.Vrglab.VrglabsLib.Fabric.Utils.VrglabsFabricInitializer;
+import org.vrglab.vrglabsLib.Fabric.Utils.VrglabsFabricInitializer;
 
 public class FabricEntryPoint implements ModInitializer {
 

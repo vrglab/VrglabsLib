@@ -1,4 +1,4 @@
-package org.Vrglab.VrglabsLib.Fabric.Utils;
+package org.vrglab.vrglabsLib.Fabric.Utils;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
@@ -15,18 +15,18 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import org.Vrglab.Reflections.Reflections;
-import org.Vrglab.Reflections.scanners.Scanners;
-import org.Vrglab.Reflections.util.ConfigurationBuilder;
-import org.Vrglab.Reflections.util.FilterBuilder;
-import org.Vrglab.VrglabsLib.API.AutoRegistry.AutoRegistryLoader;
-import org.Vrglab.VrglabsLib.API.Callbacks.ICallBack;
-import org.Vrglab.VrglabsLib.API.Callbacks.IClampedCallBack;
-import org.Vrglab.VrglabsLib.API.FunctionProviders.IBlockEntityLoaderFunction;
-import org.Vrglab.VrglabsLib.API.Helpers.TypeTransformer;
-import org.Vrglab.VrglabsLib.API.Registries.RegistryTypes;
-import org.Vrglab.VrglabsLib.Core.VrglabsInitializer;
-import org.Vrglab.VrglabsLib.Utils.Utils;
+import org.vrglab.reflections.Reflections;
+import org.vrglab.reflections.scanners.Scanners;
+import org.vrglab.reflections.util.ConfigurationBuilder;
+import org.vrglab.reflections.util.FilterBuilder;
+import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
+import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
+import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
+import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
+import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
+import org.vrglab.vrglabsLib.api.registries.RegistryTypes;
+import org.vrglab.vrglabsLib.core.VrglabsInitializer;
+import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Supplier;
@@ -45,9 +45,9 @@ public class VrglabsFabricInitializer {
      */
     public static void Create(String modid) {
         createAutoRegistry();
-       /* setEnergyStorageStatics(modid);
+       setEnergyStorageStatics(modid);
         setOreGenHelperStatics();
-        setNetworkStatics();*/
+        setNetworkStatics();
 
         TypeTransformer.ObjectToType = new ICallBack() {
             @Override
@@ -183,24 +183,23 @@ public class VrglabsFabricInitializer {
             }
         };
 
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(ItemGroupRegistryCallBack, RegistryTypes.CREATIVE_MODE_TAB, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(TradeRegistryCallBack, RegistryTypes.TRADE, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(BiomeModCallBack, RegistryTypes.BIOME_MODIFICATIONS, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
-        org.Vrglab.VrglabsLib.API.Registries.Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ItemGroupRegistryCallBack, RegistryTypes.CREATIVE_MODE_TAB, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ItemlessBlockRegistryCallBack, RegistryTypes.ITEMLESS_BLOCK, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(BlockEntityTypeRegistryCallBack, RegistryTypes.BLOCK_ENTITY_TYPE, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(BlockRegistryCallBack, RegistryTypes.BLOCK, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(POIRegistryCallBack, RegistryTypes.POI, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ProfesionRegistryCallBack, RegistryTypes.PROFESSION, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(TradeRegistryCallBack, RegistryTypes.TRADE, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(OreGenRegistryCallBack, RegistryTypes.CONFIGURED_FEAT_ORE, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(PlacedFeatCallBack, RegistryTypes.PLACED_FEAT, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(BiomeModCallBack, RegistryTypes.BIOME_MODIFICATIONS, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
+        org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
     public static ResourceLocation CreateNewId(String modid, String pathId ){
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(modid, pathId);
-        return id;
+        return ResourceLocation.fromNamespaceAndPath(modid, pathId);
     }
 
    /* public static void configureBootstrapped(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries, RegistryKey... keys) {
@@ -243,10 +242,10 @@ public class VrglabsFabricInitializer {
             var config_feat_lookup = r.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
             return r.register((RegistryKey<PlacedFeature>)args[0], new PlacedFeature(config_feat_lookup.getOrThrow((RegistryKey<ConfiguredFeature<?, ?>>) args[1]), (List<PlacementModifier>)args[2]));
         }, BootstrapType.PLACED_FEAT, modid));
-    }
+    }*/
 
     private static void setEnergyStorageStatics(String modid) {
-        EnergyStorageUtils.createStorageInstance = new ICallBack() {
+       /* EnergyStorageUtils.createStorageInstance = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 return new SimpleEnergyStorage((Long) args[0],(Long)  args[1],(Long)  args[2]){
@@ -307,11 +306,11 @@ public class VrglabsFabricInitializer {
                 team.reborn.energy.api.EnergyStorage storage = team.reborn.energy.api.EnergyStorage.SIDED.find((World) args[0], (BlockPos) args[1], (Direction) args[2]);
                 return new EnergyStorage(storage, storage.getCapacity(), storage.getCapacity(), storage.getCapacity(), storage.getAmount());
             }
-        };
+        };*/
     }
 
     private static void setOreGenHelperStatics() {
-        OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
+       /* OreGenFeatCreationHelper.ObjectBlockToStateConverted = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 return ((Block)args[0]).getDefaultState();
@@ -323,11 +322,11 @@ public class VrglabsFabricInitializer {
             public Object accept(Object... args) {
                 return HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom((Integer) args[0]), YOffset.aboveBottom((Integer) args[1]));
             }
-        };
+        };*/
     }
 
     private static void setNetworkStatics() {
-        Network.registerGlobalReceiver = new ICallbackVoid() {
+      /*  Network.registerGlobalReceiver = new ICallbackVoid() {
             @Override
             public void accept(Object... args) {
                 //TODO: Fix networking
@@ -341,9 +340,9 @@ public class VrglabsFabricInitializer {
                 //TODO: Fix networking
                 //ClientPlayNetworking.send((ResourceLocation) args[0], (PacketByteBuf) args[1]);
             }
-        };
+        };*/
     }
-*/
+
     private static void createAutoRegistry() {
         AutoRegistryLoader.collectAnnotatedFieldsForMod = new ICallBack() {
             @Override
@@ -373,7 +372,7 @@ public class VrglabsFabricInitializer {
 
             @Override
             public Object accept(Object... args) {
-                return ((org.Vrglab.VrglabsLib.API.AutoRegistry.World.Block)((org.Vrglab.VrglabsLib.API.AutoRegistry.World.BlockEntity)args[0]).getArgs().get("block")).getRegisteredObject();
+                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block)((org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity)args[0]).getArgs().get("block")).getRegisteredObject();
             }
         };
     }

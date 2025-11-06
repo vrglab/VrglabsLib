@@ -1,12 +1,12 @@
-package org.Vrglab.azure.azurelib.fabric;
+package org.vrglab.azure.azurelib.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
-import org.Vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
-import org.Vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
-import org.Vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
-import org.Vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
+import org.vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
+import org.vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
+import org.vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
+import org.vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
 
 public final class ClientListener implements ClientModInitializer {
 

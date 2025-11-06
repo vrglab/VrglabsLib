@@ -1,7 +1,7 @@
-package org.Vrglab.TeamReborn.energy.impl;
+package org.vrglab.TeamReborn.energy.impl;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal

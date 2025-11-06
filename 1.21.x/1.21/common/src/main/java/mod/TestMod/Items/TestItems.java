@@ -1,8 +1,8 @@
 package mod.TestMod.Items;
 
 import mod.TestMod.TestModeEntry;
-import org.Vrglab.VrglabsLib.API.AutoRegistry.Annotations.RegisterItem;
-import org.Vrglab.VrglabsLib.API.AutoRegistry.World.Item;
+import org.vrglab.vrglabsLib.api.autoRegistry.Annotations.RegisterItem;
+import org.vrglab.vrglabsLib.api.autoRegistry.World.Item;
 
 public class TestItems {
 

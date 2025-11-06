@@ -1,4 +1,4 @@
-package org.Vrglab.azure.azurelib.fabric.integration;
+package org.vrglab.azure.azurelib.fabric.integration;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.Vrglab.azure.azurelib.AzureLibClient;
-import org.Vrglab.azure.azurelib.common.config.ConfigHolder;
-import org.Vrglab.azure.azurelib.common.config.ConfigHolderRegistry;
-import org.Vrglab.azure.azurelib.common.platform.Services;
+import org.vrglab.azure.azurelib.AzureLibClient;
+import org.vrglab.azure.azurelib.common.config.ConfigHolder;
+import org.vrglab.azure.azurelib.common.config.ConfigHolderRegistry;
+import org.vrglab.azure.azurelib.common.platform.Services;
 
 public class ModMenuIntegration implements ModMenuApi {
 

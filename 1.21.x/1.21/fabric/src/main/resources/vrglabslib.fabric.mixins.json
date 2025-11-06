@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.Vrglab.VrglabsLib.Fabric.Mixins",
+  "package": "org.vrglab.vrglabsLib.Fabric.Mixins",
   "refmap": "vrglabslib.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "mixins": [],

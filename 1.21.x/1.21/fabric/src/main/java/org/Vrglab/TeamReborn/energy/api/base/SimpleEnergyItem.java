@@ -1,10 +1,11 @@
-package org.Vrglab.TeamReborn.energy.api.base;
+package org.vrglab.TeamReborn.energy.api.base;
 
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
-import org.Vrglab.TeamReborn.energy.impl.SimpleItemEnergyStorageImpl;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.impl.SimpleItemEnergyStorageImpl;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -14,7 +15,7 @@ import java.util.Optional;
  * <ul>
  *     <li>The energy will directly be stored in the components.</li>
  *     <li>Helper functions in this class to work with the stored energy can be used.</li>
- *     <li>An EnergyStorage will automatically be provided for queries through {@link org.Vrglab.TeamReborn.energy.api.EnergyStorage#ITEM}.</li>
+ *     <li>An EnergyStorage will automatically be provided for queries through {@link org.vrglab.TeamReborn.energy.api.EnergyStorage#ITEM}.</li>
  * </ul>
  */
 // TODO: Consider adding a tooltip and a recipe input -> output energy transfer handler like RC has.
@@ -96,7 +97,7 @@ public interface SimpleEnergyItem {
 		return getStoredEnergyUnchecked(variant.getComponents());
 	}
 
-	static long getStoredEnergyUnchecked(ComponentChanges components) {
+	static long getStoredEnergyUnchecked(DataComponentPatch components) {
 		@Nullable Optional<Long> energy = (Optional<Long>) components.get(EnergyStorage.ENERGY_COMPONENT);
 
 		//noinspection OptionalAssignedToNull

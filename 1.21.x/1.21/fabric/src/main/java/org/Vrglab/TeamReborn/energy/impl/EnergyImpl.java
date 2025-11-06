@@ -1,4 +1,4 @@
-package org.Vrglab.TeamReborn.energy.impl;
+package org.vrglab.TeamReborn.energy.impl;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -6,8 +6,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import org.Vrglab.TeamReborn.energy.api.EnergyStorage;
-import org.Vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
+import org.vrglab.TeamReborn.energy.api.EnergyStorage;
+import org.vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
 import org.jetbrains.annotations.ApiStatus;
 
 

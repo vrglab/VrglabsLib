@@ -15,7 +15,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "org.Vrglab.VrglabsLib.Fabric.FabricEntryPoint"
+            "org.vrglab.vrglabsLib.Fabric.FabricEntryPoint"
         ]
     },
     "mixins": [
@@ -28,9 +28,6 @@
         "fabric-api": "*",
         "minecraft": "${minecraft_version}",
         "java": ">=${java_version}"
-    },
-    "suggests": {
-        "another-mod": "*"
     }
 }
   

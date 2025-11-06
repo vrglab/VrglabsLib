@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.Vrglab.azure.azurelib.common.internal.mixins",
+  "package": "org.vrglab.azure.azurelib.common.internal.mixins",
   "compatibilityLevel": "JAVA_21",
   "injectors": {
     "defaultRequire": 1
