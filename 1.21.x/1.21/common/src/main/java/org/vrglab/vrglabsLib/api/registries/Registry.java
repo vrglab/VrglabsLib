@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.OreFeature;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
+import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.functionProviders.IScreenHandlerTypeCreationFunction;
 import org.vrglab.vrglabsLib.api.registries.interfaces.IRegistryType;
@@ -157,7 +158,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterBlock(String name, String Modid, IClampedCallBack<Block> aNew, Supplier<Item.Properties> settings, Supplier<BlockBehaviour.Properties> blockSettings) {
+    public static Object RegisterBlock(String name, String Modid, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<Item.Properties> settings, Supplier<BlockBehaviour.Properties> blockSettings) {
         Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings, blockSettings);
         DataGenRegistry.RegisterBlock(Modid, data);
         return data;
@@ -318,7 +319,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0-mc1.20.4
      */
-    public static <T extends CreativeModeTab> Object RegisterCreativeModeTab(String name, String Modid, T tab) {
+    public static Object RegisterCreativeModeTab(String name, String Modid, Supplier<CreativeModeTab> tab) {
        return SimpleRegister(RegistryTypes.CREATIVE_MODE_TAB,  Modid, name, tab);
     }
 

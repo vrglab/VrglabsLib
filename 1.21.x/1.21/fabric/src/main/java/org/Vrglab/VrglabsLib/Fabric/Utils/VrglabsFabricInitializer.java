@@ -22,6 +22,7 @@ import org.vrglab.reflections.util.FilterBuilder;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
+import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
@@ -71,7 +72,7 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedCallBack<Block>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[3]).get(), RegistryTypes.BLOCK, id))));
+                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[3]).get(), RegistryTypes.BLOCK, id))));
                 Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings( ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.BLOCK, id)));
                 return b;
             }
@@ -179,7 +180,7 @@ public class VrglabsFabricInitializer {
         ICallBack ItemGroupRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), (CreativeModeTab)args[1]);
+                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), ((Supplier<CreativeModeTab>)args[1]).get());
             }
         };
 
