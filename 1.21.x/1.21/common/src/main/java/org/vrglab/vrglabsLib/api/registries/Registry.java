@@ -16,6 +16,8 @@ import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.functionProviders.IScreenHandlerTypeCreationFunction;
+import org.vrglab.vrglabsLib.api.registries.interfaces.IRegistryType;
+import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.Constants;
 
 import java.util.*;
@@ -138,7 +140,7 @@ public class Registry {
      */
     public static Object RegisterItem(String name, String Modid, IClampedCallBack<Item> aNew, Supplier<Item.Properties> settings) {
         Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
-        //DataGenRegistry.RegisterItem(Modid, data);
+        DataGenRegistry.RegisterItem(Modid, data);
         return data;
     }
 
@@ -157,7 +159,7 @@ public class Registry {
      */
     public static Object RegisterBlock(String name, String Modid, IClampedCallBack<Block> aNew, Supplier<Item.Properties> settings, Supplier<BlockBehaviour.Properties> blockSettings) {
         Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings, blockSettings);
-        //DataGenRegistry.RegisterBlock(Modid, data);
+        DataGenRegistry.RegisterBlock(Modid, data);
         return data;
     }
 

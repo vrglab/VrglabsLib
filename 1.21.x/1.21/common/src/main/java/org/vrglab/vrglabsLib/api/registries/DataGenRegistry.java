@@ -1,6 +1,7 @@
 package org.vrglab.vrglabsLib.api.registries;
 
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
+import org.vrglab.vrglabsLib.api.registries.interfaces.DataGenType;
 
 import java.util.*;
 
@@ -43,9 +44,9 @@ public class DataGenRegistry {
         }
     }
 
-    /*public static void initRegistery(ICallBack _registery, DataGenType _currentRegistryTypes, String modid){
+    public static void initRegistery(ICallBack _registery, DataGenType _currentRegistryTypes, String modid){
         initRegistery(_registery, _currentRegistryTypes.getTypeId(), modid);
-    }*/
+    }
 
     public static Object SimpleRegister(UUID type, String Modid, Object... args){
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
@@ -62,7 +63,7 @@ public class DataGenRegistry {
         }
     }
 
- /*   public static Object SimpleRegister(DataGenType type, String Modid, Object... args){
+   public static Object SimpleRegister(DataGenType type, String Modid, Object... args){
         return SimpleRegister(type.getTypeId(), Modid, args);
     }
 
@@ -73,5 +74,5 @@ public class DataGenRegistry {
     public static Object RegisterItem(String Modid, Object item) {
         return SimpleRegister(DataGenType.Item, Modid, item);
     }
-*/
+
 }

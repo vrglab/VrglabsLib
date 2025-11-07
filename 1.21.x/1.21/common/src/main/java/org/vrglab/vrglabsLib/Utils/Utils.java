@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
-import org.vrglab.vrglabsLib.api.registries.IRegistryType;
+import org.vrglab.vrglabsLib.api.registries.interfaces.IRegistryType;
 
 public class Utils {
 

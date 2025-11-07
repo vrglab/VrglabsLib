@@ -32,7 +32,7 @@ import org.vrglab.vrglabsLib.api.helpers.OreGenFeatCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.PlacementModifierCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.api.registries.Registry;
-import org.vrglab.vrglabsLib.api.registries.RegistryTypes;
+import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 import org.vrglab.vrglabsLib.Utils.Utils;
 
