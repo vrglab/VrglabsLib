@@ -24,7 +24,7 @@ import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
-import org.vrglab.vrglabsLib.api.registries.RegistryTypes;
+import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 import org.vrglab.vrglabsLib.Utils.Utils;
 

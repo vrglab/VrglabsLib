@@ -1,4 +1,4 @@
-package org.Vrglab.Modloader.enumTypes;
+package org.vrglab.vrglabsLib.api.registries.interfaces;
 
 import java.util.UUID;
 

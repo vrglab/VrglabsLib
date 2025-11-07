@@ -1,4 +1,4 @@
-package org.vrglab.vrglabsLib.api.registries;
+package org.vrglab.vrglabsLib.api.registries.interfaces;
 
 import java.util.UUID;
 
