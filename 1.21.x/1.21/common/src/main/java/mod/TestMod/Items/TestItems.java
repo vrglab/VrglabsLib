@@ -14,6 +14,15 @@ public class TestItems {
             () ->  new net.minecraft.world.item.Item.Properties().stacksTo(16)
     );
 
+
+    @RegisterItem(ItemName = "fireresistent")
+    public static Item.SimpleItem FIRE_RESISTENT = new Item.SimpleItem(TestModeEntry.MODID,
+
+            (arg)->new net.minecraft.world.item.Item((net.minecraft.world.item.Item.Properties) arg[0])
+            ,
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(75).fireResistant()
+    );
+
     public static void Init() {
 
     }

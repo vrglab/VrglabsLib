@@ -1,8 +1,10 @@
 package org.vrglab.vrglabsLib.api.autoRegistry;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.vrglab.vrglabsLib.api.autoRegistry.Annotations.*;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.*;
+import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.registries.Registry;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
@@ -25,13 +27,27 @@ public class AutoRegistryLoader {
         loadBlocksInPackage(packageName, modid);
         loadItemlessBlocksInPackage(packageName, modid);
         loadBlockEntityTypesInPackage(packageName, modid);
+        loadCreativeModeTabsInPackage(packageName, modid);
         callInitsInPackage(packageName, modid);
+    }
+
+
+    public static void loadCreativeModeTabsInPackage(String packageName, String modId) {
+        LoadingResolver(packageName, modId, RegisterCreativeModeTab.class, (args) -> {
+            CreativeModeTab rg = ((CreativeModeTab)args[0]);
+            RegisterCreativeModeTab rt = ((RegisterCreativeModeTab)args[1]);
+            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
+            Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), rg.getModid(), rg.getSupplier());
+            rg.setRegistryData(return_val);
+            return return_val;
+        });
     }
 
     public static void loadItemsInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             Item rg = ((Item)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
+            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.ItemName()));
             Object return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")), (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"));
             rg.setRegistryData(return_val);
             return return_val;
@@ -42,7 +58,10 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
             Block rg = ((Block)args[0]);
             RegisterBlock rt = ((RegisterBlock)args[1]);
-            Object return_val = Registry.RegisterBlock(rt.Name(), modId, (IClampedCallBack<net.minecraft.world.level.block.Block>) rg.getArgs().get("block"), (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("item.settings"), (Supplier<BlockBehaviour.Properties>)rg.getArgs().get("block.settings"));
+            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
+            Object return_val = Registry.RegisterBlock(rt.Name(), modId,
+                    (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
+                    (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("item.settings"), (Supplier<BlockBehaviour.Properties>)rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
             return return_val;
         });
@@ -52,6 +71,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
             ItemlessBlock rg = ((ItemlessBlock)args[0]);
             RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
+            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
             Object return_val = Registry.RegisterItemlessBlock(rt.Name(), modId, (IClampedCallBack<net.minecraft.world.level.block.Block>) rg.getArgs().get("block"), (Supplier<BlockBehaviour.Properties>) rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
             return return_val;
@@ -62,6 +82,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterBlockEntityType.class, (args) -> {
             BlockEntity rg = ((BlockEntity)args[0]);
             RegisterBlockEntityType rt = ((RegisterBlockEntityType)args[1]);
+            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
             Object return_val = Registry.RegisterBlockEntityType(
                     rt.Name(),
                     modId,

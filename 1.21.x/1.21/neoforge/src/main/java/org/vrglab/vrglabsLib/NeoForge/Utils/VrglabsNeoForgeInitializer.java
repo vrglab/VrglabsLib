@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -28,6 +29,7 @@ import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
+import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.helpers.OreGenFeatCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.PlacementModifierCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
@@ -129,7 +131,12 @@ public class VrglabsNeoForgeInitializer {
         ICallBack Blockcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                DeferredHolder<Block, ?> b = BLOCK_REGISTRY.register(args[0].toString(), (Supplier<? extends Block>) args[1]);
+                DeferredHolder<Block, ?> b = BLOCK_REGISTRY.register(args[0].toString(), new Supplier<Block>() {
+                    @Override
+                    public Block get() {
+                        return ((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(((Supplier<BlockBehaviour.Properties>)args[3]).get());
+                    }
+                });
                 ITEM_REGISTRY.register(args[0].toString(), ()->new BlockItem(b.get(), ((Supplier<Item.Properties>) args[2]).get()));
                 return b;
             }
@@ -207,7 +214,7 @@ public class VrglabsNeoForgeInitializer {
         ICallBack CreativeModeTabcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ITEM_GROUP_REGISTRY.register(args[0].toString(), ()->(CreativeModeTab) args[1]);
+                return ITEM_GROUP_REGISTRY.register(args[0].toString(), (Supplier<CreativeModeTab>)args[1]);
             }
         };
 
