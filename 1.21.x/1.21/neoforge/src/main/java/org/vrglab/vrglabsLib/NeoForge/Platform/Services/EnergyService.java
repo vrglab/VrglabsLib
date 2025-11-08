@@ -32,7 +32,9 @@ public class EnergyService implements IEnergyService {
 
     @Override
     public Long GiveEnergyToContainer(Object rawEnergyContainer, long maxReceive, boolean simulate) {
-        return 0L;
+        EnergyStorage  energyStorage = (EnergyStorage)rawEnergyContainer;
+
+        return (long)energyStorage.receiveEnergy((int)maxReceive, simulate);
     }
 
     @Override
@@ -55,8 +57,8 @@ public class EnergyService implements IEnergyService {
         return EnergyContainer.ExternalContainerBuilder.Open()
                 .maxReceive(ReflectionUtil.getField(storage, "maxReceive", int.class))
                 .maxExtract(ReflectionUtil.getField(storage, "maxExtract", int.class))
-                .capacity(ReflectionUtil.getField(storage, "capacity", int.class))
-                .energy(ReflectionUtil.getField(storage, "energy", int.class))
+                .capacity(storage.getMaxEnergyStored())
+                .energy(storage.getEnergyStored())
                 .rawLoaderDependentContainer(storage)
                 .rawBlockEntity(blockEntity)
                 .Build();

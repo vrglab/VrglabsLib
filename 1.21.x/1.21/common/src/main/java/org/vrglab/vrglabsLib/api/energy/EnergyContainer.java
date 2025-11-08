@@ -1,7 +1,12 @@
 package org.vrglab.vrglabsLib.api.energy;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBackVoidNoArg;
 import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergyContainer;
+import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergySupplier;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.platform.Services;
 import org.vrglab.vrglabsLib.platform.services.energy.IEnergyService;
@@ -49,9 +54,42 @@ public class EnergyContainer implements IEnergyContainer {
         return rawBlockEntity;
     }
 
+    public <T> T GetModloaderContainer(Class<T> tClass) {
+        if (tClass.isAssignableFrom(rawLoaderDependentContainer.getClass())) {
+            return tClass.cast(rawLoaderDependentContainer);
+        }
+        throw new RuntimeException("Requested Energy Container Type does not match " + Services.PLATFORM.getPlatformName() + "'s Energy Container Type ");
+    }
+
     public EnergyContainer setMakeDirtyFunction(ICallBackVoidNoArg makeDirty) {
         this.makeDirty = makeDirty;
         return this;
+    }
+
+    public static boolean pushEnergyTo(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
+        if(EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
+            EnergyContainer storage = (EnergyContainer)EnergyController.getStorageInWorld(world, blockPos, dir);
+            EnergyContainer self_storage = (EnergyContainer) ((IEnergySupplier)self).getEnergyStorage();
+            if(storage != null && (!self_storage.isEmpty() && !storage.atMaxCapacity())) {
+                storage.receiveEnergy(amnt);
+                self_storage.extractEnergy(amnt);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean pullEnergyFrom(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
+        if(EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
+            EnergyContainer storage = (EnergyContainer)EnergyController.getStorageInWorld(world, blockPos, dir);
+            EnergyContainer self_storage = (EnergyContainer)((IEnergySupplier)self).getEnergyStorage();
+            if(storage != null && (!self_storage.atMaxCapacity() && !storage.isEmpty())) {
+                storage.extractEnergy(amnt);
+                self_storage.receiveEnergy(amnt);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -63,7 +101,7 @@ public class EnergyContainer implements IEnergyContainer {
      */
     @Override
     public long receiveEnergy(long maxReceive, boolean simulate) {
-        energy += Services.ENERGY.GiveEnergyToContainer(rawBlockEntity, maxReceive, simulate);
+        energy += Services.ENERGY.GiveEnergyToContainer(rawLoaderDependentContainer, maxReceive, simulate);
         return energy;
     }
 
