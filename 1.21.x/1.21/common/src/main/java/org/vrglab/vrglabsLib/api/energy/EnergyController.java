@@ -28,32 +28,6 @@ public class EnergyController {
     }
 
 
-    public static boolean pushEnergyTo(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
-        if(containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
-            EnergyContainer storage = (EnergyContainer)getStorageInWorld(world, blockPos, dir);
-            EnergyContainer self_storage = (EnergyContainer) ((IEnergySupplier)self).getEnergyStorage();
-            if(storage != null && (!self_storage.isEmpty() && !storage.atMaxCapacity())) {
-                storage.receiveEnergy(amnt);
-                self_storage.extractEnergy(amnt);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean pullEnergyFrom(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
-        if(containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
-            EnergyContainer storage = (EnergyContainer)getStorageInWorld(world, blockPos, dir);
-            EnergyContainer self_storage = (EnergyContainer)((IEnergySupplier)self).getEnergyStorage();
-            if(storage != null && (!self_storage.atMaxCapacity() && !storage.isEmpty())) {
-                storage.extractEnergy(amnt);
-                self_storage.receiveEnergy(amnt);
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static IEnergyContainer getStorageInWorld(Level world, BlockPos blockPos, Direction facing){
         IEnergyContainer storage =  null;
         BlockEntity entity = world.getBlockEntity(blockPos.offset(facing.getNormal()));

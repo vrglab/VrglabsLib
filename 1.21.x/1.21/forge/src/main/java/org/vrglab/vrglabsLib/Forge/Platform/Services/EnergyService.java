@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
@@ -28,7 +29,9 @@ public class EnergyService implements IEnergyService {
 
     @Override
     public Long GiveEnergyToContainer(Object rawEnergyContainer, long maxReceive, boolean simulate) {
-        return 0L;
+        EnergyStorage  energyStorage = (EnergyStorage)rawEnergyContainer;
+
+        return (long)energyStorage.receiveEnergy((int)maxReceive, simulate);
     }
 
     @Override
@@ -47,11 +50,12 @@ public class EnergyService implements IEnergyService {
     @Override
     public EnergyContainer WrapExternalStorage(Level level, BlockPos pos, Direction facing, BlockEntity blockEntity) {
         IEnergyStorage storage = blockEntity.getCapability(ForgeCapabilities.ENERGY).resolve().get();
+
         return EnergyContainer.ExternalContainerBuilder.Open()
                 .maxReceive(ReflectionUtil.getField(storage, "maxReceive", int.class))
                 .maxExtract(ReflectionUtil.getField(storage, "maxExtract", int.class))
-                .capacity(ReflectionUtil.getField(storage, "capacity", int.class))
-                .energy(ReflectionUtil.getField(storage, "energy", int.class))
+                .capacity(storage.getMaxEnergyStored())
+                .energy(storage.getEnergyStored())
                 .rawLoaderDependentContainer(storage)
                 .rawBlockEntity(blockEntity)
                 .Build();
