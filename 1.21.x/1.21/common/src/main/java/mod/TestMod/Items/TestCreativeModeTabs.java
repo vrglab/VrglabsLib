@@ -16,12 +16,16 @@ public class TestCreativeModeTabs {
     public static CreativeModeTab CREATIVE_TAB_ITEMS = new  CreativeModeTab(TestModeEntry.MODID,
             ()->net.minecraft.world.item.CreativeModeTab
                     .builder(net.minecraft.world.item.CreativeModeTab.Row.TOP, 16)
-                    .icon(()->new ItemStack(TestItems.ITEM.getRegisteredObject()))
-                    .title(Component.translatable("test_tab_items"))
+                    .icon(()->new ItemStack(TestItems.RUBY.getRegisteredObject()))
+                    .title(Component.translatable("itemGroup.testmod.creative_tab_items"))
                     .displayItems(
                             (itemDisplayParameters, output) ->{
-                                output.accept(TestItems.ITEM.getRegisteredObject());
-                                output.accept(TestItems.FIRE_RESISTENT.getRegisteredObject());
+                                output.accept(TestItems.RUBY.getRegisteredObject());
+                                output.accept(TestItems.RUBY_AXE.getRegisteredObject());
+                                output.accept(TestItems.ARMOR_BODY.getRegisteredObject());
+                                output.accept(TestItems.ARMOR_LEGS.getRegisteredObject());
+                                output.accept(TestItems.ARMOR_HEAD.getRegisteredObject());
+                                output.accept(TestItems.ARMOR_BOOTS.getRegisteredObject());
                             }
                     )
                     .build());
@@ -30,11 +34,11 @@ public class TestCreativeModeTabs {
     public static CreativeModeTab CREATIVE_TAB_BLOCKS = new  CreativeModeTab(TestModeEntry.MODID,
             ()->net.minecraft.world.item.CreativeModeTab
                     .builder(net.minecraft.world.item.CreativeModeTab.Row.TOP, 16)
-                    .icon(()->new ItemStack((Block) TestBlocks.TEST_BLOCK.getRegisteredObject()))
-                    .title(Component.translatable("test_tab"))
+                    .icon(()->new ItemStack((Block) TestBlocks.RUBY_BLOCK.getRegisteredObject()))
+                    .title(Component.translatable("creative_tab_blocks"))
                     .displayItems(
                             (itemDisplayParameters, output) ->{
-                                output.accept((Block) TestBlocks.TEST_BLOCK.getRegisteredObject());
+                                output.accept((Block) TestBlocks.RUBY_BLOCK.getRegisteredObject());
                             }
                     )
                     .build());

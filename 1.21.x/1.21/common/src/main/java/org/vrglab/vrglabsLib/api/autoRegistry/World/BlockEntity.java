@@ -11,15 +11,15 @@ public class BlockEntity<T extends net.minecraft.world.level.block.entity.BlockE
 
     public BlockEntity(String modid, IBlockEntityLoaderFunction aNew, org.vrglab.vrglabsLib.api.autoRegistry.World.Block block) {
         this.modid = modid;
-        supplier = new Supplier<BlockEntityType<T>>() {
-            @Override
-            public BlockEntityType<T> get() {
-                return registeredObject;
-            }
-        };
 
         this.args = new HashMap<>();
         this.args.put("new", aNew);
         this.args.put("block", block);
+        this.args.put("supplier", new Supplier<BlockEntityType<T>>() {
+            @Override
+            public BlockEntityType<T> get() {
+                return registeredObject;
+            }
+        });
     }
 }

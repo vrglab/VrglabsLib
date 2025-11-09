@@ -10,14 +10,13 @@ public abstract class AutoRegistryObject<T> {
     protected boolean resolved;
     protected T registeredObject;
     protected Object rawData;
-    protected Supplier<T> supplier;
     protected ResourceLocation id;
 
     protected String modid;
     protected Map<String, Object> args;
 
     public Supplier<T> getSupplier() {
-        return supplier;
+        return (Supplier<T>)args.get("supplier");
     }
 
     public Map<String, Object> getArgs() {
@@ -38,6 +37,7 @@ public abstract class AutoRegistryObject<T> {
 
     public void setRegistryData(Object data) {
         rawData = data;
+        resolved = true;
     }
 
     public void setId(ResourceLocation id) {
@@ -47,8 +47,6 @@ public abstract class AutoRegistryObject<T> {
     public ResourceLocation getId() {
         return id;
     }
-
-    public void SetModid(String modid) {}
 
     public Object getRawData() {
         return rawData;
