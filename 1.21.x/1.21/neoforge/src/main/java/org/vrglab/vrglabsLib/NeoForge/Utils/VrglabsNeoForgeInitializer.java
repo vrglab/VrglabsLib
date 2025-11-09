@@ -17,14 +17,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
+import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
+import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
+import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererRegistry;
+import org.vrglab.azure.azurelib.common.render.item.AzItemRenderer;
+import org.vrglab.azure.azurelib.common.render.item.AzItemRendererRegistry;
+import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
+import org.vrglab.azure.azurelib.world.Item.AzureItem;
 import org.vrglab.reflections.Reflections;
 import org.vrglab.reflections.scanners.Scanners;
 import org.vrglab.reflections.util.ConfigurationBuilder;
 import org.vrglab.reflections.util.FilterBuilder;
+import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
@@ -33,7 +42,9 @@ import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.helpers.OreGenFeatCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.PlacementModifierCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
+import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
 import org.vrglab.vrglabsLib.api.registries.Registry;
+import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 import org.vrglab.vrglabsLib.Utils.Utils;
@@ -48,6 +59,9 @@ public class VrglabsNeoForgeInitializer {
         VrglabsInitializer.Initialize(modid, modPackage, eventBus);
     }
 
+    public static void InitializeCommonSetup(final FMLCommonSetupEvent event, String modid) {
+        CreateCommonSetup(event, modid);
+    }
 
 
     public static ICallBack TradeRegistryEventCallback = new ICallBack() {
@@ -237,6 +251,51 @@ public class VrglabsNeoForgeInitializer {
         Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
         Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
+
+
+    public static void CreateCommonSetup(final FMLCommonSetupEvent event, String modid) {
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+
+                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+
+                return null;
+            }
+        }, BootstrapType.AZURE_ARMOR.getTypeId(),  modid);
+
+
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
+                return null;
+            }
+        }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
+
+
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Class clazz = (Class)args[1];
+
+                if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                    AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzIdentityRegistry.register(tranformed_obj);
+                }
+
+                if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                    AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzIdentityRegistry.register(tranformed_obj);
+                }
+
+                return null;
+            }
+        }, BootstrapType.AZURE_ID.getTypeId(),  modid);
+    }
+
 
     public static void villagerTradeEventResolver(VillagerTradesEvent e, String modid) {
         Registry.ForgeEventResolver(e, TradeRegistryEventCallback, RegistryTypes.TRADE, modid);

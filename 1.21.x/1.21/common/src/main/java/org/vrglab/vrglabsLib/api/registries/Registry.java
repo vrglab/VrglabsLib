@@ -1,5 +1,6 @@
 package org.vrglab.vrglabsLib.api.registries;
 
+import net.minecraft.server.Bootstrap;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.TradeWithVillager;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,11 +13,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.OreFeature;
+import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
+import org.vrglab.azure.azurelib.world.Item.AzureItem;
+import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.functionProviders.IScreenHandlerTypeCreationFunction;
+import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.IRegistryType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.Constants;
@@ -139,8 +144,27 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterItem(String name, String Modid, IClampedCallBack<Item> aNew, Supplier<Item.Properties> settings) {
+    public static <T extends Item> Object RegisterItem(String name, String Modid, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings) {
         Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
+        DataGenRegistry.RegisterItem(Modid, data);
+        return data;
+    }
+
+    public static <T extends Item> Object RegisterItem(String name, String Modid, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings, Class<T> clazz) {
+
+        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
+
+        if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ARMOR.getTypeId(), Modid, data, clazz);
+        }
+
+        if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ITEM.getTypeId(), Modid, data, clazz);
+        }
+
+        if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class) || ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ID.getTypeId(), Modid, data, clazz);
+        }
         DataGenRegistry.RegisterItem(Modid, data);
         return data;
     }

@@ -1,9 +1,8 @@
 package org.vrglab.vrglabsLib.Fabric;
 
-import mod.TestMod.Items.TestItems;
+import mod.TestMod.TestModeEntry;
 import net.fabricmc.api.ClientModInitializer;
-import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
-import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererRegistry;
+import org.vrglab.vrglabsLib.Fabric.Utils.VrglabsFabricInitializer;
 
 import java.util.function.Supplier;
 
@@ -13,11 +12,6 @@ public class FabricClientEntryPoint implements ClientModInitializer {
      */
     @Override
     public void onInitializeClient() {
-        AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>) TestItems.ARMOR_BODY.getRegisteredObject().GetAzureRenderer(),
-                TestItems.ARMOR_BODY.getRegisteredObject(),
-                TestItems.ARMOR_BOOTS.getRegisteredObject(),
-                TestItems.ARMOR_LEGS.getRegisteredObject(),
-                TestItems.ARMOR_HEAD.getRegisteredObject()
-        );
+        VrglabsFabricInitializer.InitializeClient(TestModeEntry.MODID);
     }
 }

@@ -48,7 +48,18 @@ public class AutoRegistryLoader {
             Item rg = ((Item)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
             rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.ItemName()));
-            Object return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")), (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"));
+
+            Object return_val = null;
+
+            if(rg.getArgs().containsKey("item.class")) {
+                return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")),
+                        (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"), (Class)rg.getArgs().get("item.class"));
+            }else {
+                return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")),
+                        (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"));
+            }
+
+
             rg.setRegistryData(return_val);
             return return_val;
         });
