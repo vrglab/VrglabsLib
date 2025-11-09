@@ -43,7 +43,8 @@ public class TestItems {
                 }
             }
             ,
-            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1)
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
+            AzureArmor.class
     );
 
     @RegisterItem(ItemName = "armor_legs")
@@ -57,7 +58,8 @@ public class TestItems {
                 }
             }
             ,
-            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1)
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
+            AzureArmor.class
     );
 
     @RegisterItem(ItemName = "armor_head")
@@ -71,7 +73,8 @@ public class TestItems {
                 }
             }
             ,
-            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1)
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
+            AzureArmor.class
     );
 
     @RegisterItem(ItemName = "armor_boots")
@@ -85,7 +88,8 @@ public class TestItems {
                 }
             }
             ,
-            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1)
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
+            AzureArmor.class
     );
 
     public static void Init() {

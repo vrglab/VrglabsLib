@@ -114,4 +114,13 @@ public class ReflectionUtil {
             throw new RuntimeException("Failed to instantiate nested class " + nestedClass, e);
         }
     }
+
+    /**
+     * Checks if the given type is the same as, or a subclass (or sub-subclass) of the parent class
+     */
+    public static boolean isSubclassOrSame(Class<?> type, Class<?> parent) {
+        if (type == null || parent == null) return false;
+        return parent.isAssignableFrom(type);
+    }
+
 }

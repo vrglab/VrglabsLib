@@ -15,16 +15,26 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
+import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
+import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererRegistry;
+import org.vrglab.azure.azurelib.common.render.item.AzItemRenderer;
+import org.vrglab.azure.azurelib.common.render.item.AzItemRendererRegistry;
+import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
+import org.vrglab.azure.azurelib.world.Item.AzureItem;
 import org.vrglab.reflections.Reflections;
 import org.vrglab.reflections.scanners.Scanners;
 import org.vrglab.reflections.util.ConfigurationBuilder;
 import org.vrglab.reflections.util.FilterBuilder;
+import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
+import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
+import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 import org.vrglab.vrglabsLib.Utils.Utils;
@@ -35,8 +45,12 @@ import java.util.function.Supplier;
 public class VrglabsFabricInitializer {
 
     public static void Initialize(String modid, String modPackage) {
-        VrglabsFabricInitializer.Create(modid);
+        Create(modid);
         VrglabsInitializer.Initialize(modid, modPackage);
+    }
+
+    public static void InitializeClient(String modid) {
+        CreateClient(modid);
     }
 
 
@@ -197,6 +211,49 @@ public class VrglabsFabricInitializer {
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(BiomeModCallBack, RegistryTypes.BIOME_MODIFICATIONS, modid);
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
+    }
+
+    public static void CreateClient(String modid) {
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+
+                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+
+                return null;
+            }
+        }, BootstrapType.AZURE_ARMOR.getTypeId(),  modid);
+
+
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
+                return null;
+            }
+        }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
+
+
+        Bootstrapper.initBootstrapper(new ICallBack() {
+            @Override
+            public Object accept(Object... args) {
+                Class clazz = (Class)args[1];
+
+                if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                    AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzIdentityRegistry.register(tranformed_obj);
+                }
+
+                if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                    AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzIdentityRegistry.register(tranformed_obj);
+                }
+
+                return null;
+            }
+        }, BootstrapType.AZURE_ID.getTypeId(),  modid);
     }
 
     public static ResourceLocation CreateNewId(String modid, String pathId ){

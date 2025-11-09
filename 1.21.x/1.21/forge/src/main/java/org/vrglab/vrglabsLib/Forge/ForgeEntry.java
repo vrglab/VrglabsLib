@@ -26,11 +26,6 @@ public class ForgeEntry {
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>) TestItems.ARMOR_BODY.getRegisteredObject().GetAzureRenderer(),
-                TestItems.ARMOR_BODY.getRegisteredObject(),
-                TestItems.ARMOR_BOOTS.getRegisteredObject(),
-                TestItems.ARMOR_LEGS.getRegisteredObject(),
-                TestItems.ARMOR_HEAD.getRegisteredObject()
-        );
+        VrglabsForgeInitializer.InitializeCommonSetup(event, TestModeEntry.MODID);
     }
 }
