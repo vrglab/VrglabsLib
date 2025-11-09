@@ -81,7 +81,7 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                return Registry.register(BuiltInRegistries.BLOCK, id, ((IClampedCallBack<Block>)args[1]).accept(Utils.MakeSafeSettings((((Supplier<BlockBehaviour.Properties>)args[2]).get()), RegistryTypes.ITEM, id)));
+                return Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[2]).get(), RegistryTypes.BLOCK, id))));
             }
         };
         ICallBack POIRegistryCallBack = new ICallBack() {

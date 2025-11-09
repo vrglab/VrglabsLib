@@ -69,10 +69,13 @@ public class AutoRegistryLoader {
 
     public static void loadItemlessBlocksInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
-            ItemlessBlock rg = ((ItemlessBlock)args[0]);
+            Block rg = ((Block)args[0]);
             RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
             rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
-            Object return_val = Registry.RegisterItemlessBlock(rt.Name(), modId, (IClampedCallBack<net.minecraft.world.level.block.Block>) rg.getArgs().get("block"), (Supplier<BlockBehaviour.Properties>) rg.getArgs().get("block.settings"));
+            Object return_val = Registry.
+                    RegisterItemlessBlock(rt.Name(), modId,
+                    (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
+                            (Supplier<BlockBehaviour.Properties>) rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
             return return_val;
         });

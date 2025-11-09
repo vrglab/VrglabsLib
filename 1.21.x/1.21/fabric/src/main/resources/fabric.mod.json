@@ -16,6 +16,9 @@
     "entrypoints": {
         "main": [
             "org.vrglab.vrglabsLib.Fabric.FabricEntryPoint"
+        ],
+        "client": [
+            "org.vrglab.vrglabsLib.Fabric.FabricClientEntryPoint"
         ]
     },
     "mixins": [

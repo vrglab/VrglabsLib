@@ -145,7 +145,13 @@ public class VrglabsForgeInitializer {
         ICallBack ItemlessBlockcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return BLOCK_REGISTRY.register(args[0].toString(), (Supplier<? extends Block>) args[1]);
+                Supplier<Block> s = new Supplier<Block>() {
+                    @Override
+                    public Block get() {
+                        return ((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(((Supplier<BlockBehaviour.Properties>)args[2]).get());
+                    }
+                };
+                return BLOCK_REGISTRY.register(args[0].toString(), s);
             }
         };
 

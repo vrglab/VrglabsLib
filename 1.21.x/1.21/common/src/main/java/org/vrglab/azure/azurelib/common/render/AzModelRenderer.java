@@ -369,6 +369,6 @@ public class AzModelRenderer<K, T> {
      * @return {@code true} if the buffer is inactive (not building); {@code false} otherwise.
      */
     protected boolean isBufferInactive(BufferBuilder builder) {
-        return !ReflectionUtil.getField(builder, "building", boolean.class);
+        return !ReflectionUtil.getField(builder, "building", java.lang.Boolean.class);
     }
 }

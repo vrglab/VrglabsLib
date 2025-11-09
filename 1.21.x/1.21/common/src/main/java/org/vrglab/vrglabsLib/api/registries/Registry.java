@@ -221,7 +221,7 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterItemlessBlock(String name, String Modid, IClampedCallBack<Block> aNew, Supplier<BlockBehaviour.Properties> settingsSupplier) {
+    public static Object RegisterItemlessBlock(String name, String Modid, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<BlockBehaviour.Properties> settingsSupplier) {
         return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew, settingsSupplier);
     }
 
