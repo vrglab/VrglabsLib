@@ -12,21 +12,6 @@ public final class ClientListener implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ClientPlayNetworking.registerGlobalReceiver(
-            AzEntityDispatchCommandPacket.TYPE,
-            (packet, context) -> packet.handle()
-        );
-        ClientPlayNetworking.registerGlobalReceiver(
-            AzItemStackDispatchCommandPacket.TYPE,
-            (packet, context) -> packet.handle()
-        );
-        ClientPlayNetworking.registerGlobalReceiver(
-            AzBlockEntityDispatchCommandPacket.TYPE,
-            (packet, context) -> packet.handle()
-        );
-        ClientPlayNetworking.registerGlobalReceiver(
-            SendConfigDataPacket.TYPE,
-            (packet, context) -> packet.handle()
-        );
+
     }
 }

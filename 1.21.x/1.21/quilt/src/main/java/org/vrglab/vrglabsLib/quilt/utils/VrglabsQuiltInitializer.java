@@ -1,4 +1,5 @@
-package org.vrglab.vrglabsLib.Fabric.Utils;
+package org.vrglab.vrglabsLib.quilt.utils;
+
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import org.quiltmc.loader.api.ModContainer;
 import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
 import org.vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
 import org.vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
@@ -32,6 +34,7 @@ import org.vrglab.reflections.scanners.Scanners;
 import org.vrglab.reflections.util.ConfigurationBuilder;
 import org.vrglab.reflections.util.FilterBuilder;
 import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
+import org.vrglab.vrglabsLib.Utils.Utils;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
@@ -42,20 +45,19 @@ import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
 import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
-import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Supplier;
 
-public class VrglabsFabricInitializer {
+public class VrglabsQuiltInitializer {
 
     public static void Initialize(String modid, String modPackage) {
         Create(modid);
         VrglabsInitializer.Initialize(modid, modPackage);
     }
 
-    public static void InitializeClient(String modid) {
-        ClientPlayNetworking.registerGlobalReceiver(
+    public static void InitializeClient( String modid) {
+       /* ClientPlayNetworking.registerGlobalReceiver(
                 AzEntityDispatchCommandPacket.TYPE,
                 (packet, context) -> packet.handle()
         );
@@ -71,7 +73,7 @@ public class VrglabsFabricInitializer {
                 SendConfigDataPacket.TYPE,
                 (packet, context) -> packet.handle()
         );
-
+*/
         CreateClient(modid);
     }
 
@@ -235,7 +237,7 @@ public class VrglabsFabricInitializer {
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
 
-    public static void CreateClient(String modid) {
+    public static void CreateClient( String modid) {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
