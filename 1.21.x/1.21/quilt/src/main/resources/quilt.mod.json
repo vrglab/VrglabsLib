@@ -16,7 +16,8 @@
         },
         "intermediate_mappings": "net.fabricmc:intermediary",
         "entrypoints": {
-            "init": "org.vrglab.vrglabsLib.quilt.QuiltEntryPoint"
+            "init": "org.vrglab.vrglabsLib.quilt.QuiltEntryPoint",
+            "client": "org.vrglab.vrglabsLib.quilt.QuiltClientEntryPoint"
         },
         "depends": [
             {
@@ -32,5 +33,10 @@
                 "versions": ">=1.21"
             }
         ]
-    }
+    },
+  "mixin": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.quilt.mixins.json" ,
+    "azurelib.quilt.mixins.json"
+  ]
 }
