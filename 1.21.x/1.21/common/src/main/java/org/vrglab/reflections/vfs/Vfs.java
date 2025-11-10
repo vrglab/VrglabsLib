@@ -21,37 +21,7 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-/**
- * a simple virtual file system bridge
- * <p>use the {@link org.vrglab.reflections.vfs.Vfs#fromURL(URL)} to get a {@link org.vrglab.reflections.vfs.Vfs.Dir},
- * then use {@link org.vrglab.reflections.vfs.Vfs.Dir#getFiles()} to iterate over the {@link org.vrglab.reflections.vfs.Vfs.File}
- * <p>for example:
- * <pre>
- *      Vfs.Dir dir = Vfs.fromURL(url);
- *      Iterable< Vfs.File > files = dir.getFiles();
- *      for (Vfs.File file : files) {
- *          InputStream is = file.openInputStream();
- *      }
- * </pre>
- * <p>{@link org.vrglab.reflections.vfs.Vfs#fromURL(URL)} uses static {@link org.vrglab.reflections.vfs.Vfs.DefaultUrlTypes} to resolve URLs.
- * It contains VfsTypes for handling for common resources such as local jar file, local directory, jar url, jar input stream and more.
- * <p>It can be plugged in with other {@link org.vrglab.reflections.vfs.Vfs.UrlType} using {@link org.vrglab.reflections.vfs.Vfs#addDefaultURLTypes(org.vrglab.reflections.vfs.Vfs.UrlType)} or {@link org.vrglab.reflections.vfs.Vfs#setDefaultURLTypes(List)}.
- * <p>for example:
- * <pre>
- *      Vfs.addDefaultURLTypes(new Vfs.UrlType() {
- *          public boolean matches(URL url)         {
- *              return url.getProtocol().equals("http");
- *          }
- *          public Vfs.Dir createDir(final URL url) {
- *              return new HttpDir(url); //implement this type... (check out a naive implementation on VfsTest)
- *          }
- *      });
- *
- *      Vfs.Dir dir = Vfs.fromURL(new URL("http://mirrors.ibiblio.org/pub/mirrors/maven2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.jar"));
- * </pre>
- * <p>use {@link org.vrglab.reflections.vfs.Vfs#findFiles(Collection, Predicate)} to get an
- * iteration of files matching given name predicate over given list of urls
- */
+
 public abstract class Vfs {
     private static List<UrlType> defaultUrlTypes = new ArrayList<>(Arrays.asList(DefaultUrlTypes.values()));
 
