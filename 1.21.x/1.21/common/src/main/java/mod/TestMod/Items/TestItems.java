@@ -3,7 +3,6 @@ package mod.TestMod.Items;
 import mod.TestMod.TestModeEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.ArmorMaterials;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererConfig;
 import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
@@ -32,25 +31,10 @@ public class TestItems {
             () ->  new net.minecraft.world.item.Item.Properties().stacksTo(75).fireResistant()
     );
 
-    @RegisterItem(ItemName = "armor_body")
-    public static Item<AzureArmor> ARMOR_BODY = new Item(TestModeEntry.MODID,
+    @RegisterItem(ItemName = "amethyst_chestplate")
+    public static Item<AzureArmor> AMETHYST_CHESTPLATE = new Item(TestModeEntry.MODID,
 
-            (arg)->new AzureArmor(mod.TestMod.Items.ArmorMaterials.IRON, ArmorItem.Type.CHESTPLATE, (net.minecraft.world.item.Item.Properties) arg[0]) {
-
-                @Override
-                public Supplier<? extends AzArmorRenderer> GetAzureRenderer() {
-                    return ()->new ExampleArmorRenderer();
-                }
-            }
-            ,
-            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
-            AzureArmor.class
-    );
-
-    @RegisterItem(ItemName = "armor_legs")
-    public static Item<AzureArmor> ARMOR_LEGS = new Item(TestModeEntry.MODID,
-
-            (arg)->new AzureArmor(ArmorMaterials.GOLD, ArmorItem.Type.LEGGINGS, (net.minecraft.world.item.Item.Properties) arg[0]) {
+            (arg)->new AzureArmor(ArmorMaterials.AMETHYST, ArmorItem.Type.CHESTPLATE, (net.minecraft.world.item.Item.Properties) arg[0]) {
 
                 @Override
                 public Supplier<? extends AzArmorRenderer> GetAzureRenderer() {
@@ -62,10 +46,10 @@ public class TestItems {
             AzureArmor.class
     );
 
-    @RegisterItem(ItemName = "armor_head")
-    public static Item<AzureArmor> ARMOR_HEAD = new Item(TestModeEntry.MODID,
+    @RegisterItem(ItemName = "amethyst_leggings")
+    public static Item<AzureArmor> AMETHYST_LEGGINGS = new Item(TestModeEntry.MODID,
 
-            (arg)->new AzureArmor(ArmorMaterials.GOLD, ArmorItem.Type.HELMET, (net.minecraft.world.item.Item.Properties) arg[0]) {
+            (arg)->new AzureArmor(ArmorMaterials.AMETHYST, ArmorItem.Type.LEGGINGS, (net.minecraft.world.item.Item.Properties) arg[0]) {
 
                 @Override
                 public Supplier<? extends AzArmorRenderer> GetAzureRenderer() {
@@ -77,10 +61,25 @@ public class TestItems {
             AzureArmor.class
     );
 
-    @RegisterItem(ItemName = "armor_boots")
-    public static Item<AzureArmor> ARMOR_BOOTS = new Item(TestModeEntry.MODID,
+    @RegisterItem(ItemName = "amethyst_helmet")
+    public static Item<AzureArmor> AMETHYST_HELMET = new Item(TestModeEntry.MODID,
 
-            (arg)->new AzureArmor(ArmorMaterials.GOLD, ArmorItem.Type.BOOTS, (net.minecraft.world.item.Item.Properties) arg[0]) {
+            (arg)->new AzureArmor(ArmorMaterials.AMETHYST, ArmorItem.Type.HELMET, (net.minecraft.world.item.Item.Properties) arg[0]) {
+
+                @Override
+                public Supplier<? extends AzArmorRenderer> GetAzureRenderer() {
+                    return ()->new ExampleArmorRenderer();
+                }
+            }
+            ,
+            () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
+            AzureArmor.class
+    );
+
+    @RegisterItem(ItemName = "amethyst_boots")
+    public static Item<AzureArmor> AMETHYST_BOOTS = new Item(TestModeEntry.MODID,
+
+            (arg)->new AzureArmor(ArmorMaterials.AMETHYST, ArmorItem.Type.BOOTS, (net.minecraft.world.item.Item.Properties) arg[0]) {
 
                 @Override
                 public Supplier<? extends AzArmorRenderer> GetAzureRenderer() {
