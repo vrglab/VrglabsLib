@@ -31,14 +31,14 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     /** include package prefix <pre>{@code new FilterBuilder().includePackage("java.lang")}</pre>
-     * <i>note that the {@code value} is mapped into a prefix pattern with a trailing dot, for example {@code "a.b" == "a\\.b\\..*}
+     * <i>note that the {@code value} is mapped into a prefix pattern with a trailing dot, for example {@code "a.b" == "a\\.b\\..*}</i>
      * <p>see more in {@link #prefixPattern(String)} */
     public FilterBuilder includePackage(String value) {
         return includePattern(prefixPattern(value));
     }
 
     /** exclude package prefix <pre>{@code new FilterBuilder().excludePackage("java.lang")}</pre>
-     * <i>note that the {@code value} is mapped into a prefix pattern with a trailing dot, for example {@code "a.b" == "a\\.b\\..*}
+     * <i>note that the {@code value} is mapped into a prefix pattern with a trailing dot, for example {@code "a.b" == "a\\.b\\..*}</i>
      * <p>see more in {@link #prefixPattern(String)} */
     public FilterBuilder excludePackage(String value) {
         return excludePattern(prefixPattern(value));

@@ -372,7 +372,6 @@ public class Registry {
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
-     * @from 1.19.4
      */
     public static Object SimpleRegister(UUID type, String Modid, Object... args){
         if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type)) {

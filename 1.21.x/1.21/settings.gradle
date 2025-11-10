@@ -2,53 +2,10 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Fabric'
-                    url = uri('https://maven.fabricmc.net')
-                }
-            }
-            filter {
-                includeGroup('net.fabricmc')
-                includeGroup('fabric-loom')
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Sponge'
-                    url = uri('https://repo.spongepowered.org/repository/maven-public')
-                }
-            }
-            filter {
-                includeGroupAndSubgroups("org.spongepowered")
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Forge'
-                    url = uri('https://maven.minecraftforge.net')
-                }
-            }
-            filter {
-                includeGroupAndSubgroups('net.minecraftforge')
-            }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Quilt'
-                    url = 'https://maven.quiltmc.org/repository/release'
-                }
-            }
-            filter {
-                includeGroupAndSubgroups('org.quiltmc')
-                includeGroup('org.quiltmc.loom')
-            }
-        }
-
+        maven { url = 'https://maven.fabricmc.net/' }  // needed for unpick
+        maven { url = 'https://maven.quiltmc.org/repository/release' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
+        maven { url = 'https://maven.minecraftforge.net' }
     }
 }
 
@@ -62,3 +19,4 @@ include('common')
 include('fabric')
 include('neoforge')
 include('forge')
+include('quilt')
