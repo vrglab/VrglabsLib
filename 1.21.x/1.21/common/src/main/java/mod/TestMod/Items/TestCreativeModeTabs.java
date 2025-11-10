@@ -22,10 +22,10 @@ public class TestCreativeModeTabs {
                             (itemDisplayParameters, output) ->{
                                 output.accept(TestItems.RUBY.getRegisteredObject());
                                 output.accept(TestItems.RUBY_AXE.getRegisteredObject());
-                                output.accept(TestItems.ARMOR_BODY.getRegisteredObject());
-                                output.accept(TestItems.ARMOR_LEGS.getRegisteredObject());
-                                output.accept(TestItems.ARMOR_HEAD.getRegisteredObject());
-                                output.accept(TestItems.ARMOR_BOOTS.getRegisteredObject());
+                                output.accept(TestItems.AMETHYST_CHESTPLATE.getRegisteredObject());
+                                output.accept(TestItems.AMETHYST_BOOTS.getRegisteredObject());
+                                output.accept(TestItems.AMETHYST_LEGGINGS.getRegisteredObject());
+                                output.accept(TestItems.AMETHYST_HELMET.getRegisteredObject());
                             }
                     )
                     .build());
