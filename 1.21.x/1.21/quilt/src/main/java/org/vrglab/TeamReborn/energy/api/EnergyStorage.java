@@ -77,9 +77,9 @@ public interface EnergyStorage {
 	/**
 	 * Stock data component type for energy.
 	 *
-	 * <p><b>This component should only be used on item stacks from your mod.</b>
+	 * This component should only be used on item stacks from your mod.
 	 * Otherwise, do not query it or assume it exists.
-	 * Inter-mod energy interactions should happen using {@link #ITEM}.</b>
+	 * Inter-mod energy interactions should happen using {@link #ITEM}
 	 */
 	DataComponentType<Long> ENERGY_COMPONENT = Objects.requireNonNull(EnergyImpl.ENERGY_COMPONENT);
 

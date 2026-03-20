@@ -60,7 +60,7 @@ public interface SimpleEnergyItem {
 
 	/**
 	 * Directly set the energy stored in the stack. Count is ignored.
-	 * It's up to callers to ensure that the new amount is >= 0 and <= capacity.
+	 * It's up to callers to ensure that the new amount is more than or equal to 0 and less than or equal to capacity.
 	 */
 	default void setStoredEnergy(ItemStack stack, long newAmount) {
 		setStoredEnergyUnchecked(stack, newAmount);

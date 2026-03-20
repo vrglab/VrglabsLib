@@ -17,6 +17,17 @@ dependencies {
 
     modApi "com.terraformersmc:modmenu:${modmenu_version}"
     compileOnly "curse.maven:shoulder-surfing-reloaded-243190:6993803"
+
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.17'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    testImplementation 'org.assertj:assertj-core:4.0.0-M1'
+    testImplementation 'org.assertj:assertj-guava:4.0.0-M1'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 loom {
