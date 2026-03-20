@@ -55,7 +55,7 @@ jobs:
 
       - name: Run unit tests
         if: matrix.project.runTests
-        run: ./gradlew --no-daemon test --stacktrace
+        run: ./gradlew test
 
       - name: Upload test reports
         if: always() && matrix.project.runTests
@@ -99,7 +99,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build mod artifacts without tests
-        run: ./gradlew --no-daemon assemble --stacktrace
+        run: ./gradlew build
 
       - name: Upload build outputs
         if: always()
