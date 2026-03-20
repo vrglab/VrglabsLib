@@ -8,18 +8,24 @@ on:
     branches:
       - "master"
       - "main"
-      - "main/*"
 
 jobs:
-  build:
+  define-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.projects.outputs.projects }}
+    steps:
+      - id: projects
+        run: |
+          echo 'projects=["1.19.2","1.20.4","1.21.x/1.21"]' >> "$GITHUB_OUTPUT"
+
+  build-and-test:
+    needs: define-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - "1.20.4"
-          - "1.21.4"
-          - "1.21.x/1.21"
+        project: ${{ fromJSON(needs.define-matrix.outputs.projects) }}
 
     permissions:
       contents: read
@@ -43,18 +49,25 @@ jobs:
       - name: Make wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Build
-        run: ./gradlew build
+      - name: Run unit tests and build
+        run: ./gradlew clean test build
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ matrix.project }}
+          path: |
+            ${{ matrix.project }}/**/build/reports/tests/
+            ${{ matrix.project }}/**/build/test-results/
 
   dependency-submission:
+    needs: define-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - "1.20.4"
-          - "1.21.4"
-          - "1.21.x/1.21"
+        project: ${{ fromJSON(needs.define-matrix.outputs.projects) }}
 
     permissions:
       contents: write
