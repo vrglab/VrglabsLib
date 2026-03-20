@@ -19,7 +19,7 @@ jobs:
     steps:
       - id: projects
         run: | 
-          echo 'projects=[{"path":"1.19.2","runTests":false},{"path":"1.20.1","runTests":false},{"path":"1.21.x/1.21","runTests":true}]' >> "$GITHUB_OUTPUT"
+          echo 'projects=[{"path":"1.19.2","runTests":false},{"path":"1.20.4","runTests":false},{"path":"1.21.x/1.21","runTests":true}]' >> "$GITHUB_OUTPUT"
 
   build-and-test:
     needs: define-matrix
