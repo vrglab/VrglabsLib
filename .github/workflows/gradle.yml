@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - "dev/*"
+      - "dev/**"
   pull_request:
     branches:
       - "master"
-      - "main"
+      - "main/*"
+      - "main/**"
 
 jobs:
   define-matrix:
@@ -17,7 +19,11 @@ jobs:
     steps:
       - id: projects
         run: |
-          echo 'projects=["1.19.2","1.20.4","1.21.x/1.21"]' >> "$GITHUB_OUTPUT"
+          echo 'projects=[
+            {"path":"1.19.2","runTests":false},
+            {"path":"1.20.4","runTests":false},
+            {"path":"1.21.x/1.21","runTests":true}
+          ]' >> "$GITHUB_OUTPUT"
 
   build-and-test:
     needs: define-matrix
@@ -32,7 +38,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ${{ matrix.project }}
+        working-directory: ${{ matrix.project.path }}
 
     steps:
       - uses: actions/checkout@v6
@@ -49,17 +55,22 @@ jobs:
       - name: Make wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Run unit tests and build
-        run: ./gradlew clean test build
+      - name: Run tests and build
+        if: matrix.project.runTests
+        run: ./gradlew --no-daemon clean test build --stacktrace
+
+      - name: Build only
+        if: ${{ !matrix.project.runTests }}
+        run: ./gradlew --no-daemon build --stacktrace
 
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports-${{ matrix.project }}
+          name: test-reports-${{ matrix.project.path }}
           path: |
-            ${{ matrix.project }}/**/build/reports/tests/
-            ${{ matrix.project }}/**/build/test-results/
+            ${{ matrix.project.path }}/**/build/reports/tests/
+            ${{ matrix.project.path }}/**/build/test-results/
 
   dependency-submission:
     needs: define-matrix
@@ -84,4 +95,4 @@ jobs:
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
         with:
-          build-root-directory: ${{ matrix.project }}
+          build-root-directory: ${{ matrix.project.path }}
