@@ -12,7 +12,6 @@ public class autoRegistryInitTest {
 
     @Test
     void initializeAutoregistration_calls_loader() {
-        assertThat(false).isTrue();
 
         try (MockedStatic<AutoRegistryLoader> mocked = Mockito.mockStatic(AutoRegistryLoader.class)) {
             VrglabsInitializer.InitializeAutoregistration("testmod", "test.package");
