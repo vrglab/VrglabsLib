@@ -20,6 +20,10 @@ jobs:
     permissions:
       contents: read
 
+    defaults:
+      run:
+        working-directory: 1.21.x/1.21
+
     steps:
     - uses: actions/checkout@v6
     - name: Set up JDK 21
