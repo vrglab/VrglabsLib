@@ -16,11 +16,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class AutoRegistryLoader {
 
     static ClassLoader loader = null;
+
+    static AtomicInteger successFullyLoadedContentCount = new AtomicInteger(0);
 
     public static void LoadAllInPackage(String packageName, String modid) {
         loadItemsInPackage(packageName, modid);
@@ -39,11 +42,13 @@ public class AutoRegistryLoader {
             rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
             Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), rg.getModid(), rg.getSupplier());
             rg.setRegistryData(return_val);
+            successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
     }
 
     public static void loadItemsInPackage(String packageName, String modId) {
+
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             Item rg = ((Item)args[0]);
             RegisterItem rt = ((RegisterItem)args[1]);
@@ -61,6 +66,7 @@ public class AutoRegistryLoader {
 
 
             rg.setRegistryData(return_val);
+            successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
     }
@@ -74,6 +80,7 @@ public class AutoRegistryLoader {
                     (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
                     (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("item.settings"), (Supplier<BlockBehaviour.Properties>)rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
+            successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
     }
@@ -88,6 +95,7 @@ public class AutoRegistryLoader {
                     (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
                             (Supplier<BlockBehaviour.Properties>) rg.getArgs().get("block.settings"));
             rg.setRegistryData(return_val);
+            successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
     }
@@ -104,6 +112,7 @@ public class AutoRegistryLoader {
                     (rg.getArgs().get("block") instanceof Block<?>) ? (entityTypeBlockSelector.accept(rg)) : rg.getArgs().get("block")
             );
             rg.setRegistryData(return_val);
+            successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
     }
@@ -133,6 +142,10 @@ public class AutoRegistryLoader {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public static int getSuccessFullyLoadedContentCount() {
+        return successFullyLoadedContentCount.get();
     }
 
     /** HELPER METHODS AND REFLECTION FUNCTIONS **/
