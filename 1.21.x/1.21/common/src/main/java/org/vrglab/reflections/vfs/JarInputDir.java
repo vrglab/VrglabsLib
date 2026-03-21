@@ -11,24 +11,27 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
 public class JarInputDir implements Vfs.Dir {
-    private final URL url;
+    private final URL _url;
     JarInputStream jarInputStream;
     long cursor = 0;
     long nextCursor = 0;
 
     public JarInputDir(URL url) {
-        this.url = url;
+        this._url = url;
     }
 
     public String getPath() {
-        return url.getPath();
+        return _url.getPath();
     }
 
     public Iterable<Vfs.File> getFiles() {
         return () -> new Iterator<Vfs.File>() {
             {
-                try { jarInputStream = new JarInputStream(url.openConnection().getInputStream()); }
-                catch (Exception e) { throw new ReflectionsException("Could not open url connection", e); }
+                try {
+                    jarInputStream = new JarInputStream(_url.openConnection().getInputStream());
+                } catch (Exception e) {
+                    throw new ReflectionsException("Could not open url connection", e);
+                }
             }
 
             Vfs.File entry = null;
@@ -54,7 +57,9 @@ public class JarInputDir implements Vfs.Dir {
                         }
 
                         long size = entry.getSize();
-                        if (size < 0) size = 0xffffffffl + size; //JDK-6916399
+                        if (size < 0) {
+                            size = 0xffffffffl + size;
+                        } //JDK-6916399
                         nextCursor += size;
                         if (!entry.isDirectory()) {
                             return new JarInputFile(entry, JarInputDir.this, cursor, nextCursor);
@@ -68,8 +73,11 @@ public class JarInputDir implements Vfs.Dir {
     }
 
     public void close() {
-        try { if (jarInputStream != null) ((InputStream) jarInputStream).close(); }
-        catch (IOException e) {
+        try {
+            if (jarInputStream != null) {
+                ((InputStream) jarInputStream).close();
+            }
+        } catch (IOException e) {
             if (Reflections.log != null) {
                 Reflections.log.warn("Could not close InputStream", e);
             }

@@ -46,15 +46,15 @@ import java.util.stream.IntStream;
  */
 public class JavaCodeSerializer implements Serializer {
 
-    private static final String pathSeparator = "_";
-    private static final String doubleSeparator = "__";
-    private static final String dotSeparator = ".";
-    private static final String arrayDescriptor = "$$";
-    private static final String tokenSeparator = "_";
+    private static final String PATH_SEPARATOR = "_";
+    private static final String DOUBLE_SEPARATOR = "__";
+    private static final String DOT_SEPARATOR = ".";
+    private static final String ARRAY_DESCRIPTOR = "$$";
+    private static final String TOKEN_SEPARATOR = "_";
 
-    private StringBuilder sb;
-    private List<String> prevPaths;
-    private int indent;
+    private StringBuilder _sb;
+    private List<String> _prevPaths;
+    private int _indent;
 
     public Reflections read(InputStream inputStream) {
         throw new UnsupportedOperationException("read is not implemented on JavaCodeSerializer");
@@ -87,17 +87,17 @@ public class JavaCodeSerializer implements Serializer {
 
         //generate
         try {
-            sb = new StringBuilder();
-            sb.append("//generated using Reflections JavaCodeSerializer").append(" [").append(new Date()).append("]").append("\n");
+            _sb = new StringBuilder();
+            _sb.append("//generated using Reflections JavaCodeSerializer").append(" [").append(new Date()).append("]").append("\n");
             if (packageName.length() != 0) {
-                sb.append("package ").append(packageName).append(";\n");
-                sb.append("\n");
+                _sb.append("package ").append(packageName).append(";\n");
+                _sb.append("\n");
             }
-            sb.append("public interface ").append(className).append(" {\n\n");
+            _sb.append("public interface ").append(className).append(" {\n\n");
             toString(reflections);
-            sb.append("}\n");
+            _sb.append("}\n");
 
-            Files.write(new File(filename).toPath(), sb.toString().getBytes(Charset.defaultCharset()));
+            Files.write(new File(filename).toPath(), _sb.toString().getBytes(Charset.defaultCharset()));
 
         } catch (IOException e) {
             throw new RuntimeException();
@@ -108,8 +108,8 @@ public class JavaCodeSerializer implements Serializer {
 
     private void toString(Reflections reflections) {
         Map<String, Set<String>> map = reflections.getStore().get(TypeElementsScanner.class.getSimpleName());
-        prevPaths = new ArrayList<>();
-        indent = 1;
+        _prevPaths = new ArrayList<>();
+        _indent = 1;
 
         map.keySet().stream().sorted().forEach(fqn -> {
             List<String> typePaths = Arrays.asList(fqn.split("\\."));
@@ -125,7 +125,7 @@ public class JavaCodeSerializer implements Serializer {
                         int i = element.indexOf('(');
                         String name = element.substring(0, i);
                         String params = element.substring(i + 1, element.indexOf(")"));
-                        String paramsDescriptor = params.length() != 0 ? tokenSeparator + params.replace(dotSeparator, tokenSeparator).replace(", ", doubleSeparator).replace("[]", arrayDescriptor) : "";
+                        String paramsDescriptor = params.length() != 0 ? TOKEN_SEPARATOR + params.replace(DOT_SEPARATOR, TOKEN_SEPARATOR).replace(", ", DOUBLE_SEPARATOR).replace("[]", ARRAY_DESCRIPTOR) : "";
                         methods.add(!methods.contains(name) ? name : name + paramsDescriptor);
                     }
                 } else if (!element.isEmpty()) {
@@ -133,17 +133,17 @@ public class JavaCodeSerializer implements Serializer {
                 }
             });
 
-            int i = indentOpen(typePaths, prevPaths);
+            int i = indentOpen(typePaths, _prevPaths);
             addPackages(typePaths, i);
             addClass(typePaths, className);
             addFields(typePaths, fields);
             addMethods(typePaths, fields, methods);
             addAnnotations(typePaths, annotations);
 
-            prevPaths = typePaths;
+            _prevPaths = typePaths;
         });
 
-        indentClose(prevPaths);
+        indentClose(_prevPaths);
     }
 
     protected int indentOpen(List<String> typePaths, List<String> prevPaths) {
@@ -152,55 +152,55 @@ public class JavaCodeSerializer implements Serializer {
             i++;
         }
         for (int j = prevPaths.size(); j > i; j--) {
-            sb.append(indent(--indent)).append("}\n");
+            _sb.append(indent(--_indent)).append("}\n");
         }
         return i;
     }
 
     protected void indentClose(List<String> prevPaths) {
         for (int j = prevPaths.size(); j >= 1; j--) {
-            sb.append(indent(j)).append("}\n");
+            _sb.append(indent(j)).append("}\n");
         }
     }
 
     protected void addPackages(List<String> typePaths, int i) {
         for (int j = i; j < typePaths.size() - 1; j++) {
-            sb.append(indent(indent++)).append("interface ").append(uniqueName(typePaths.get(j), typePaths, j)).append(" {\n");
+            _sb.append(indent(_indent++)).append("interface ").append(uniqueName(typePaths.get(j), typePaths, j)).append(" {\n");
         }
     }
 
     protected void addClass(List<String> typePaths, String className) {
-        sb.append(indent(indent++)).append("interface ").append(uniqueName(className, typePaths, typePaths.size() - 1)).append(" {\n");
+        _sb.append(indent(_indent++)).append("interface ").append(uniqueName(className, typePaths, typePaths.size() - 1)).append(" {\n");
     }
 
     protected void addFields(List<String> typePaths, List<String> fields) {
         if (!fields.isEmpty()) {
-            sb.append(indent(indent++)).append("interface fields {\n");
+            _sb.append(indent(_indent++)).append("interface fields {\n");
             for (String field : fields) {
-                sb.append(indent(indent)).append("interface ").append(uniqueName(field, typePaths)).append(" {}\n");
+                _sb.append(indent(_indent)).append("interface ").append(uniqueName(field, typePaths)).append(" {}\n");
             }
-            sb.append(indent(--indent)).append("}\n");
+            _sb.append(indent(--_indent)).append("}\n");
         }
     }
 
     protected void addMethods(List<String> typePaths, List<String> fields, List<String> methods) {
         if (!methods.isEmpty()) {
-            sb.append(indent(indent++)).append("interface methods {\n");
+            _sb.append(indent(_indent++)).append("interface methods {\n");
             for (String method : methods) {
                 String methodName = uniqueName(method, fields);
-                sb.append(indent(indent)).append("interface ").append(uniqueName(methodName, typePaths)).append(" {}\n");
+                _sb.append(indent(_indent)).append("interface ").append(uniqueName(methodName, typePaths)).append(" {}\n");
             }
-            sb.append(indent(--indent)).append("}\n");
+            _sb.append(indent(--_indent)).append("}\n");
         }
     }
 
     protected void addAnnotations(List<String> typePaths, List<String> annotations) {
         if (!annotations.isEmpty()) {
-            sb.append(indent(indent++)).append("interface annotations {\n");
+            _sb.append(indent(_indent++)).append("interface annotations {\n");
             for (String annotation : annotations) {
-                sb.append(indent(indent)).append("interface ").append(uniqueName(annotation, typePaths)).append(" {}\n");
+                _sb.append(indent(_indent)).append("interface ").append(uniqueName(annotation, typePaths)).append(" {}\n");
             }
-            sb.append(indent(--indent)).append("}\n");
+            _sb.append(indent(--_indent)).append("}\n");
         }
     }
 
@@ -208,14 +208,14 @@ public class JavaCodeSerializer implements Serializer {
         String normalized = normalize(candidate);
         for (int i = 0; i < offset; i++) {
             if (normalized.equals(prev.get(i))) {
-                return uniqueName(normalized + tokenSeparator, prev, offset);
+                return uniqueName(normalized + TOKEN_SEPARATOR, prev, offset);
             }
         }
         return normalized;
     }
 
     private String normalize(String candidate) {
-        return candidate.replace(dotSeparator, pathSeparator);
+        return candidate.replace(DOT_SEPARATOR, PATH_SEPARATOR);
     }
 
     private String uniqueName(String candidate, List<String> prev) {

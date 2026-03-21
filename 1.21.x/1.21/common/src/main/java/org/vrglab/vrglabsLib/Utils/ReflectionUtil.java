@@ -97,8 +97,9 @@ public class ReflectionUtil {
             Object[] finalArgs;
 
             if (nestedClass.getEnclosingClass() != null && !Modifier.isStatic(nestedClass.getModifiers())) {
-                if (outerInstance == null)
+                if (outerInstance == null){
                     throw new IllegalArgumentException("Outer instance cannot be null for non-static nested class");
+                }
 
                 finalArgs = new Object[args.length + 1];
                 finalArgs[0] = outerInstance;
@@ -119,7 +120,9 @@ public class ReflectionUtil {
      * Checks if the given type is the same as, or a subclass (or sub-subclass) of the parent class
      */
     public static boolean isSubclassOrSame(Class<?> type, Class<?> parent) {
-        if (type == null || parent == null) return false;
+        if (type == null || parent == null) {
+            return false;
+        }
         return parent.isAssignableFrom(type);
     }
 

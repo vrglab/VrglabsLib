@@ -11,10 +11,10 @@ import java.util.jar.JarFile;
 
 public class JbossDir implements Vfs.Dir {
 
-    private final VirtualFile virtualFile;
+    private final VirtualFile _virtualFile;
 
     private JbossDir(VirtualFile virtualFile) {
-        this.virtualFile = virtualFile;
+        this._virtualFile = virtualFile;
     }
 
     public static Vfs.Dir createDir(URL url) throws Exception {
@@ -34,7 +34,7 @@ public class JbossDir implements Vfs.Dir {
 
     @Override
     public String getPath() {
-        return virtualFile.getPathName();
+        return _virtualFile.getPathName();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class JbossDir implements Vfs.Dir {
             Vfs.File entry = null;
 
             {
-                stack.addAll(virtualFile.getChildren());
+                stack.addAll(_virtualFile.getChildren());
             }
 
             @Override

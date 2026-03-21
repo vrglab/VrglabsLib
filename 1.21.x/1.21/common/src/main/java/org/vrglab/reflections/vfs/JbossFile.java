@@ -7,24 +7,24 @@ import java.io.InputStream;
 
 public class JbossFile implements Vfs.File {
 
-    private final JbossDir root;
-    private final VirtualFile virtualFile;
+    private final JbossDir _root;
+    private final VirtualFile _virtualFile;
 
     public JbossFile(final JbossDir root, VirtualFile virtualFile) {
-        this.root = root;
-        this.virtualFile = virtualFile;
+        this._root = root;
+        this._virtualFile = virtualFile;
     }
 
     @Override
     public String getName() {
-        return virtualFile.getName();
+        return _virtualFile.getName();
     }
 
     @Override
     public String getRelativePath() {
-        String filepath  = virtualFile.getPathName();
-        if(filepath.startsWith(root.getPath())) {
-            return filepath.substring(root.getPath().length() + 1);
+        String filepath  = _virtualFile.getPathName();
+        if (filepath.startsWith(_root.getPath())) {
+            return filepath.substring(_root.getPath().length() + 1);
         }
 
         return null;
@@ -32,6 +32,6 @@ public class JbossFile implements Vfs.File {
 
     @Override
     public InputStream openInputStream() throws IOException {
-        return virtualFile.openStream();
+        return _virtualFile.openStream();
     }
 }

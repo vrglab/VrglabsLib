@@ -8,34 +8,34 @@ import java.util.zip.ZipEntry;
 *
 */
 public class JarInputFile implements Vfs.File {
-    private final ZipEntry entry;
-    private final JarInputDir jarInputDir;
-    private final long fromIndex;
-    private final long endIndex;
+    private final ZipEntry _entry;
+    private final JarInputDir _jarInputDir;
+    private final long _fromIndex;
+    private final long _endIndex;
 
     public JarInputFile(ZipEntry entry, JarInputDir jarInputDir, long cursor, long nextCursor) {
-        this.entry = entry;
-        this.jarInputDir = jarInputDir;
-        fromIndex = cursor;
-        endIndex = nextCursor;
+        this._entry = entry;
+        this._jarInputDir = jarInputDir;
+        _fromIndex = cursor;
+        _endIndex = nextCursor;
     }
 
     public String getName() {
-        String name = entry.getName();
+        String name = _entry.getName();
         return name.substring(name.lastIndexOf("/") + 1);
     }
 
     public String getRelativePath() {
-        return entry.getName();
+        return _entry.getName();
     }
 
     public InputStream openInputStream() {
         return new InputStream() {
             @Override
             public int read() throws IOException {
-                if (jarInputDir.cursor >= fromIndex && jarInputDir.cursor <= endIndex) {
-                    int read = jarInputDir.jarInputStream.read();
-                    jarInputDir.cursor++;
+                if (_jarInputDir.cursor >= _fromIndex && _jarInputDir.cursor <= _endIndex) {
+                    int read = _jarInputDir.jarInputStream.read();
+                    _jarInputDir.cursor++;
                     return read;
                 } else {
                     return -1;

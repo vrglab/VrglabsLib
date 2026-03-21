@@ -167,8 +167,8 @@ public class Reflections implements NameHelper {
 
     protected Map<String, Map<String, Set<String>>> scan() {
         long start = System.currentTimeMillis();
-        Map<String, Set<Map.Entry<String, String>>> collect = configuration.getScanners().stream().map(Scanner::index).distinct()
-            .collect(Collectors.toMap(s -> s, s -> Collections.synchronizedSet(new HashSet<>())));
+        Map<String, Set<Map.Entry<String, String>>> collect = configuration.getScanners().stream().map(Scanner::index).distinct().
+                collect(Collectors.toMap(s -> s, s -> Collections.synchronizedSet(new HashSet<>())));
         Set<URL> urls = configuration.getUrls();
 
         (configuration.isParallel() ? urls.stream().parallel() : urls.stream()).forEach(url -> {
@@ -181,37 +181,45 @@ public class Reflections implements NameHelper {
                                 if (doFilter(file, scanner::acceptsInput)) {
                                     List<Map.Entry<String, String>> entries = scanner.scan(file);
                                     if (entries == null) {
-                                        if (classFile == null) classFile = getClassFile(file);
+                                        if (classFile == null) {
+                                            classFile = getClassFile(file);
+                                        }
                                         entries = scanner.scan(classFile);
                                     }
-                                    if (entries != null) collect.get(scanner.index()).addAll(entries);
+                                    if (entries != null) {
+                                        collect.get(scanner.index()).addAll(entries);
+                                    }
                                 }
                             } catch (Exception e) {
-                                if (log != null) log.debug("could not scan file {} with scanner {}", file.getRelativePath(), scanner.getClass().getSimpleName(), e);
+                                if (log != null) {
+                                    log.debug("could not scan file {} with scanner {}", file.getRelativePath(), scanner.getClass().getSimpleName(), e);
+                                }
                             }
                         }
                     }
                 }
             } catch (Throwable e) {
-                if (log != null) log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
+                if (log != null) {
+                    log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
+                }
             }
         });
 
         // merge
         Map<String, Map<String, Set<String>>> storeMap =
-            collect.entrySet().stream()
-                .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> entry.getValue().stream().filter(e -> e.getKey() != null)
-                        .collect(Collectors.groupingBy(
-                            Map.Entry::getKey,
-                            HashMap::new,
-                            Collectors.mapping(Map.Entry::getValue, Collectors.toSet())))));
+            collect.entrySet().stream().
+                    collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().stream().filter(e -> e.getKey() != null).
+                                collect(Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                HashMap::new,
+                                Collectors.mapping(Map.Entry::getValue, Collectors.toSet())))));
         if (log != null) {
             int keys = 0, values = 0;
             for (Map<String, Set<String>> map : storeMap.values()) {
                 keys += map.size();
-                values += map.values().stream().mapToLong(Set::size).sum();
+                values += (int) map.values().stream().mapToLong(Set::size).sum();
             }
             log.info(format("Reflections took %d ms to scan %d urls, producing %d keys and %d values", System.currentTimeMillis() - start, urls.size(), keys, values));
         }
@@ -264,8 +272,8 @@ public class Reflections implements NameHelper {
         Collection<URL> urls = ClasspathHelper.forPackage(packagePrefix);
         Iterable<Vfs.File> files = Vfs.findFiles(urls, packagePrefix, resourceNameFilter);
         Reflections reflections = new Reflections();
-        StreamSupport.stream(files.spliterator(), false)
-            .forEach(file -> {
+        StreamSupport.stream(files.spliterator(), false).
+            forEach(file -> {
                 try (InputStream inputStream = file.openInputStream()) {
                     reflections.collect(inputStream, serializer);
                 } catch (IOException e) {
@@ -298,7 +306,9 @@ public class Reflections implements NameHelper {
     /** merges the given {@code reflections} instance metadata into this instance */
     public Reflections merge(Reflections reflections) {
         reflections.store.forEach((index, map) -> this.store.merge(index, map, (m1, m2) -> {
-            m2.forEach((k, v) -> m1.merge(k, v, (s1, s2) -> { s1.addAll(s2); return s1;}));
+            m2.forEach((k, v) -> m1.merge(k, v, (s1, s2) -> {
+                s1.addAll(s2); return s1;
+            }));
             return m1;
         }));
         return this;
@@ -315,7 +325,9 @@ public class Reflections implements NameHelper {
      * </ul>
      */
     public void expandSuperTypes(Map<String, Set<String>> subTypesStore, Map<String, Set<String>> typesAnnotatedStore) {
-        if (subTypesStore == null || subTypesStore.isEmpty()) return;
+        if (subTypesStore == null || subTypesStore.isEmpty()) {
+            return;
+        }
         Set<String> keys = new LinkedHashSet<>(subTypesStore.keySet());
         keys.removeAll(subTypesStore.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         keys.remove("java.lang.Object");
@@ -369,8 +381,8 @@ public class Reflections implements NameHelper {
      */
     public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> type) {
         //noinspection unchecked
-        return (Set<Class<? extends T>>) get(SubTypes.of(type)
-            .as((Class<? extends T>) Class.class, loaders()));
+        return (Set<Class<? extends T>>) get(SubTypes.of(type).
+                    as((Class<? extends T>) Class.class, loaders()));
     }
 
     /**
@@ -397,10 +409,10 @@ public class Reflections implements NameHelper {
             return getTypesAnnotatedWith(annotation);
         } else {
             if (annotation.isAnnotationPresent(Inherited.class)) {
-                return get(TypesAnnotated.get(annotation)
-                    .add(SubTypes.of(TypesAnnotated.get(annotation)
-                        .filter(c -> !forClass(c, loaders()).isInterface())))
-                    .asClass(loaders()));
+                return get(TypesAnnotated.get(annotation).
+                        add(SubTypes.of(TypesAnnotated.get(annotation).
+                                filter(c -> !forClass(c, loaders()).isInterface()))).
+                        asClass(loaders()));
             } else {
                 return get(TypesAnnotated.get(annotation).asClass(loaders()));
             }
@@ -414,9 +426,9 @@ public class Reflections implements NameHelper {
      */
     public Set<Class<?>> getTypesAnnotatedWith(Annotation annotation) {
         return get(SubTypes.of(
-                TypesAnnotated.of(TypesAnnotated.get(annotation.annotationType())
-                    .filter(c -> withAnnotation(annotation).test(forClass(c, loaders())))))
-            .asClass(loaders()));
+                TypesAnnotated.of(TypesAnnotated.get(annotation.annotationType()).
+                        filter(c -> withAnnotation(annotation).test(forClass(c, loaders()))))).
+                asClass(loaders()));
     }
 
     /**
@@ -430,8 +442,8 @@ public class Reflections implements NameHelper {
         } else {
             Class<? extends Annotation> type = annotation.annotationType();
             if (type.isAnnotationPresent(Inherited.class)) {
-                return get(TypesAnnotated.with(type).asClass(loaders()).filter(withAnnotation(annotation))
-                    .add(SubTypes.of(TypesAnnotated.with(type).asClass(loaders()).filter(c -> !c.isInterface()))));
+                return get(TypesAnnotated.with(type).asClass(loaders()).filter(withAnnotation(annotation)).
+                        add(SubTypes.of(TypesAnnotated.with(type).asClass(loaders()).filter(c -> !c.isInterface()))));
             } else {
                 return get(TypesAnnotated.with(type).asClass(loaders()).filter(withAnnotation(annotation)));
             }
@@ -453,8 +465,8 @@ public class Reflections implements NameHelper {
      * <p></p><i>depends on {@link Scanners#MethodsAnnotated} configured</i>
      */
     public Set<Method> getMethodsAnnotatedWith(Annotation annotation) {
-        return get(MethodsAnnotated.with(annotation.annotationType()).as(Method.class, loaders())
-            .filter(withAnnotation(annotation)));
+        return get(MethodsAnnotated.with(annotation.annotationType()).as(Method.class, loaders()).
+                filter(withAnnotation(annotation)));
     }
 
     /**
@@ -499,8 +511,8 @@ public class Reflections implements NameHelper {
      * <p></p><i>depends on {@link Scanners#ConstructorsAnnotated} configured</i>
      */
     public Set<Constructor> getConstructorsAnnotatedWith(Annotation annotation) {
-        return get(ConstructorsAnnotated.with(annotation.annotationType()).as(Constructor.class, loaders())
-            .filter(withAnyParameterAnnotation(annotation)));
+        return get(ConstructorsAnnotated.with(annotation.annotationType()).as(Constructor.class, loaders()).
+                filter(withAnyParameterAnnotation(annotation)));
     }
 
     /**
@@ -536,8 +548,8 @@ public class Reflections implements NameHelper {
      * <p></p><i>depends on {@link Scanners#FieldsAnnotated} configured</i>
      */
     public Set<Field> getFieldsAnnotatedWith(Annotation annotation) {
-        return get(FieldsAnnotated.with(annotation.annotationType()).as(Field.class, loaders())
-            .filter(withAnnotation(annotation)));
+        return get(FieldsAnnotated.with(annotation.annotationType()).as(Field.class, loaders()).
+                filter(withAnnotation(annotation)));
     }
 
     /**
@@ -563,8 +575,8 @@ public class Reflections implements NameHelper {
      * <p>depends on {@link MethodParameterNamesScanner} configured
      */
     public List<String> getMemberParameterNames(Member member) {
-        return store.getOrDefault(MethodParameterNamesScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet())
-            .stream().flatMap(s -> Stream.of(s.split(", "))).collect(Collectors.toList());
+        return store.getOrDefault(MethodParameterNamesScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet()).
+                stream().flatMap(s -> Stream.of(s.split(", "))).collect(Collectors.toList());
     }
 
     /**
@@ -624,5 +636,7 @@ public class Reflections implements NameHelper {
         return serializer.save(this, filename);
     }
 
-    ClassLoader[] loaders() { return configuration.getClassLoaders(); }
+    ClassLoader[] loaders() {
+        return configuration.getClassLoaders();
+    }
 }

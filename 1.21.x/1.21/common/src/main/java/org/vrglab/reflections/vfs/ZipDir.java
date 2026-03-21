@@ -18,14 +18,16 @@ public class ZipDir implements Vfs.Dir {
     }
 
     public Iterable<Vfs.File> getFiles() {
-        return () -> jarFile.stream()
-                .filter(entry -> !entry.isDirectory())
-                .map(entry -> (Vfs.File) new ZipFile(ZipDir.this, entry))
-                .iterator();
+        return () -> jarFile.stream().
+                filter(entry -> !entry.isDirectory()).
+                map(entry -> (Vfs.File) new ZipFile(ZipDir.this, entry)).
+                iterator();
     }
 
     public void close() {
-        try { jarFile.close(); } catch (IOException e) {
+        try {
+            jarFile.close();
+        } catch (IOException e) {
             if (Reflections.log != null) {
                 Reflections.log.warn("Could not close JarFile", e);
             }

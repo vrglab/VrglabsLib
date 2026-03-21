@@ -25,16 +25,16 @@ import java.util.function.Predicate;
 
 /** scan methods/constructors/fields usage */
 public class MemberUsageScanner implements Scanner {
-    private Predicate<String> resultFilter = s -> true; //accept all by default
-    private final ClassLoader[] classLoaders;
-    private volatile ClassPool classPool;
+    private Predicate<String> _resultFilter = s -> true; //accept all by default
+    private final ClassLoader[] _classLoaders;
+    private volatile ClassPool _classPool;
 
     public MemberUsageScanner() {
         this(ClasspathHelper.classLoaders());
     }
 
     public MemberUsageScanner(@NonnullDefault ClassLoader[] classLoaders) {
-        this.classLoaders = classLoaders;
+        this._classLoaders = classLoaders;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MemberUsageScanner implements Scanner {
     }
 
     public Scanner filterResultsBy(Predicate<String> filter) {
-        this.resultFilter = filter;
+        this._resultFilter = filter;
         return this;
     }
 
@@ -111,7 +111,7 @@ public class MemberUsageScanner implements Scanner {
     }
 
     private void add(List<Map.Entry<String, String>> entries, String key, String value) {
-        if (resultFilter.test(key)) {
+        if (_resultFilter.test(key)) {
             entries.add(entry(key, value));
         }
     }
@@ -121,16 +121,16 @@ public class MemberUsageScanner implements Scanner {
     }
 
     private ClassPool getClassPool() {
-        if (classPool == null) {
+        if (_classPool == null) {
             synchronized (this) {
-                if (classPool == null) {
-                    classPool = new ClassPool();
-                    for (ClassLoader classLoader : classLoaders) {
-                        classPool.appendClassPath(new LoaderClassPath(classLoader));
+                if (_classPool == null) {
+                    _classPool = new ClassPool();
+                    for (ClassLoader classLoader : _classLoaders) {
+                        _classPool.appendClassPath(new LoaderClassPath(classLoader));
                     }
                 }
             }
         }
-        return classPool;
+        return _classPool;
     }
 }

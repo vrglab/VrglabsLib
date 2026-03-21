@@ -6,22 +6,22 @@ import java.io.FileNotFoundException;
 
 /** an implementation of {@link org.vrglab.reflections.vfs.Vfs.File} for a directory {@link java.io.File} */
 public class SystemFile implements Vfs.File {
-    private final SystemDir root;
-    private final java.io.File file;
+    private final SystemDir _root;
+    private final java.io.File _file;
 
     public SystemFile(final SystemDir root, java.io.File file) {
-        this.root = root;
-        this.file = file;
+        this._root = root;
+        this._file = file;
     }
 
     public String getName() {
-        return file.getName();
+        return _file.getName();
     }
 
     public String getRelativePath() {
-        String filepath = file.getPath().replace("\\", "/");
-        if (filepath.startsWith(root.getPath())) {
-            return filepath.substring(root.getPath().length() + 1);
+        String filepath = _file.getPath().replace("\\", "/");
+        if (filepath.startsWith(_root.getPath())) {
+            return filepath.substring(_root.getPath().length() + 1);
         }
 
         return null; //should not get here
@@ -29,7 +29,7 @@ public class SystemFile implements Vfs.File {
 
     public InputStream openInputStream() {
         try {
-            return new FileInputStream(file);
+            return new FileInputStream(_file);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -37,6 +37,6 @@ public class SystemFile implements Vfs.File {
 
     @Override
     public String toString() {
-        return file.toString();
+        return _file.toString();
     }
 }

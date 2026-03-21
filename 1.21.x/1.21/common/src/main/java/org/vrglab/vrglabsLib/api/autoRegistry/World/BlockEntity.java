@@ -7,7 +7,7 @@ import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-public class BlockEntity<T extends net.minecraft.world.level.block.entity.BlockEntity> extends AutoRegistryObject<BlockEntityType<T>>{
+public class BlockEntity<T extends net.minecraft.world.level.block.entity.BlockEntity> extends AutoRegistryObject<BlockEntityType<T>> {
 
     public BlockEntity(String modid, IBlockEntityLoaderFunction aNew, org.vrglab.vrglabsLib.api.autoRegistry.World.Block block) {
         this.modid = modid;

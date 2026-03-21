@@ -46,45 +46,45 @@ import java.util.stream.Collectors;
  */
 public class XmlSerializer implements Serializer {
 
-	public Reflections read(InputStream inputStream) {
-		try {
-			Document document = new SAXReader().read(inputStream);
-			Map<String, Map<String, Set<String>>> storeMap =
-				document.getRootElement()
-					.elements().stream()
-					.collect(Collectors.toMap(Node::getName,
-						index -> index.elements().stream().collect(Collectors.toMap(
-							entry -> entry.element("key").getText(),
-							entry -> entry.element("values").elements().stream().map(Element::getText).collect(Collectors.toSet())))));
-			return new Reflections(new Store(storeMap));
-		} catch (Exception e) {
-			throw new ReflectionsException("could not read.", e);
-		}
-	}
+    public Reflections read(InputStream inputStream) {
+        try {
+            Document document = new SAXReader().read(inputStream);
+            Map<String, Map<String, Set<String>>> storeMap =
+                    document.getRootElement().
+                            elements().stream().
+                            collect(Collectors.toMap(Node::getName,
+                                    index -> index.elements().stream().collect(Collectors.toMap(
+                                            entry -> entry.element("key").getText(),
+                                            entry -> entry.element("values").elements().stream().map(Element::getText).collect(Collectors.toSet())))));
+            return new Reflections(new Store(storeMap));
+        } catch (Exception e) {
+            throw new ReflectionsException("could not read.", e);
+        }
+    }
 
-	public File save(Reflections reflections, String filename) {
-		File file = Serializer.prepareFile(filename);
-		try (FileOutputStream out = new FileOutputStream(file)) {
-			new XMLWriter(out, OutputFormat.createPrettyPrint())
-				.write(createDocument(reflections.getStore()));
-		} catch (Exception e) {
-			throw new ReflectionsException("could not save to file " + filename, e);
-		}
-		return file;
-	}
+    public File save(Reflections reflections, String filename) {
+        File file = Serializer.prepareFile(filename);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            new XMLWriter(out, OutputFormat.createPrettyPrint()).
+                    write(createDocument(reflections.getStore()));
+        } catch (Exception e) {
+            throw new ReflectionsException("could not save to file " + filename, e);
+        }
+        return file;
+    }
 
-	private Document createDocument(Store store) {
-		Document document = DocumentFactory.getInstance().createDocument();
-		Element root = document.addElement("Reflections");
-		store.forEach((index, map) -> {
-			Element indexElement = root.addElement(index);
-			map.forEach((key, values) -> {
-				Element entryElement = indexElement.addElement("entry");
-				entryElement.addElement("key").setText(key);
-				Element valuesElement = entryElement.addElement("values");
-				values.forEach(value -> valuesElement.addElement("value").setText(value));
-			});
-		});
-		return document;
-	}
+    private Document createDocument(Store store) {
+        Document document = DocumentFactory.getInstance().createDocument();
+        Element root = document.addElement("Reflections");
+        store.forEach((index, map) -> {
+            Element indexElement = root.addElement(index);
+            map.forEach((key, values) -> {
+                Element entryElement = indexElement.addElement("entry");
+                entryElement.addElement("key").setText(key);
+                Element valuesElement = entryElement.addElement("values");
+                values.forEach(value -> valuesElement.addElement("value").setText(value));
+            });
+        });
+        return document;
+    }
 }

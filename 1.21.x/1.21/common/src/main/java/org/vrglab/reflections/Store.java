@@ -9,5 +9,7 @@ import java.util.Set;
  * <i>{@code Store} multimap is not copy protected, preferably use {@link org.vrglab.reflections.util.QueryBuilder} to safely rich query the metadata </i> */
 public class Store extends HashMap<String, Map<String, Set<String>>> {
     public Store() {}
-    public Store(Map<String, Map<String, Set<String>>> storeMap) { super(storeMap); }
+    public Store(Map<String, Map<String, Set<String>>> storeMap) {
+        super(storeMap);
+    }
 }

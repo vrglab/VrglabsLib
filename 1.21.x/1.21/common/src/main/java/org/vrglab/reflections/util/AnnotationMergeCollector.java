@@ -28,78 +28,78 @@ import static org.vrglab.reflections.ReflectionUtils.toMap;
  */
 public class AnnotationMergeCollector implements Collector<Annotation, Map<String, Object>, Map<String, Object>> {
 
-	private final AnnotatedElement annotatedElement;
-	private final BiFunction<Object, Object, Object> mergeFunction;
+    private final AnnotatedElement _annotatedElement;
+    private final BiFunction<Object, Object, Object> _mergeFunction;
 
-	public AnnotationMergeCollector(AnnotatedElement annotatedElement, BiFunction<Object, Object, Object> mergeFunction) {
-		this.annotatedElement = annotatedElement;
-		this.mergeFunction = mergeFunction;
-	}
+    public AnnotationMergeCollector(AnnotatedElement annotatedElement, BiFunction<Object, Object, Object> mergeFunction) {
+        this._annotatedElement = annotatedElement;
+        this._mergeFunction = mergeFunction;
+    }
 
-	public AnnotationMergeCollector() {
-		this(null);
-	}
+    public AnnotationMergeCollector() {
+        this(null);
+    }
 
-	public AnnotationMergeCollector(AnnotatedElement annotatedElement) {
-		this(annotatedElement, AnnotationMergeCollector::concatValues);
-	}
+    public AnnotationMergeCollector(AnnotatedElement annotatedElement) {
+        this(annotatedElement, AnnotationMergeCollector::concatValues);
+    }
 
-	@Override
-	public Supplier<Map<String, Object>> supplier() {
-		return HashMap::new;
-	}
+    @Override
+    public Supplier<Map<String, Object>> supplier() {
+        return HashMap::new;
+    }
 
-	@Override
-	public BiConsumer<Map<String, Object>, Annotation> accumulator() {
-		return (acc, ann) -> mergeMaps(acc, toMap(ann, annotatedElement));
-	}
+    @Override
+    public BiConsumer<Map<String, Object>, Annotation> accumulator() {
+        return (acc, ann) -> mergeMaps(acc, toMap(ann, _annotatedElement));
+    }
 
-	@Override
-	public BinaryOperator<Map<String, Object>> combiner() {
-		return this::mergeMaps;
-	}
+    @Override
+    public BinaryOperator<Map<String, Object>> combiner() {
+        return this::mergeMaps;
+    }
 
-	@Override
-	public Function<Map<String, Object>, Map<String, Object>> finisher() {
-		return Function.identity();
-	}
+    @Override
+    public Function<Map<String, Object>, Map<String, Object>> finisher() {
+        return Function.identity();
+    }
 
-	@Override
-	public Set<Characteristics> characteristics() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Set<Characteristics> characteristics() {
+        return Collections.emptySet();
+    }
 
-	//
-	private Map<String, Object> mergeMaps(Map<String, Object> m1, Map<String, Object> m2) {
-		m2.forEach((k1, v1) -> m1.merge(k1, v1, mergeFunction));
-		return m1;
-	}
+    //
+    private Map<String, Object> mergeMaps(Map<String, Object> m1, Map<String, Object> m2) {
+        m2.forEach((k1, v1) -> m1.merge(k1, v1, _mergeFunction));
+        return m1;
+    }
 
-	private static Object concatValues(Object v1, Object v2) {
-		if (v1.getClass().isArray()) {
-			if (v2.getClass().getComponentType().equals(String.class)) {
-				return stringArrayConcat((String[]) v1, (String[]) v2);
-			} else {
-				return arrayAdd(((Object[]) v1), ((Object[]) v2));
-			}
-		} else if (v2.getClass().equals(String.class)) {
-			return stringConcat(((String) v1), ((String) v2));
-		} else {
-			return v2; // override
-		}
-	}
+    private static Object concatValues(Object v1, Object v2) {
+        if (v1.getClass().isArray()) {
+            if (v2.getClass().getComponentType().equals(String.class)) {
+                return stringArrayConcat((String[]) v1, (String[]) v2);
+            } else {
+                return arrayAdd(((Object[]) v1), ((Object[]) v2));
+            }
+        } else if (v2.getClass().equals(String.class)) {
+            return stringConcat(((String) v1), ((String) v2));
+        } else {
+            return v2; // override
+        }
+    }
 
-	private static Object[] arrayAdd(Object[] o1, Object[] o2) {
-		return o2.length == 0 ? o1 : o1.length == 0 ? o2 :
-			Stream.concat(Stream.of(o1), Stream.of(o2)).toArray(Object[]::new);
-	}
+    private static Object[] arrayAdd(Object[] o1, Object[] o2) {
+        return o2.length == 0 ? o1 : o1.length == 0 ? o2 :
+                Stream.concat(Stream.of(o1), Stream.of(o2)).toArray(Object[]::new);
+    }
 
-	private static Object stringArrayConcat(String[] v1, String[] v2) {
-		return v2.length == 0 ? v1 : v1.length == 0 ? v2 :
-			Arrays.stream(v2).flatMap(s2 -> Arrays.stream(v1).map(s1 -> s2 + s1)).toArray(String[]::new);
-	}
+    private static Object stringArrayConcat(String[] v1, String[] v2) {
+        return v2.length == 0 ? v1 : v1.length == 0 ? v2 :
+                Arrays.stream(v2).flatMap(s2 -> Arrays.stream(v1).map(s1 -> s2 + s1)).toArray(String[]::new);
+    }
 
-	private static Object stringConcat(String v1, String v2) {
-		return v2.isEmpty() ? v1 : v1.isEmpty() ? v2 : v1 + v2;
-	}
+    private static Object stringConcat(String v1, String v2) {
+        return v2.isEmpty() ? v1 : v1.isEmpty() ? v2 : v1 + v2;
+    }
 }

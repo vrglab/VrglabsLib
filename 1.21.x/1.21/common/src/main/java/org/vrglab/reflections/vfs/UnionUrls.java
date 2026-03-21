@@ -5,8 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class UnionUrls implements Vfs.Dir {
-    private final URL url;
-    private final File file;
+    private final URL _url;
+    private final File _file;
 
     public UnionUrls(URL url) {
         URL _newURL = null;
@@ -26,25 +26,25 @@ public class UnionUrls implements Vfs.Dir {
 
 
 
-        this.url = _newURL;
-        file = new File(_newURL.getFile());
+        this._url = _newURL;
+        _file = new File(_newURL.getFile());
 
     }
 
     @Override
     public String getPath() {
-        return url.getPath();
+        return _url.getPath();
     }
 
     @Override
     public Iterable<Vfs.File> getFiles() {
         try {
-            if (file.isFile()) {
-                return new JarInputDir(file.toURI().toURL()).getFiles();
+            if (_file.isFile()) {
+                return new JarInputDir(_file.toURI().toURL()).getFiles();
             }
 
-            if (file.isDirectory()) {
-                return new SystemDir(file).getFiles();
+            if (_file.isDirectory()) {
+                return new SystemDir(_file).getFiles();
             }
 
             return null;

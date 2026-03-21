@@ -2,13 +2,12 @@ package org.vrglab.vrglabsLib.api.autoRegistry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.vrglab.vrglabsLib.Utils.Utils;
 import org.vrglab.vrglabsLib.api.autoRegistry.Annotations.*;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.*;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.registries.Registry;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.core.Constants;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -17,7 +16,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 public class AutoRegistryLoader {
 
@@ -37,11 +35,12 @@ public class AutoRegistryLoader {
 
     public static void loadCreativeModeTabsInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterCreativeModeTab.class, (args) -> {
-            CreativeModeTab rg = ((CreativeModeTab)args[0]);
-            RegisterCreativeModeTab rt = ((RegisterCreativeModeTab)args[1]);
-            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
-            Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), rg.getModid(), rg.getSupplier());
-            rg.setRegistryData(return_val);
+            CreativeModeTab autoRegTab = Utils.typeCaster(args[0], CreativeModeTab.class);
+            RegisterCreativeModeTab rt = Utils.typeCaster(args[1], RegisterCreativeModeTab.class);
+
+            autoRegTab.setId(ResourceLocation.fromNamespaceAndPath(autoRegTab.getModid(), rt.Name()));
+            Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), autoRegTab.getModid(), autoRegTab.getSupplier());
+            autoRegTab.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
@@ -50,22 +49,23 @@ public class AutoRegistryLoader {
     public static void loadItemsInPackage(String packageName, String modId) {
 
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
-            Item rg = ((Item)args[0]);
-            RegisterItem rt = ((RegisterItem)args[1]);
-            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.ItemName()));
+            Item<?> autoRegItem = Utils.typeCaster(args[0], Item.class);
+            RegisterItem rt = Utils.typeCaster(args[1], RegisterItem.class);
+            autoRegItem.setId(ResourceLocation.fromNamespaceAndPath(autoRegItem.getModid(), rt.ItemName()));
 
             Object return_val = null;
 
-            if(rg.getArgs().containsKey("item.class")) {
-                return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")),
-                        (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"), (Class)rg.getArgs().get("item.class"));
-            }else {
-                return_val = Registry.RegisterItem(rt.ItemName(), modId, ((IClampedCallBack<net.minecraft.world.item.Item>) rg.getArgs().get("item")),
-                        (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("settingsItem"));
+            if (autoRegItem.getArgs().containsKey("item.class")) {
+                return_val = Registry.RegisterItem(rt.ItemName(), modId, Utils.typeCasterIClampedCallBackafied(autoRegItem.getArgs().get("item"), net.minecraft.world.item.Item.class),
+                        Utils.typeCasterSupplierfied(autoRegItem.getArgs().get("settingsItem"), net.minecraft.world.item.Item.Properties.class),
+                        Utils.typeCaster(autoRegItem.getArgs().get("item.class")));
+            } else {
+                return_val = Registry.RegisterItem(rt.ItemName(), modId, Utils.typeCasterIClampedCallBackafied(autoRegItem.getArgs().get("item"), net.minecraft.world.item.Item.class),
+                        Utils.typeCasterSupplierfied(autoRegItem.getArgs().get("settingsItem"), net.minecraft.world.item.Item.Properties.class));
             }
 
 
-            rg.setRegistryData(return_val);
+            autoRegItem.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
@@ -73,13 +73,14 @@ public class AutoRegistryLoader {
 
     public static void loadBlocksInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
-            Block rg = ((Block)args[0]);
-            RegisterBlock rt = ((RegisterBlock)args[1]);
-            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
+            Block<?> autoRegBlock = Utils.typeCaster(args[0], Block.class);
+            RegisterBlock rt = Utils.typeCaster(args[1], RegisterBlock.class);
+            autoRegBlock.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
             Object return_val = Registry.RegisterBlock(rt.Name(), modId,
-                    (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
-                    (Supplier<net.minecraft.world.item.Item.Properties>)rg.getArgs().get("item.settings"), (Supplier<BlockBehaviour.Properties>)rg.getArgs().get("block.settings"));
-            rg.setRegistryData(return_val);
+                    Utils.typeCasterIClampedSingleCallBackafied(autoRegBlock.getArgs().get("block"), net.minecraft.world.level.block.Block.class, BlockBehaviour.Properties.class),
+                    Utils.typeCasterSupplierfied(autoRegBlock.getArgs().get("item.settings"), net.minecraft.world.item.Item.Properties.class),
+                    Utils.typeCasterSupplierfied(autoRegBlock.getArgs().get("block.settings"), net.minecraft.world.level.block.state.BlockBehaviour.Properties.class));
+            autoRegBlock.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
@@ -87,14 +88,15 @@ public class AutoRegistryLoader {
 
     public static void loadItemlessBlocksInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
-            Block rg = ((Block)args[0]);
-            RegisterItemlessBlock rt = ((RegisterItemlessBlock)args[1]);
-            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
+            Block<?> autoRegBlock = Utils.typeCaster(args[0], Block.class);
+            RegisterItemlessBlock rt = Utils.typeCaster(args[1], RegisterItemlessBlock.class);
+            autoRegBlock.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
+
             Object return_val = Registry.
                     RegisterItemlessBlock(rt.Name(), modId,
-                    (IClampedSingleCallback<net.minecraft.world.level.block.Block, BlockBehaviour.Properties>) rg.getArgs().get("block"),
-                            (Supplier<BlockBehaviour.Properties>) rg.getArgs().get("block.settings"));
-            rg.setRegistryData(return_val);
+                            Utils.typeCasterIClampedSingleCallBackafied(autoRegBlock.getArgs().get("block"), net.minecraft.world.level.block.Block.class, BlockBehaviour.Properties.class),
+                            Utils.typeCasterSupplierfied(autoRegBlock.getArgs().get("block.settings"), net.minecraft.world.level.block.state.BlockBehaviour.Properties.class));
+            autoRegBlock.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
@@ -102,16 +104,16 @@ public class AutoRegistryLoader {
 
     public static void loadBlockEntityTypesInPackage(String packageName, String modId) {
         LoadingResolver(packageName, modId, RegisterBlockEntityType.class, (args) -> {
-            BlockEntity rg = ((BlockEntity)args[0]);
-            RegisterBlockEntityType rt = ((RegisterBlockEntityType)args[1]);
-            rg.setId(ResourceLocation.fromNamespaceAndPath(rg.getModid(), rt.Name()));
+            BlockEntity<?> autoRegBlockEntity = Utils.typeCaster(args[0], BlockEntity.class);
+            RegisterBlockEntityType rt = Utils.typeCaster(args[1], RegisterBlockEntityType.class);
+            autoRegBlockEntity.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlockEntity.getModid(), rt.Name()));
             Object return_val = Registry.RegisterBlockEntityType(
                     rt.Name(),
                     modId,
-                    (IBlockEntityLoaderFunction) rg.getArgs().get("new"),
-                    (rg.getArgs().get("block") instanceof Block<?>) ? (entityTypeBlockSelector.accept(rg)) : rg.getArgs().get("block")
+                    Utils.typeCaster(autoRegBlockEntity.getArgs().get("new"), IBlockEntityLoaderFunction.class),
+                    (autoRegBlockEntity.getArgs().get("block") instanceof Block<?>) ? (entityTypeBlockSelector.accept(autoRegBlockEntity)) : autoRegBlockEntity.getArgs().get("block")
             );
-            rg.setRegistryData(return_val);
+            autoRegBlockEntity.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
             return return_val;
         });
@@ -130,14 +132,15 @@ public class AutoRegistryLoader {
         });
     }
 
-    private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack Resolver) {
+    private static <T extends Annotation> void LoadingResolver(String packageName, String modId, Class<T> annotation, ICallBack resolver) {
         Set<Field> annotatedFields = getFieldsAnnotatedIn(annotation, packageName, modId);
         annotatedFields.forEach(field -> {
             Annotation anno = field.getAnnotation(annotation);
             try {
-                AutoRegistryObject rg = ((AutoRegistryObject)field.get(null));
-                if(rg.getModid().equals(modId))
-                    Resolver.accept(rg, anno);
+                AutoRegistryObject<?> rg = Utils.typeCaster(field.get(null), AutoRegistryObject.class);
+                if (rg.getModid().equals(modId)) {
+                    resolver.accept(rg, anno);
+                }
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -151,7 +154,7 @@ public class AutoRegistryLoader {
     /** HELPER METHODS AND REFLECTION FUNCTIONS **/
 
     private static Set<Field> getFieldsAnnotatedIn(Class annotation, String packageName, String modid){
-        return (Set<Field>)collectAnnotatedFieldsForMod.accept(packageName, annotation, modid);
+        return (Set<Field>) collectAnnotatedFieldsForMod.accept(packageName, annotation, modid);
     }
 
     private static Set<Class> getTypesAnnotatedIn(Class annotation, String packageName, String modid){

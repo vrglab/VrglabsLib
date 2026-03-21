@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
  * note that includePackage/excludePackage value is mapped into a prefix pattern with a trailing dot, for example: {@code includePackage("a.b")} is equivalent to {@code includePattern("a\\.b\\..*)}
  */
 public class FilterBuilder implements Predicate<String> {
-    private final List<Predicate<String>> chain = new ArrayList<>();
+    private final List<Predicate<String>> _chain = new ArrayList<>();
 
     public FilterBuilder() {}
 
 	private FilterBuilder(Collection<Predicate<String>> filters) {
-        chain.addAll(filters);
+        _chain.addAll(filters);
     }
 
     /** include package prefix <pre>{@code new FilterBuilder().includePackage("java.lang")}</pre>
@@ -89,14 +89,14 @@ public class FilterBuilder implements Predicate<String> {
     }
 
     public FilterBuilder add(Predicate<String> filter) {
-        chain.add(filter);
+        _chain.add(filter);
         return this;
     }
 
     public boolean test(String regex) {
-        boolean accept = chain.isEmpty() || chain.get(0) instanceof Exclude;
+        boolean accept = _chain.isEmpty() || _chain.get(0) instanceof Exclude;
 
-        for (Predicate<String> filter : chain) {
+        for (Predicate<String> filter : _chain) {
             if (accept && filter instanceof Include) {continue;} //skip if this filter won't change
             if (!accept && filter instanceof Exclude) {continue;}
             accept = filter.test(regex);
@@ -109,16 +109,16 @@ public class FilterBuilder implements Predicate<String> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return Objects.equals(chain, ((FilterBuilder) o).chain);
+        return Objects.equals(_chain, ((FilterBuilder) o)._chain);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chain);
+        return Objects.hash(_chain);
     }
 
     @Override public String toString() {
-        return chain.stream().map(Object::toString).collect(Collectors.joining(", "));
+        return _chain.stream().map(Object::toString).collect(Collectors.joining(", "));
     }
 
     /** maps fqn to prefix pattern with a trailing dot, for example {@code packageNamePrefix("a.b") == "a\\.b\\..*} */

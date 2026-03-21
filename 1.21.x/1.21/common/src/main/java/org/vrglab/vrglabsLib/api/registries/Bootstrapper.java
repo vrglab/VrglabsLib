@@ -10,9 +10,7 @@ public class Bootstrapper {
          UnregisteredData(UUID registryType, Object... args) {
             this.registryType = registryType;
             this.args = new ArrayList<>();
-            for (Object argdata: args) {
-                this.args.add(argdata);
-            }
+             Collections.addAll(this.args, args);
         }
 
         public List<Object> args;

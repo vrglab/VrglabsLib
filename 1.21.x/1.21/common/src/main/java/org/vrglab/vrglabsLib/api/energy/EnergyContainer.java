@@ -7,10 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBackVoidNoArg;
 import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergyContainer;
 import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergySupplier;
-import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.platform.Services;
-import org.vrglab.vrglabsLib.platform.services.energy.IEnergyService;
-
 public class EnergyContainer implements IEnergyContainer {
 
     protected long energy;
@@ -18,8 +15,9 @@ public class EnergyContainer implements IEnergyContainer {
     protected long maxReceive;
     protected long maxExtract;
 
-    private Object rawLoaderDependentContainer, rawBlockEntity;
-    private ICallBackVoidNoArg makeDirty;
+    private final Object _rawLoaderDependentContainer;
+    private Object _rawBlockEntity;
+    private ICallBackVoidNoArg _makeDirty;
 
     public EnergyContainer(long capacity) {
         this(capacity, capacity, capacity, 0);
@@ -38,7 +36,7 @@ public class EnergyContainer implements IEnergyContainer {
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.energy = Math.max(0 , Math.min(capacity, energy));
-        this.rawLoaderDependentContainer = Services.ENERGY.CreateContainerInstance(capacity, maxReceive, maxExtract, energy, this, rawBlockEntity);
+        this._rawLoaderDependentContainer = Services.ENERGY.CreateContainerInstance(capacity, maxReceive, maxExtract, energy, this, _rawBlockEntity);
     }
 
     private EnergyContainer(long capacity, long maxReceive, long maxExtract, long energy, Object rawLoaderDependentContainer, Object blockEntity) {
@@ -46,31 +44,31 @@ public class EnergyContainer implements IEnergyContainer {
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.energy = Math.max(0 , Math.min(capacity, energy));
-        this.rawLoaderDependentContainer = rawLoaderDependentContainer;
-        rawBlockEntity =  blockEntity;
+        this._rawLoaderDependentContainer = rawLoaderDependentContainer;
+        _rawBlockEntity =  blockEntity;
     }
 
     public Object getRawBlockEntity() {
-        return rawBlockEntity;
+        return _rawBlockEntity;
     }
 
     public <T> T GetModloaderContainer(Class<T> tClass) {
-        if (tClass.isAssignableFrom(rawLoaderDependentContainer.getClass())) {
-            return tClass.cast(rawLoaderDependentContainer);
+        if (tClass.isAssignableFrom(_rawLoaderDependentContainer.getClass())) {
+            return tClass.cast(_rawLoaderDependentContainer);
         }
         throw new RuntimeException("Requested Energy Container Type does not match " + Services.PLATFORM.getPlatformName() + "'s Energy Container Type ");
     }
 
     public EnergyContainer setMakeDirtyFunction(ICallBackVoidNoArg makeDirty) {
-        this.makeDirty = makeDirty;
+        this._makeDirty = makeDirty;
         return this;
     }
 
     public static boolean pushEnergyTo(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
-        if(EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
-            EnergyContainer storage = (EnergyContainer)EnergyController.getStorageInWorld(world, blockPos, dir);
-            EnergyContainer self_storage = (EnergyContainer) ((IEnergySupplier)self).getEnergyStorage();
-            if(storage != null && (!self_storage.isEmpty() && !storage.atMaxCapacity())) {
+        if (EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
+            EnergyContainer storage = (EnergyContainer) EnergyController.getStorageInWorld(world, blockPos, dir);
+            EnergyContainer self_storage = (EnergyContainer) ((IEnergySupplier<?>) self).getEnergyStorage();
+            if (storage != null && (!self_storage.isEmpty() && !storage.atMaxCapacity())) {
                 storage.receiveEnergy(amnt);
                 self_storage.extractEnergy(amnt);
                 return true;
@@ -80,10 +78,10 @@ public class EnergyContainer implements IEnergyContainer {
     }
 
     public static boolean pullEnergyFrom(BlockEntity self, Level world, BlockPos blockPos, Direction dir, long amnt) {
-        if(EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
-            EnergyContainer storage = (EnergyContainer)EnergyController.getStorageInWorld(world, blockPos, dir);
-            EnergyContainer self_storage = (EnergyContainer)((IEnergySupplier)self).getEnergyStorage();
-            if(storage != null && (!self_storage.atMaxCapacity() && !storage.isEmpty())) {
+        if (EnergyController.containEnergyStorage(world, blockPos.offset(dir.getNormal()))) {
+            EnergyContainer storage = (EnergyContainer) EnergyController.getStorageInWorld(world, blockPos, dir);
+            EnergyContainer self_storage = (EnergyContainer) ((IEnergySupplier<?>) self).getEnergyStorage();
+            if (storage != null && (!self_storage.atMaxCapacity() && !storage.isEmpty())) {
                 storage.extractEnergy(amnt);
                 self_storage.receiveEnergy(amnt);
                 return true;
@@ -101,7 +99,7 @@ public class EnergyContainer implements IEnergyContainer {
      */
     @Override
     public long receiveEnergy(long maxReceive, boolean simulate) {
-        energy += Services.ENERGY.GiveEnergyToContainer(rawLoaderDependentContainer, maxReceive, simulate);
+        energy += Services.ENERGY.GiveEnergyToContainer(_rawLoaderDependentContainer, maxReceive, simulate);
         return energy;
     }
 
@@ -114,7 +112,7 @@ public class EnergyContainer implements IEnergyContainer {
      */
     @Override
     public long extractEnergy(long maxExtract, boolean simulate) {
-        energy -= Services.ENERGY.ExtractEnergyFromContainer(rawLoaderDependentContainer, maxExtract, simulate);
+        energy -= Services.ENERGY.ExtractEnergyFromContainer(_rawLoaderDependentContainer, maxExtract, simulate);
         return energy;
     }
 
@@ -178,50 +176,50 @@ public class EnergyContainer implements IEnergyContainer {
         return (energy == 0);
     }
 
-    public boolean atMaxCapacity(){
+    public boolean atMaxCapacity() {
         return (energy == capacity);
     }
 
 
     public static final class ExternalContainerBuilder {
-        private long energy;
-        private long capacity;
-        private long maxReceive;
-        private long maxExtract;
+        private long _energy;
+        private long _capacity;
+        private long _maxReceive;
+        private long _maxExtract;
 
-        private Object rawLoaderDependentContainer, rawBlockEntity;
+        private Object _rawLoaderDependentContainer, _rawBlockEntity;
 
         public static ExternalContainerBuilder Open() {
             return new ExternalContainerBuilder();
         }
 
         public ExternalContainerBuilder energy(long energy) {
-            this.energy = energy;
+            this._energy = energy;
             return this;
         }
         public ExternalContainerBuilder capacity(long capacity) {
-            this.capacity = capacity;
+            this._capacity = capacity;
             return this;
         }
         public ExternalContainerBuilder maxReceive(long maxReceive) {
-            this.maxReceive = maxReceive;
+            this._maxReceive = maxReceive;
             return this;
         }
         public ExternalContainerBuilder maxExtract(long maxExtract) {
-            this.maxExtract = maxExtract;
+            this._maxExtract = maxExtract;
             return this;
         }
         public ExternalContainerBuilder rawLoaderDependentContainer(Object rawLoaderDependentContainer) {
-            this.rawLoaderDependentContainer = rawLoaderDependentContainer;
+            this._rawLoaderDependentContainer = rawLoaderDependentContainer;
             return this;
         }
         public ExternalContainerBuilder rawBlockEntity(Object rawBlockEntity) {
-            this.rawBlockEntity = rawBlockEntity;
+            this._rawBlockEntity = rawBlockEntity;
             return this;
         }
 
         public EnergyContainer Build() {
-            return new EnergyContainer(energy, capacity, maxReceive, maxExtract, rawLoaderDependentContainer, rawBlockEntity);
+            return new EnergyContainer(_energy, _capacity, _maxReceive, _maxExtract, _rawLoaderDependentContainer, _rawBlockEntity);
         }
     }
 }

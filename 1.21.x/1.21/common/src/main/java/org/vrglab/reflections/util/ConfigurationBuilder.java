@@ -37,15 +37,15 @@ public class ConfigurationBuilder implements Configuration {
     public static final Set<Scanner> DEFAULT_SCANNERS = new HashSet<>(Arrays.asList(Scanners.TypesAnnotated, Scanners.SubTypes));
     public static final Predicate<String> DEFAULT_INPUTS_FILTER = t -> true;
 
-    private Set<Scanner> scanners;
-    private Set<URL> urls;
-    private Predicate<String> inputsFilter;
-    private boolean isParallel = true;
-    private ClassLoader[] classLoaders;
-    private boolean expandSuperTypes = true;
+    private Set<Scanner> _scanners;
+    private Set<URL> _urls;
+    private Predicate<String> _inputsFilter;
+    private boolean _isParallel = true;
+    private ClassLoader[] _classLoaders;
+    private boolean _expandSuperTypes = true;
 
     public ConfigurationBuilder() {
-        urls = new HashSet<>();
+        _urls = new HashSet<>();
     }
 
     /** constructs a {@link ConfigurationBuilder}.
@@ -71,14 +71,24 @@ public class ConfigurationBuilder implements Configuration {
         List<Object> parameters = new ArrayList<>();
         for (Object param : params) {
             if (param != null) {
-                if (param.getClass().isArray()) { for (Object p : (Object[]) param) parameters.add(p); }
-                else if (param instanceof Iterable) { for (Object p : (Iterable) param) parameters.add(p); }
-                else parameters.add(param);
+                if (param.getClass().isArray()) {
+                    for (Object p : (Object[]) param) {
+                        parameters.add(p);
+                    }
+                }else if (param instanceof Iterable) {
+                    for (Object p : (Iterable) param) {
+                        parameters.add(p);
+                    }
+                } else {
+                    parameters.add(param);
+                }
             }
         }
 
         ClassLoader[] loaders = Stream.of(params).filter(p -> p instanceof ClassLoader).distinct().toArray(ClassLoader[]::new);
-        if (loaders.length != 0) { builder.addClassLoaders(loaders); }
+        if (loaders.length != 0) {
+            builder.addClassLoaders(loaders);
+        }
 
         FilterBuilder inputsFilter = new FilterBuilder();
         builder.filterInputsBy(inputsFilter);
@@ -95,11 +105,16 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof Scanner) {
                 builder.addScanners((Scanner) param);
             } else if (param instanceof Class && Scanner.class.isAssignableFrom((Class) param)) {
-                try { builder.addScanners(((Class<Scanner>) param).getDeclaredConstructor().newInstance()); }
-                catch (Exception e) { throw new RuntimeException(e); }
+                try {
+                    builder.addScanners(((Class<Scanner>) param).getDeclaredConstructor().newInstance());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } else if (param instanceof Predicate) {
                 builder.filterInputsBy((Predicate<String>) param);
-            } else throw new ReflectionsException("could not use param '" + param + "'");
+            } else {
+                throw new ReflectionsException("could not use param '" + param + "'");
+            }
         }
 
         if (builder.getUrls().isEmpty()) {
@@ -117,54 +132,60 @@ public class ConfigurationBuilder implements Configuration {
 
     /** {@link #addUrls(URL...)} by applying {@link ClasspathHelper#forPackage(String, ClassLoader...)} for the given {@code packages}*/
     public ConfigurationBuilder forPackages(String... packages) {
-        for (String pkg : packages) forPackage(pkg);
+        for (String pkg : packages) {
+            forPackage(pkg);
+        }
         return this;
     }
 
     @Override
     /* @inherited */
     public Set<Scanner> getScanners() {
-        return scanners != null ? scanners : DEFAULT_SCANNERS;
+        return _scanners != null ? _scanners : DEFAULT_SCANNERS;
 	}
 
     /** set the scanners instances for scanning different metadata */
     public ConfigurationBuilder setScanners(Scanner... scanners) {
-        this.scanners = new HashSet<>(Arrays.asList(scanners));
+        this._scanners = new HashSet<>(Arrays.asList(scanners));
         return this;
     }
 
     /** set the scanners instances for scanning different metadata */
     public ConfigurationBuilder addScanners(Scanner... scanners) {
-        if (this.scanners == null) setScanners(scanners); else this.scanners.addAll(Arrays.asList(scanners));
+        if (this._scanners == null) {
+            setScanners(scanners);
+        } else {
+            this._scanners.addAll(Arrays.asList(scanners));
+        }
         return this;
     }
 
     @Override
     /* @inherited */
     public Set<URL> getUrls() {
-        return urls;
+        return _urls;
     }
 
     /** set the urls to be scanned
      * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)} */
     public ConfigurationBuilder setUrls(Collection<URL> urls) {
-		this.urls = new HashSet<>(urls);
+        this._urls = new HashSet<>(urls);
         return this;
-	}
+    }
 
     /** set the urls to be scanned
      * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)} */
     public ConfigurationBuilder setUrls(URL... urls) {
         return setUrls(Arrays.asList(urls));
-	}
+    }
 
     /** add urls to be scanned
      * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)} */
     public ConfigurationBuilder addUrls(Collection<URL> urls) {
-        this.urls.addAll(urls);
+        this._urls.addAll(urls);
         return this;
     }
 
@@ -178,13 +199,13 @@ public class ConfigurationBuilder implements Configuration {
     @Override
     /* @inherited */
     public Predicate<String> getInputsFilter() {
-        return inputsFilter != null ? inputsFilter : DEFAULT_INPUTS_FILTER;
+        return _inputsFilter != null ? _inputsFilter : DEFAULT_INPUTS_FILTER;
     }
 
     /** sets the input filter for all resources to be scanned.
      * <p>prefer using {@link FilterBuilder} */
     public ConfigurationBuilder setInputsFilter(Predicate<String> inputsFilter) {
-        this.inputsFilter = inputsFilter;
+        this._inputsFilter = inputsFilter;
         return this;
     }
 
@@ -197,45 +218,45 @@ public class ConfigurationBuilder implements Configuration {
     @Override
     /* @inherited */
     public boolean isParallel() {
-        return isParallel;
+        return _isParallel;
     }
 
     /** if true, scan urls in parallel. */
     public ConfigurationBuilder setParallel(boolean parallel) {
-        isParallel = parallel;
+        _isParallel = parallel;
         return this;
     }
 
     @Override
     /* @inherited */
     public ClassLoader[] getClassLoaders() {
-        return classLoaders;
+        return _classLoaders;
     }
 
 
     /** set optional class loaders used for resolving types. */
     public ConfigurationBuilder setClassLoaders(ClassLoader[] classLoaders) {
-        this.classLoaders = classLoaders;
+        this._classLoaders = classLoaders;
         return this;
     }
 
     /** add optional class loaders used for resolving types. */
     public ConfigurationBuilder addClassLoaders(ClassLoader... classLoaders) {
-        this.classLoaders = this.classLoaders == null ? classLoaders :
-            Stream.concat(Arrays.stream(this.classLoaders), Arrays.stream(classLoaders)).distinct().toArray(ClassLoader[]::new);
+        this._classLoaders = this._classLoaders == null ? classLoaders :
+            Stream.concat(Arrays.stream(this._classLoaders), Arrays.stream(classLoaders)).distinct().toArray(ClassLoader[]::new);
         return this;
     }
 
     @Override
     /* @inherited */
     public boolean shouldExpandSuperTypes() {
-        return expandSuperTypes;
+        return _expandSuperTypes;
     }
 
     /** if set to true, Reflections will expand super types after scanning.
      * <p>see {@link org.vrglab.reflections.Reflections#expandSuperTypes(Map, Map)} */
-    public ConfigurationBuilder setExpandSuperTypes(boolean expandSuperTypes) {
-        this.expandSuperTypes = expandSuperTypes;
+    public ConfigurationBuilder set_expandSuperTypes(boolean expandSuperTypes) {
+        this._expandSuperTypes = expandSuperTypes;
         return this;
     }
 }

@@ -6,29 +6,29 @@ import java.util.zip.ZipEntry;
 
 /** an implementation of {@link org.vrglab.reflections.vfs.Vfs.File} for {@link ZipEntry} */
 public class ZipFile implements Vfs.File {
-    private final ZipDir root;
-    private final ZipEntry entry;
+    private final ZipDir _root;
+    private final ZipEntry _entry;
 
     public ZipFile(final ZipDir root, ZipEntry entry) {
-        this.root = root;
-        this.entry = entry;
+        this._root = root;
+        this._entry = entry;
     }
 
     public String getName() {
-        String name = entry.getName();
+        String name = _entry.getName();
         return name.substring(name.lastIndexOf("/") + 1);
     }
 
     public String getRelativePath() {
-        return entry.getName();
+        return _entry.getName();
     }
 
     public InputStream openInputStream() throws IOException {
-        return root.jarFile.getInputStream(entry);
+        return _root.jarFile.getInputStream(_entry);
     }
 
     @Override
     public String toString() {
-        return root.getPath() + "!" + java.io.File.separatorChar + entry.toString();
+        return _root.getPath() + "!" + java.io.File.separatorChar + _entry.toString();
     }
 }

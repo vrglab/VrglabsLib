@@ -34,10 +34,10 @@ public class MethodParameterNamesScanner implements Scanner {
         int length = JavassistHelper.getParameters(method).size();
         if (length > 0) {
             int shift = Modifier.isStatic(method.getAccessFlags()) ? 0 : 1; //skip this
-            return IntStream.range(shift, length + shift)
-                .mapToObj(i -> method.getConstPool().getUtf8Info(table.nameIndex(i)))
-                .filter(name -> !name.startsWith("this$"))
-                .collect(Collectors.joining(", "));
+            return IntStream.range(shift, length + shift).
+                    mapToObj(i -> method.getConstPool().getUtf8Info(table.nameIndex(i))).
+                    filter(name -> !name.startsWith("this$")).
+                    collect(Collectors.joining(", "));
         }
         return "";
     }

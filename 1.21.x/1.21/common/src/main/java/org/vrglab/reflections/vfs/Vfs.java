@@ -71,7 +71,9 @@ public abstract class Vfs {
             try {
                 if (type.matches(url)) {
                     Dir dir = type.createDir(url);
-                    if (dir != null) return dir;
+                    if (dir != null) {
+                        return dir;
+                    }
                 }
             } catch (Throwable e) {
                 if (Reflections.log != null) {
@@ -94,7 +96,7 @@ public abstract class Vfs {
     /** return an iterable of all {@link org.vrglab.reflections.vfs.Vfs.File} in given urls, starting with given packagePrefix and matching nameFilter */
     public static Iterable<File> findFiles(final Collection<URL> inUrls, final String packagePrefix, final Predicate<String> nameFilter) {
         Predicate<File> fileNamePredicate = file -> {
-            String path = file.toString().replace('\\','/');
+            String path = file.toString().replace('\\', '/');
             if (path.contains(packagePrefix)) {
                 String filename = path.substring(path.indexOf(packagePrefix) + packagePrefix.length());
                 return !filename.isEmpty() && nameFilter.test(filename.substring(1));
@@ -107,8 +109,8 @@ public abstract class Vfs {
 
     /** return an iterable of all {@link org.vrglab.reflections.vfs.Vfs.File} in given urls, matching filePredicate */
     public static Iterable<File> findFiles(final Collection<URL> urls, final Predicate<File> filePredicate) {
-        return () -> urls.stream()
-                .flatMap(url -> {
+        return () -> urls.stream().
+                flatMap(url -> {
                     try {
                         return StreamSupport.stream(fromURL(url).getFiles().spliterator(), false);
                     } catch (Throwable e) {
@@ -127,29 +129,49 @@ public abstract class Vfs {
 
         try {
             path = url.toURI().getSchemeSpecificPart();
-            if ((file = new java.io.File(path)).exists()) return file;
+            if ((file = new java.io.File(path)).exists()) {
+                return file;
+            }
         } catch (URISyntaxException ignored) {
         }
 
         try {
             path = URLDecoder.decode(url.getPath(), "UTF-8");
-            if (path.contains(".jar!")) path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
-            if ((file = new java.io.File(path)).exists()) return file;
+            if (path.contains(".jar!")) {
+                path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
+            }
+            if ((file = new java.io.File(path)).exists()) {
+                return file;
+            }
 
         } catch (UnsupportedEncodingException ignored) {
         }
 
         try {
             path = url.toExternalForm();
-            if (path.startsWith("jar:")) path = path.substring("jar:".length());
-            if (path.startsWith("wsjar:")) path = path.substring("wsjar:".length());
-            if (path.startsWith("file:")) path = path.substring("file:".length());
-            if (path.contains(".jar!")) path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
-            if (path.contains(".war!")) path = path.substring(0, path.indexOf(".war!") + ".war".length());
-            if ((file = new java.io.File(path)).exists()) return file;
+            if (path.startsWith("jar:")) {
+                path = path.substring("jar:".length());
+            }
+            if (path.startsWith("wsjar:")) {
+                path = path.substring("wsjar:".length());
+            }
+            if (path.startsWith("file:")) {
+                path = path.substring("file:".length());
+            }
+            if (path.contains(".jar!")) {
+                path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
+            }
+            if (path.contains(".war!")) {
+                path = path.substring(0, path.indexOf(".war!") + ".war".length());
+            }
+            if ((file = new java.io.File(path)).exists()) {
+                return file;
+            }
 
             path = path.replace("%20", " ");
-            if ((file = new java.io.File(path)).exists()) return file;
+            if ((file = new java.io.File(path)).exists()) {
+                return file;
+            }
 
         } catch (Exception ignored) {
         }
@@ -248,7 +270,9 @@ public abstract class Vfs {
                 if (url.getProtocol().equals("file") && !hasJarFileInPath(url)) {
                     java.io.File file = getFile(url);
                     return file != null && file.isDirectory();
-                } else return false;
+                } else {
+                    return false;
+                }
             }
 
             public Dir createDir(final URL url) throws Exception {

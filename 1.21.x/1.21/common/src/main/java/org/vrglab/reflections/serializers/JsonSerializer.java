@@ -36,8 +36,8 @@ public class JsonSerializer implements Serializer {
 
     @Override
     public Reflections read(InputStream inputStream) {
-        return new GsonBuilder().setPrettyPrinting().create()
-            .fromJson(new InputStreamReader(inputStream), Reflections.class);
+        return new GsonBuilder().setPrettyPrinting().create().
+                fromJson(new InputStreamReader(inputStream), Reflections.class);
     }
 
     @Override

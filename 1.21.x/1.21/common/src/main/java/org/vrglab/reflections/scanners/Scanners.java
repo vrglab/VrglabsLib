@@ -115,9 +115,9 @@ public enum Scanners implements Scanner, QueryBuilder, NameHelper {
 
         @Override
         public QueryFunction<Store, String> with(String pattern) {
-            return store -> store.getOrDefault(index(), Collections.emptyMap())
-                .entrySet().stream().filter(entry -> entry.getKey().matches(pattern))
-                .flatMap(entry -> entry.getValue().stream()).collect(Collectors.toCollection(LinkedHashSet::new));
+            return store -> store.getOrDefault(index(), Collections.emptyMap()).
+                    entrySet().stream().filter(entry -> entry.getKey().matches(pattern)).
+                    flatMap(entry -> entry.getValue().stream()).collect(Collectors.toCollection(LinkedHashSet::new));
         }
     },
 
@@ -182,7 +182,7 @@ public enum Scanners implements Scanner, QueryBuilder, NameHelper {
         }
     };
 
-    private Predicate<String> resultFilter = s -> true; //accept all by default
+    private Predicate<String> _resultFilter = s -> true; //accept all by default
 
     @Override
     public String index() {
@@ -190,7 +190,7 @@ public enum Scanners implements Scanner, QueryBuilder, NameHelper {
     }
 
     public Scanners filterResultsBy(Predicate<String> filter) {
-        this.resultFilter = filter;
+        this._resultFilter = filter;
         return this;
     }
 
@@ -204,6 +204,6 @@ public enum Scanners implements Scanner, QueryBuilder, NameHelper {
     abstract void scan(ClassFile classFile, List<Map.Entry<String, String>> entries);
 
     protected boolean acceptResult(String fqn) {
-        return fqn != null && resultFilter.test(fqn);
+        return fqn != null && _resultFilter.test(fqn);
     }
 }
