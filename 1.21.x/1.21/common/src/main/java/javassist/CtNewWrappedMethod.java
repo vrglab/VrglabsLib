@@ -52,7 +52,7 @@ class CtNewWrappedMethod {
                                  parameterTypes, returnType, constParam);
         MethodInfo minfo = mt.getMethodInfo2();
         minfo.setCodeAttribute(code.toCodeAttribute());
-        // a stack map has been already created. 
+        // a stack map has been already created.
         return mt;
     }
 

@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class autoRegistryInitTest {
 

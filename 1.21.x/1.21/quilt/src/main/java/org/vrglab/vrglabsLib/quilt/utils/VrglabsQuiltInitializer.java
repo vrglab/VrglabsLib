@@ -1,7 +1,6 @@
 package org.vrglab.vrglabsLib.quilt.utils;
 
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.core.BlockPos;
@@ -17,12 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import org.quiltmc.loader.api.ModContainer;
 import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
-import org.vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
-import org.vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
-import org.vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
-import org.vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererRegistry;
 import org.vrglab.azure.azurelib.common.render.item.AzItemRenderer;
@@ -40,7 +34,6 @@ import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
-import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
 import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;

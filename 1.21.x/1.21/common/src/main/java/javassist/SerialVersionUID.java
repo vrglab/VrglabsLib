@@ -53,7 +53,7 @@ public class SerialVersionUID {
         // check if the class is serializable.
         if (!isSerializable(clazz))
             return;
-            
+
         // add field with default value.
         CtField field = new CtField(CtClass.longType, "serialVersionUID",
                                     clazz);
@@ -65,13 +65,13 @@ public class SerialVersionUID {
     /**
      * Does the class implement Serializable?
      */
-    private static boolean isSerializable(CtClass clazz) 
+    private static boolean isSerializable(CtClass clazz)
         throws NotFoundException
     {
         ClassPool pool = clazz.getClassPool();
         return clazz.subtypeOf(pool.get("java.io.Serializable"));
     }
-    
+
     /**
      * Calculate default value. See Java Serialization Specification, Stream
      * Unique Identifiers.
@@ -85,7 +85,7 @@ public class SerialVersionUID {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bout);
             ClassFile classFile = clazz.getClassFile();
-            
+
             // class name.
             String javaName = javaName(clazz);
             out.writeUTF(javaName);
@@ -110,7 +110,7 @@ public class SerialVersionUID {
             Arrays.sort(interfaces);
             for (int i = 0; i < interfaces.length; i++)
                 out.writeUTF(interfaces[i]);
-            
+
             // fields.
             CtField[] fields = clazz.getDeclaredFields();
             Arrays.sort(fields, new Comparator<CtField>() {
@@ -121,7 +121,7 @@ public class SerialVersionUID {
             });
 
             for (int i = 0; i < fields.length; i++) {
-                CtField field = fields[i]; 
+                CtField field = fields[i];
                 int mods = field.getModifiers();
                 if (((mods & Modifier.PRIVATE) == 0) ||
                     ((mods & (Modifier.STATIC | Modifier.TRANSIENT)) == 0)) {

@@ -18,7 +18,7 @@ package javassist.bytecode.annotation;
 
 /**
  * Thrown if the linkage fails.
- * It keeps the name of the class that caused this error. 
+ * It keeps the name of the class that caused this error.
  */
 public class NoSuchClassError extends Error {
     /** default serialVersionUID */
@@ -34,7 +34,7 @@ public class NoSuchClassError extends Error {
     }
 
     /**
-     * Returns the name of the class not found. 
+     * Returns the name of the class not found.
      */
     public String getClassName() {
         return className;

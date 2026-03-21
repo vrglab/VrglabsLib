@@ -60,7 +60,7 @@ public class CtNewConstructor {
      * The source code must include not only the constructor body
      * but the whole declaration.
      *
-     * @param src               the source text. 
+     * @param src               the source text.
      * @param declaring    the class to which the created constructor is added.
      */
     public static CtConstructor make(String src, CtClass declaring)

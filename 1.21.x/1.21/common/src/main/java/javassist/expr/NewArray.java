@@ -132,7 +132,7 @@ public class NewArray extends Expr {
         case Opcode.T_LONG :
             return CtClass.longType;
         default :
-            throw new RuntimeException("bad atype: " + atype);        
+            throw new RuntimeException("bad atype: " + atype);
         }
     }
 
@@ -200,7 +200,7 @@ public class NewArray extends Expr {
         String desc;
         if (opcode == Opcode.NEWARRAY) {
             index = iterator.byteAt(currentPos + 1);    // atype
-            CtPrimitiveType cpt = (CtPrimitiveType)getPrimitiveType(index); 
+            CtPrimitiveType cpt = (CtPrimitiveType)getPrimitiveType(index);
             desc = "[" + cpt.getDescriptor();
             codeLength = 2;
         }

@@ -201,9 +201,9 @@ class CodeAnalyzer implements Opcode {
             throw new BadBytecode("verification error (" + stackDepth +
                                   "," + d + ") at " + opIndex);
     }
-                             
+
     private static boolean isEnd(int opcode) {
-        return (IRETURN <= opcode && opcode <= RETURN) || opcode == ATHROW; 
+        return (IRETURN <= opcode && opcode <= RETURN) || opcode == ATHROW;
     }
 
     /**

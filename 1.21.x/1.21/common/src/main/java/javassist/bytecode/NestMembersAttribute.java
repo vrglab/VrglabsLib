@@ -75,7 +75,7 @@ public class NestMembersAttribute extends AttributeInfo {
     }
 
     /** Returns <code>classes[index]</code>.
-     * 
+     *
      * @param index   the index into <code>classes</code>.
      * @return the value at the given index in the <code>classes</code> array.
      *   It is an index into the constant pool.

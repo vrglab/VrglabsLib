@@ -2,16 +2,11 @@ package org.vrglab.vrglabsLib.NeoForge.Platform.Services;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.energy.EnergyContainer;
 import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergyContainer;

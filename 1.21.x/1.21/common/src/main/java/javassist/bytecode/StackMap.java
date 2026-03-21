@@ -32,7 +32,7 @@ import javassist.CannotCompileException;
  * <p>According to the CLDC specification, the sizes of some fields are not 16bit
  * but 32bit if the code size is more than 64K or the number of the local variables
  * is more than 64K.  However, for the J2ME CLDC technology, they are always 16bit.
- * The implementation of the StackMap class assumes they are 16bit.  
+ * The implementation of the StackMap class assumes they are 16bit.
  *
  * @see MethodInfo#doPreverify
  * @see StackMapTable
@@ -62,7 +62,7 @@ public class StackMap extends AttributeInfo {
      * Returns <code>number_of_entries</code>.
      */
     public int numOfEntries() {
-    	return ByteArray.readU16bit(info, 0);
+        return ByteArray.readU16bit(info, 0);
     }
 
     /**
@@ -134,7 +134,7 @@ public class StackMap extends AttributeInfo {
         }
 
         /**
-         * Visits each entry of the stack map frames. 
+         * Visits each entry of the stack map frames.
          */
         public void visit() {
             int num = ByteArray.readU16bit(info, 0);
@@ -150,7 +150,7 @@ public class StackMap extends AttributeInfo {
 
         /**
          * Invoked when <code>locals</code> of <code>stack_map_frame</code>
-         * is visited.  
+         * is visited.
          */
         public int locals(int pos, int offset, int num) {
             return typeInfoArray(pos, offset, num, true);
@@ -158,7 +158,7 @@ public class StackMap extends AttributeInfo {
 
         /**
          * Invoked when <code>stack</code> of <code>stack_map_frame</code>
-         * is visited.  
+         * is visited.
          */
         public int stack(int pos, int offset, int num) {
             return typeInfoArray(pos, offset, num, false);
@@ -447,7 +447,7 @@ public class StackMap extends AttributeInfo {
      *
      * <p>This method is for javassist.convert.TransformNew.
      * It is called to update the stack map when
-     * the NEW opcode (and the following DUP) is removed. 
+     * the NEW opcode (and the following DUP) is removed.
      *
      * @param where     the position of the removed NEW opcode.
      */

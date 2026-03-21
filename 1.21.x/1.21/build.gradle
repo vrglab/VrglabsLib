@@ -1,13 +1,25 @@
 plugins {
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
     id 'net.neoforged.moddev' version '0.1.110' apply false
+    id "com.diffplug.spotless" version "8.4.0" apply false
 }
 
 subprojects {
     apply plugin: 'checkstyle'
+    apply plugin: "com.diffplug.spotless"
 
     checkstyle {
         toolVersion = "${checkstyle_version}"
         configFile = rootProject.file("config/checkstyle.xml")
+    }
+
+    spotless {
+        java {
+            // cleanup
+            leadingTabsToSpaces(4)
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
     }
 }

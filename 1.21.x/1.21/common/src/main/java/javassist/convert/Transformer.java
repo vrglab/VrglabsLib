@@ -41,9 +41,9 @@ public abstract class Transformer implements Opcode {
     public Transformer getNext() { return next; }
 
     public void initialize(ConstPool cp, CodeAttribute attr) {}
-    
-    public void initialize(ConstPool cp, CtClass clazz, MethodInfo minfo) throws CannotCompileException { 
-    	initialize(cp, minfo.getCodeAttribute());
+
+    public void initialize(ConstPool cp, CtClass clazz, MethodInfo minfo) throws CannotCompileException {
+        initialize(cp, minfo.getCodeAttribute());
     }
 
     public void clean() {}

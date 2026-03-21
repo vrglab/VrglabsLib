@@ -114,7 +114,7 @@ public class MethodCall extends Expr {
     }
 
     /**
-     * Returns the name of the called method. 
+     * Returns the name of the called method.
      */
     public String getMethodName() {
         ConstPool cp = getConstPool();

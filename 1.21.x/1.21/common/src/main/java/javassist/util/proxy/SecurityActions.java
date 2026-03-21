@@ -282,4 +282,3 @@ class SecurityActions extends SecurityManager
         } catch (Exception e) { /*swallow*/ }
     }
 }
-

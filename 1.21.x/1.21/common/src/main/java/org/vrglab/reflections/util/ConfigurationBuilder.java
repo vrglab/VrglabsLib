@@ -142,7 +142,7 @@ public class ConfigurationBuilder implements Configuration {
     /* @inherited */
     public Set<Scanner> getScanners() {
         return _scanners != null ? _scanners : DEFAULT_SCANNERS;
-	}
+    }
 
     /** set the scanners instances for scanning different metadata */
     public ConfigurationBuilder setScanners(Scanner... scanners) {

@@ -35,11 +35,11 @@ public class CondExpr extends ASTList {
 
     public ASTree thenExpr() { return tail().head(); }
 
-    public void setThen(ASTree t) { tail().setHead(t); } 
+    public void setThen(ASTree t) { tail().setHead(t); }
 
     public ASTree elseExpr() { return tail().tail().head(); }
 
-    public void setElse(ASTree t) { tail().tail().setHead(t); } 
+    public void setElse(ASTree t) { tail().tail().setHead(t); }
 
     @Override
     public String getTag() { return "?:"; }

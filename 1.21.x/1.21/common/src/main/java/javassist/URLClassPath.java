@@ -76,7 +76,7 @@ public class URLClassPath implements ClassPath {
     /**
      * Opens a class file with http.
      *
-     * @return null if the class file could not be found. 
+     * @return null if the class file could not be found.
      */
     @Override
     public InputStream openClassfile(String classname) {
@@ -101,7 +101,7 @@ public class URLClassPath implements ClassPath {
     /**
      * Returns the URL.
      *
-     * @return null if the class file could not be obtained. 
+     * @return null if the class file could not be obtained.
      */
     @Override
     public URL find(String classname) {
@@ -114,7 +114,7 @@ public class URLClassPath implements ClassPath {
             }
         }
         catch (IOException e) {}
-        return null; 
+        return null;
     }
 
     /**

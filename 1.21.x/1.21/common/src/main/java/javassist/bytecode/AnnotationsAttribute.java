@@ -544,7 +544,7 @@ public class AnnotationsAttribute extends AttributeInfo {
          *                  It can be null.
          */
         Copier(byte[] info, ConstPool src, ConstPool dest, Map<String,String> map) {
-            this(info, src, dest, map, true); 
+            this(info, src, dest, map, true);
         }
 
         Copier(byte[] info, ConstPool src, ConstPool dest, Map<String,String> map, boolean makeWriter) {

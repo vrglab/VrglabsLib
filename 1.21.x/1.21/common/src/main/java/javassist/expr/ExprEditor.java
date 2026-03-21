@@ -126,7 +126,7 @@ public class ExprEditor {
     }
 
     /**
-     * Visits each bytecode in the given range. 
+     * Visits each bytecode in the given range.
      */
     boolean doit(CtClass clazz, MethodInfo minfo, LoopContext context,
                  CodeIterator iterator, int endPos)

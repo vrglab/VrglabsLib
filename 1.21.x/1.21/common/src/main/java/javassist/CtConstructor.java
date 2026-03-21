@@ -190,7 +190,7 @@ public final class CtConstructor extends CtBehavior {
     /**
      * Returns true if this constructor calls a constructor
      * of the super class.  This method returns false if it
-     * calls another constructor of this class by <code>this()</code>. 
+     * calls another constructor of this class by <code>this()</code>.
      */
     public boolean callsSuper() throws CannotCompileException {
         CodeAttribute codeAttr = methodInfo.getCodeAttribute();
@@ -313,7 +313,7 @@ public final class CtConstructor extends CtBehavior {
      *
      * <p>An occurrence of another constructor call <code>this()</code>
      * or a super constructor call <code>super()</code> is
-     * eliminated from the resulting method. 
+     * eliminated from the resulting method.
      *
      * <p>The immediate super class of the class declaring this constructor
      * must be also a super class of the class declaring the resulting method.
@@ -339,7 +339,7 @@ public final class CtConstructor extends CtBehavior {
      *
      * <p>An occurrence of another constructor call <code>this()</code>
      * or a super constructor call <code>super()</code> is
-     * eliminated from the resulting method. 
+     * eliminated from the resulting method.
      *
      * <p>The immediate super class of the class declaring this constructor
      * must be also a super class of the class declaring the resulting method

@@ -167,7 +167,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -177,7 +177,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -187,7 +187,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -197,7 +197,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -207,7 +207,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -217,7 +217,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -227,7 +227,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -237,7 +237,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -247,7 +247,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param value     the constant value.
@@ -257,7 +257,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>const_value_index</code> 
+     * Writes <code>tag</code> and <code>const_value_index</code>
      * in <code>element_value</code>.
      *
      * @param tag       <code>tag</code> in <code>element_value</code>.
@@ -272,7 +272,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>enum_const_value</code> 
+     * Writes <code>tag</code> and <code>enum_const_value</code>
      * in <code>element_value</code>.
      *
      * @param typeName      the type name of the enum constant.
@@ -286,7 +286,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>enum_const_value</code> 
+     * Writes <code>tag</code> and <code>enum_const_value</code>
      * in <code>element_value</code>.
      *
      * @param typeNameIndex       <code>type_name_index</code>
@@ -303,7 +303,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>class_info_index</code> 
+     * Writes <code>tag</code> and <code>class_info_index</code>
      * in <code>element_value</code>.
      *
      * @param name      the class name.
@@ -313,7 +313,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>class_info_index</code> 
+     * Writes <code>tag</code> and <code>class_info_index</code>
      * in <code>element_value</code>.
      *
      * @param index       <code>class_info_index</code>
@@ -324,7 +324,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>annotation_value</code> 
+     * Writes <code>tag</code> and <code>annotation_value</code>
      * in <code>element_value</code>.
      * This method must be followed by a call to <code>annotation()</code>.
      */
@@ -333,7 +333,7 @@ public class AnnotationsWriter {
     }
 
     /**
-     * Writes <code>tag</code> and <code>array_value</code> 
+     * Writes <code>tag</code> and <code>array_value</code>
      * in <code>element_value</code>.
      * This method must be followed by <code>numValues</code> calls
      * to <code>constValueIndex()</code>, <code>enumConstValue()</code>,

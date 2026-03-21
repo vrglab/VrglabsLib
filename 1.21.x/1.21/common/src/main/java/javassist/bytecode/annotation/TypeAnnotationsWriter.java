@@ -53,7 +53,7 @@ public class TypeAnnotationsWriter extends AnnotationsWriter {
     {
         output.write(0x10);
         write16bit(supertypeIndex);
-    }    
+    }
 
     /**
      * Writes {@code target_type} and {@code type_parameter_bound_target}
@@ -95,7 +95,7 @@ public class TypeAnnotationsWriter extends AnnotationsWriter {
     {
         output.write(0x17);
         write16bit(throwsTypeIndex);
-    } 
+    }
 
     /**
      * Writes {@code target_type} and {@code localvar_target}
@@ -131,7 +131,7 @@ public class TypeAnnotationsWriter extends AnnotationsWriter {
     {
         output.write(0x42);
         write16bit(exceptionTableIndex);
-    } 
+    }
 
     /**
      * Writes {@code target_type} and {@code offset_target}
@@ -164,7 +164,7 @@ public class TypeAnnotationsWriter extends AnnotationsWriter {
     }
 
     /**
-     * Writes an element of {@code path[]} of {@code type_path}. 
+     * Writes an element of {@code path[]} of {@code type_path}.
      */
     public void typePathPath(int typePathKind, int typeArgumentIndex)
         throws IOException

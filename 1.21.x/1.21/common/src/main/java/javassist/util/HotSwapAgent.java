@@ -53,7 +53,7 @@ import javassist.NotFoundException;
  *
  * <pre>
  * $ jshell --class-path javassist.jar
- * jshell&gt; javassist.util.HotSwapAgent.createAgentJarFile("hotswap.jar") 
+ * jshell&gt; javassist.util.HotSwapAgent.createAgentJarFile("hotswap.jar")
  * </pre>
  *
  * <p>Then, run the JVM with the VM argument {@code -javaagent:hotswap.jar}
@@ -66,11 +66,11 @@ import javassist.NotFoundException;
  * and deploy it by {@code -javaagent}.</p>
  *
  * <p>The {@code HotSwapAgent} requires {@code tools.jar} as well as {@code javassist.jar}.</p>
- * 
+ *
  * <p>The idea of this class was given by <a href="https://github.com/alugowski">Adam Lugowski</a>.
  * Shigeru Chiba wrote this class by referring
  * to his <a href="https://github.com/turn/RedefineClassAgent">{@code RedefineClassAgent}</a>.
- * For details, see <a href="https://github.com/jboss-javassist/javassist/issues/119">this discussion</a>. 
+ * For details, see <a href="https://github.com/jboss-javassist/javassist/issues/119">this discussion</a>.
  * </p>
  *
  * @see #redefine(Class, CtClass)
@@ -83,12 +83,12 @@ public class HotSwapAgent {
     /**
      * Obtains the {@code Instrumentation} object.
      *
-     * @return null             when it is not available. 
+     * @return null             when it is not available.
      */
     public Instrumentation instrumentation() { return instrumentation; }
 
     /**
-     * The entry point invoked when this agent is started by {@code -javaagent}. 
+     * The entry point invoked when this agent is started by {@code -javaagent}.
      */
     public static void premain(String agentArgs, Instrumentation inst) throws Throwable {
         agentmain(agentArgs, inst);
@@ -175,7 +175,7 @@ public class HotSwapAgent {
     }
 
     /**
-     * Creates an agent file for using {@code HotSwapAgent}. 
+     * Creates an agent file for using {@code HotSwapAgent}.
      */
     public static File createAgentJarFile(String fileName)
         throws IOException, CannotCompileException, NotFoundException

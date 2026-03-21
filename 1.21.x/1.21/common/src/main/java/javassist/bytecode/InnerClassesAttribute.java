@@ -216,7 +216,7 @@ public class InnerClassesAttribute extends AttributeInfo {
      * Removes the {@code nth} entry.  It does not eliminate
      * constant pool items that the removed entry refers to.
      * {@link ClassFile#compact()} should be executed to remove
-     * these unnecessary items. 
+     * these unnecessary items.
      *
      * @param nth       0, 1, 2, ...
      * @return  the number of items after the removal.

@@ -109,7 +109,7 @@ public class LineNumberAttribute extends AttributeInfo {
     static public class Pc {
         /**
          * The index into the code array.
-         */ 
+         */
         public int index;
         /**
          * The line number.
@@ -138,7 +138,7 @@ public class LineNumberAttribute extends AttributeInfo {
         for (int i = 1; i < n; ++i) {
             int d = lineNumber(i) - line;
             if ((d < 0 && d > distance)
-                || (d >= 0 && (d < distance || distance < 0))) { 
+                || (d >= 0 && (d < distance || distance < 0))) {
                     distance = d;
                     nearPc = startPc(i);
             }

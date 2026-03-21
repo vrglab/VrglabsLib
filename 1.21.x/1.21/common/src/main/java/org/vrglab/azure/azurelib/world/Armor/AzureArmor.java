@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
-import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
 
 import java.util.function.Supplier;
 

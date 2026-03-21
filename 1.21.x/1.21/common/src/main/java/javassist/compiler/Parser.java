@@ -1362,4 +1362,3 @@ public final class Parser implements TokenId {
         return list;
     }
 }
-

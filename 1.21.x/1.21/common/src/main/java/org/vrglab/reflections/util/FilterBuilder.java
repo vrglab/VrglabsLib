@@ -26,7 +26,7 @@ public class FilterBuilder implements Predicate<String> {
 
     public FilterBuilder() {}
 
-	private FilterBuilder(Collection<Predicate<String>> filters) {
+    private FilterBuilder(Collection<Predicate<String>> filters) {
         _chain.addAll(filters);
     }
 
@@ -97,18 +97,28 @@ public class FilterBuilder implements Predicate<String> {
         boolean accept = _chain.isEmpty() || _chain.get(0) instanceof Exclude;
 
         for (Predicate<String> filter : _chain) {
-            if (accept && filter instanceof Include) {continue;} //skip if this filter won't change
-            if (!accept && filter instanceof Exclude) {continue;}
+            if (accept && filter instanceof Include) {
+                continue;
+            } //skip if this filter won't change
+            if (!accept && filter instanceof Exclude) {
+                continue;
+            }
             accept = filter.test(regex);
-            if (!accept && filter instanceof Exclude) {break;} //break on first exclusion
+            if (!accept && filter instanceof Exclude) {
+                break;
+            } //break on first exclusion
         }
         return accept;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         return Objects.equals(_chain, ((FilterBuilder) o)._chain);
     }
 
@@ -129,23 +139,41 @@ public class FilterBuilder implements Predicate<String> {
 
     abstract static class Matcher implements Predicate<String> {
         final Pattern pattern;
-        Matcher(String regex) { pattern = Pattern.compile(regex); }
-        @Override public int hashCode() { return Objects.hash(pattern); }
+        Matcher(String regex) {
+            pattern = Pattern.compile(regex);
+        }
+        @Override public int hashCode() {
+            return Objects.hash(pattern);
+        }
         @Override public boolean equals(Object o) {
             return this == o || o != null && getClass() == o.getClass() && Objects.equals(pattern.pattern(), ((Matcher) o).pattern.pattern());
         }
-        @Override public String toString() { return pattern.pattern(); }
+        @Override public String toString() {
+            return pattern.pattern();
+        }
     }
 
     static class Include extends Matcher {
-        Include(String regex) { super(regex); }
-        @Override public boolean test(String regex) { return pattern.matcher(regex).matches(); }
-        @Override public String toString() { return "+" + pattern; }
+        Include(String regex) {
+            super(regex);
+        }
+        @Override public boolean test(String regex) {
+            return pattern.matcher(regex).matches();
+        }
+        @Override public String toString() {
+            return "+" + pattern;
+        }
     }
 
     static class Exclude extends Matcher {
-        Exclude(String regex) { super(regex); }
-        @Override public boolean test(String regex) { return !pattern.matcher(regex).matches(); }
-        @Override public String toString() { return "-" + pattern; }
+        Exclude(String regex) {
+            super(regex);
+        }
+        @Override public boolean test(String regex) {
+            return !pattern.matcher(regex).matches();
+        }
+        @Override public String toString() {
+            return "-" + pattern;
+        }
     }
 }

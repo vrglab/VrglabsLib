@@ -48,7 +48,7 @@ public class TransformCall extends Transformer {
         super(next);
         methodname = oldMethodName;
         methodDescriptor = substMethod.getMethodInfo2().getDescriptor();
-        classname = newClassname = substMethod.getDeclaringClass().getName(); 
+        classname = newClassname = substMethod.getDeclaringClass().getName();
         newMethodname = substMethod.getName();
         constPool = null;
         newMethodIsPrivate = Modifier.isPrivate(substMethod.getModifiers());

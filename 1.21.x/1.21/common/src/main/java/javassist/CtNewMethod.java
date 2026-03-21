@@ -41,7 +41,7 @@ public class CtNewMethod {
      *
      * <pre>"public Object id(Object obj) { return obj; }"</pre>
      *
-     * @param src               the source text. 
+     * @param src               the source text.
      * @param declaring    the class to which the created method is added.
      */
     public static CtMethod make(String src, CtClass declaring)
@@ -60,7 +60,7 @@ public class CtNewMethod {
      * <p>If the source code includes <code>$proceed()</code>, then
      * it is compiled into a method call on the specified object.
      *
-     * @param src               the source text. 
+     * @param src               the source text.
      * @param declaring    the class to which the created method is added.
      * @param delegateObj       the source text specifying the object
      *                          that is called on by <code>$proceed()</code>.
@@ -370,7 +370,7 @@ public class CtNewMethod {
         code.setMaxLocals(++s);
         code.setMaxStack(s < 2 ? 2 : s); // for a 2-word return value
         minfo.setCodeAttribute(code.toCodeAttribute());
-        // a stack map is not needed. 
+        // a stack map is not needed.
         return new CtMethod(minfo, declaring);
     }
 

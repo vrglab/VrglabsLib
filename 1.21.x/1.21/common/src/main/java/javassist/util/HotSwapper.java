@@ -48,7 +48,7 @@ class Trigger {
  * <p><b>Note:</b> The new definition of the reloaded class must declare
  * the same set of methods and fields as the original definition.  The
  * schema change between the original and new definitions is not allowed
- * by the JPDA. 
+ * by the JPDA.
  *
  * <p>To use this class, the JVM must be launched with the following
  * command line options:

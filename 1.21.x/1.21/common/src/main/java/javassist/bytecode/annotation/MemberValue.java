@@ -93,5 +93,3 @@ public abstract class MemberValue {
      */
     public abstract void write(AnnotationsWriter w) throws IOException;
 }
-
-

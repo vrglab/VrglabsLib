@@ -28,7 +28,7 @@ import javassist.NotFoundException;
 
 /**
  * A scoped class pool.
- * 
+ *
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
@@ -42,7 +42,7 @@ public class ScopedClassPool extends ClassPool {
     protected LoaderClassPath classPath;
 
     protected Map<String,CtClass> softcache = new SoftValueHashMap<String,CtClass>();
-    
+
     boolean isBootstrapCl = true;
 
     static {
@@ -52,7 +52,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Create a new ScopedClassPool.
-     * 
+     *
      * @param cl
      *            the classloader
      * @param src
@@ -65,10 +65,10 @@ public class ScopedClassPool extends ClassPool {
     {
        this(cl, src, repository, false);
     }
-    
+
     /**
      * Create a new ScopedClassPool.
-     * 
+     *
      * @param cl
      *            the classloader
      * @param src
@@ -97,7 +97,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Get the class loader
-     * 
+     *
      * @return the class loader
      */
     public ClassLoader getClassLoader() {
@@ -125,7 +125,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Flush a class
-     * 
+     *
      * @param classname
      *            the class to flush
      */
@@ -136,7 +136,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Soften a class
-     * 
+     *
      * @param clazz
      *            the class
      */
@@ -149,7 +149,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Whether the classloader is loader
-     * 
+     *
      * @return false always
      */
     public boolean isUnloadedClassLoader() {
@@ -158,7 +158,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Get the cached class
-     * 
+     *
      * @param classname
      *            the class name
      * @return the class
@@ -210,7 +210,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Cache a class
-     * 
+     *
      * @param classname
      *            the class name
      * @param c
@@ -231,7 +231,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Lock a class into the cache
-     * 
+     *
      * @param c
      *            the class
      */
@@ -241,7 +241,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Whether the class is cached in this pooled
-     * 
+     *
      * @param classname
      *            the class name
      * @return the cached class
@@ -257,7 +257,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Get any local copy of the class
-     * 
+     *
      * @param classname
      *            the class name
      * @return the class
@@ -280,7 +280,7 @@ public class ScopedClassPool extends ClassPool {
 
     /**
      * Convert a javassist class to a java class
-     * 
+     *
      * @param ct
      *            the javassist class
      * @param loader

@@ -130,7 +130,7 @@ public final class CtMethod extends CtBehavior {
      * <code>CtNewMethod</code>.  See it for more details.
      * <code>CtNewMethod</code> has a number of useful factory methods.
      *
-     * @param src               the source text. 
+     * @param src               the source text.
      * @param declaring    the class to which the created method is added.
      * @see CtNewMethod#make(String, CtClass)
      */
@@ -177,7 +177,7 @@ public final class CtMethod extends CtBehavior {
         cachedStringRep = null;
     }
 
-    /* This method is also called by CtClassType.getMethods0(). 
+    /* This method is also called by CtClassType.getMethods0().
      */
     final String getStringRep() {
         if (cachedStringRep == null)

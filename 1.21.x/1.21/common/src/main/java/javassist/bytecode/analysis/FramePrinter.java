@@ -46,14 +46,14 @@ public final class FramePrinter {
     }
 
     /**
-     * Prints all the methods declared in the given class. 
+     * Prints all the methods declared in the given class.
      */
     public static void print(CtClass clazz, PrintStream stream) {
         (new FramePrinter(stream)).print(clazz);
     }
 
     /**
-     * Prints all the methods declared in the given class. 
+     * Prints all the methods declared in the given class.
      */
     public void print(CtClass clazz) {
         CtMethod[] methods = clazz.getDeclaredMethods();

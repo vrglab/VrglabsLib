@@ -39,7 +39,7 @@ public class framedump {
             System.err.println("Usage: java javassist.tools.framedump <fully-qualified class name>");
             return;
         }
-        
+
         ClassPool pool = ClassPool.getDefault();
         CtClass clazz = pool.get(args[0]);
         System.out.println("Frame Dump of " + clazz.getName() + ":");

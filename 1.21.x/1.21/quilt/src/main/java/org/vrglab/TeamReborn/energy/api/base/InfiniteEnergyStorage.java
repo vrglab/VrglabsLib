@@ -10,30 +10,30 @@ import org.vrglab.TeamReborn.energy.api.EnergyStorage;
  * {@link #INSTANCE} can be used instead of creating a new object every time.
  */
 public class InfiniteEnergyStorage implements EnergyStorage {
-	public static final InfiniteEnergyStorage INSTANCE = new InfiniteEnergyStorage();
+    public static final InfiniteEnergyStorage INSTANCE = new InfiniteEnergyStorage();
 
-	@Override
-	public boolean supportsInsertion() {
-		return false;
-	}
+    @Override
+    public boolean supportsInsertion() {
+        return false;
+    }
 
-	@Override
-	public long insert(long maxAmount, TransactionContext transaction) {
-		return 0;
-	}
+    @Override
+    public long insert(long maxAmount, TransactionContext transaction) {
+        return 0;
+    }
 
-	@Override
-	public long extract(long maxAmount, TransactionContext transaction) {
-		return maxAmount;
-	}
+    @Override
+    public long extract(long maxAmount, TransactionContext transaction) {
+        return maxAmount;
+    }
 
-	@Override
-	public long getAmount() {
-		return Long.MAX_VALUE;
-	}
+    @Override
+    public long getAmount() {
+        return Long.MAX_VALUE;
+    }
 
-	@Override
-	public long getCapacity() {
-		return Long.MAX_VALUE;
-	}
+    @Override
+    public long getCapacity() {
+        return Long.MAX_VALUE;
+    }
 }

@@ -118,7 +118,7 @@ public class RuntimeSupport {
      * @throws RuntimeException     if the method is not found.
      */
     public static Method findSuperMethod(Object self, String name, String desc) {
-    	// for JBoss Seam.  See JASSIST-183.
+        // for JBoss Seam.  See JASSIST-183.
         Class<?> clazz = self.getClass();
         return findSuperClassMethod(clazz, name, desc);
     }
@@ -148,7 +148,7 @@ public class RuntimeSupport {
     private static Method findSuperMethod2(Class<?> clazz, String name, String desc) {
         Method m = findMethod2(clazz, name, desc);
         if (m != null)
-            return m; 
+            return m;
 
         Class<?> superClass = clazz.getSuperclass();
         if (superClass != null) {

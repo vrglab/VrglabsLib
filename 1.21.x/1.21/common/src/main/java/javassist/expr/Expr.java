@@ -196,7 +196,7 @@ public abstract class Expr implements Opcode {
 
     /**
      * Returns the source file containing the expression.
-     * 
+     *
      * @return null if this information is not available.
      */
     public String getFileName() {
@@ -223,7 +223,7 @@ public abstract class Expr implements Opcode {
     /*
      * If isStaticCall is true, null is assigned to $0. So $0 must be declared
      * by calling Javac.recordParams().
-     * 
+     *
      * After executing this method, the current stack depth might be less than
      * 0.
      */

@@ -2,7 +2,6 @@ package javassist.bytecode;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 public class BootstrapMethodsAttribute extends AttributeInfo {

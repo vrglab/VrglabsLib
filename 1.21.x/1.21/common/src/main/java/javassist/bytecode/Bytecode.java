@@ -151,7 +151,7 @@ public class Bytecode extends ByteVector implements Cloneable, Opcode {
      * Constructs a <code>Bytecode</code> object with an empty bytecode
      * sequence.  The initial values of <code>max_stack</code> and
      * <code>max_locals</code> are zero.
-     * 
+     *
      * @param cp            constant pool table.
      * @see Bytecode#setMaxStack(int)
      * @see Bytecode#setMaxLocals(int)
@@ -628,7 +628,7 @@ public class Bytecode extends ByteVector implements Cloneable, Opcode {
             addIndex(n);
         }
     }
-   
+
     /**
      * Appends DCONST or DCONST_&lt;n&gt;
      *
@@ -1225,7 +1225,7 @@ public class Bytecode extends ByteVector implements Cloneable, Opcode {
      * Appends INVOKEDYNAMIC.
      *
      * @param bootstrap     an index into the <code>bootstrap_methods</code> array
-     *                      of the bootstrap method table.     
+     *                      of the bootstrap method table.
      * @param name          the method name.
      * @param desc          the method descriptor.
      * @see Descriptor#ofMethod(CtClass,CtClass[])

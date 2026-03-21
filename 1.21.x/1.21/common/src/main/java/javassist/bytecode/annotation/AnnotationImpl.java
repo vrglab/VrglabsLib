@@ -30,7 +30,7 @@ import javassist.bytecode.MethodInfo;
 /**
  * Internal-use only.  This is a helper class internally used for implementing
  * <code>toAnnotationType()</code> in <code>Annotation</code>.
- *   
+ *
  * @author Shigeru Chiba
  * @author <a href="mailto:bill@jboss.org">Bill Burke</a>
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
@@ -82,7 +82,7 @@ public class AnnotationImpl implements InvocationHandler {
 
     /**
      * Obtains the name of the annotation type.
-     * 
+     *
      * @return the type name
      */
     public String getTypeName() {
@@ -91,7 +91,7 @@ public class AnnotationImpl implements InvocationHandler {
 
     /**
      * Get the annotation type
-     * 
+     *
      * @return the annotation class
      * @throws NoClassDefFoundError when the class could not loaded
      */
@@ -112,7 +112,7 @@ public class AnnotationImpl implements InvocationHandler {
 
     /**
      * Obtains the internal data structure representing the annotation.
-     * 
+     *
      * @return the annotation
      */
     public Annotation getAnnotation() {
@@ -229,7 +229,7 @@ public class AnnotationImpl implements InvocationHandler {
 
     /**
      * Check that another annotation equals ourselves.
-     * 
+     *
      * @param obj the other annotation
      * @return the true when equals false otherwise
      * @throws Exception for any problem
@@ -285,7 +285,7 @@ public class AnnotationImpl implements InvocationHandler {
     /**
      * Calculates the hashCode of an array using the same
      * algorithm as java.util.Arrays.hashCode()
-     * 
+     *
      * @param object the object
      * @return the hashCode
      */

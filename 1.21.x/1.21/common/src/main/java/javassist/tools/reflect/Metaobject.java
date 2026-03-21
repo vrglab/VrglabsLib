@@ -225,7 +225,7 @@ public class Metaobject implements Serializable {
      * metaobject is not created until the execution of a
      * constructor of the super class finishes.
      */
-    public Object trapMethodcall(int identifier, Object[] args) 
+    public Object trapMethodcall(int identifier, Object[] args)
         throws Throwable
     {
         try {

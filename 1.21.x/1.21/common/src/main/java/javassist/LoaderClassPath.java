@@ -32,7 +32,7 @@ import java.net.URL;
  *
  * <p>The given class loader must have both <code>getResourceAsStream()</code>
  * and <code>getResource()</code>.
- * 
+ *
  * <p>Class files in a named module are private to that module.
  * This method cannot obtain class files in named modules.
  * </p>
@@ -79,7 +79,7 @@ public class LoaderClassPath implements ClassPath {
      * This method calls <code>getResource(String)</code>
      * on the class loader.
      *
-     * @return null if the class file could not be found. 
+     * @return null if the class file could not be found.
      */
     @Override
     public URL find(String classname) {

@@ -233,9 +233,9 @@ public final class FieldInfo {
      *
      * <p>An attribute name can be obtained by, for example,
      * {@link AnnotationsAttribute#visibleTag} or
-     * {@link AnnotationsAttribute#invisibleTag}. 
+     * {@link AnnotationsAttribute#invisibleTag}.
      * </p>
-     * 
+     *
      * @param name      attribute name
      * @see #getAttributes()
      */
