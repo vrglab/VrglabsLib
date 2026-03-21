@@ -2,3 +2,12 @@ plugins {
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
     id 'net.neoforged.moddev' version '0.1.110' apply false
 }
+
+subprojects {
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "${checkstyle_version}"
+        configFile = rootProject.file("config/checkstyle.xml")
+    }
+}

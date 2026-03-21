@@ -7,12 +7,12 @@ public enum DataGenType implements IRegistryType {
     Item(UUID.randomUUID())
     ;
 
-    private final UUID getTypeId;
+    private final UUID _getTypeId;
     DataGenType(UUID type) {
-        getTypeId = type;
+        _getTypeId = type;
     }
 
     public UUID getTypeId() {
-        return getTypeId;
+        return _getTypeId;
     }
 }

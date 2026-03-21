@@ -1,7 +1,6 @@
 package org.vrglab.vrglabsLib.Fabric.Platform.Services;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -20,8 +19,8 @@ public class EnergyService implements IEnergyService {
 
     @Override
     public Long ExtractEnergyFromContainer(Object rawEnergyContainer, long maxExtract, boolean simulate) {
-        SimpleEnergyStorage storage = (SimpleEnergyStorage)rawEnergyContainer;
-        try(Transaction openTransaction = Transaction.openOuter()) {
+        SimpleEnergyStorage storage = (SimpleEnergyStorage) rawEnergyContainer;
+        try (Transaction openTransaction = Transaction.openOuter()) {
             long result = storage.extract(maxExtract, openTransaction);
             openTransaction.commit();
             return result;
@@ -30,8 +29,8 @@ public class EnergyService implements IEnergyService {
 
     @Override
     public Long GiveEnergyToContainer(Object rawEnergyContainer, long maxReceive, boolean simulate) {
-        SimpleEnergyStorage storage = (SimpleEnergyStorage)rawEnergyContainer;
-        try(Transaction openTransaction = Transaction.openOuter()) {
+        SimpleEnergyStorage storage = (SimpleEnergyStorage) rawEnergyContainer;
+        try (Transaction openTransaction = Transaction.openOuter()) {
             long result = storage.insert(maxReceive, openTransaction);
             openTransaction.commit();
             return result;
@@ -40,7 +39,7 @@ public class EnergyService implements IEnergyService {
 
     @Override
     public boolean EntityHasEnergyCapabilities(BlockEntity entity) {
-        if(entity == null){
+        if (entity == null){
             return false;
         }
 
@@ -53,13 +52,13 @@ public class EnergyService implements IEnergyService {
     @Override
     public EnergyContainer WrapExternalStorage(Level level, BlockPos pos, Direction facing, BlockEntity blockEntity) {
         EnergyStorage storage = EnergyStorage.SIDED.find(level, pos, facing);
-        return EnergyContainer.ExternalContainerBuilder.Open()
-                .capacity(storage.getCapacity())
-                .maxExtract(storage.getCapacity())
-                .maxReceive(storage.getCapacity())
-                .energy(storage.getAmount())
-                .rawLoaderDependentContainer(storage)
-                .rawBlockEntity(blockEntity)
-                .Build();
+        return EnergyContainer.ExternalContainerBuilder.Open().
+                capacity(storage.get_capacity()).
+                maxExtract(storage.get_capacity()).
+                maxReceive(storage.get_capacity()).
+                energy(storage.getAmount()).
+                rawLoaderDependentContainer(storage).
+                rawBlockEntity(blockEntity).
+                Build();
     }
 }

@@ -30,11 +30,11 @@ public final class AzureLib {
 
     public static final Marker MAIN_MARKER = MarkerManager.getMarker("main");
 
-    public static final Supplier<DataComponentType<UUID>> AZ_ID = Services.PLATFORM
-        .registerDataComponent(
+    public static final Supplier<DataComponentType<UUID>> AZ_ID = Services.PLATFORM.
+            registerDataComponent(
             "az_id",
-            builder -> builder.persistent(UUIDUtil.CODEC)
-                .networkSynchronized(UUIDUtil.STREAM_CODEC)
+            builder -> builder.persistent(UUIDUtil.CODEC).
+                    networkSynchronized(UUIDUtil.STREAM_CODEC)
         );
 
     public static boolean hasInitialized;

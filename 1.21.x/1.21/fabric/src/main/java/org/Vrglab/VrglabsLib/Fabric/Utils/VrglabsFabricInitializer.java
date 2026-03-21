@@ -80,6 +80,7 @@ public class VrglabsFabricInitializer {
      * Initializes Fabric related Callbacks and functions
      * @param modid The modid of the calling mod
      */
+    @SuppressWarnings("unchecked")
     public static void Create(String modid) {
         createAutoRegistry();
        setEnergyStorageStatics(modid);
@@ -98,8 +99,8 @@ public class VrglabsFabricInitializer {
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
 
-                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.ITEM, id);
-                Item itemToRegister = ((IClampedCallBack<Item>)args[1]).accept(properties);
+                Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, id);
+                Item itemToRegister = ((IClampedCallBack<Item>) args[1]).accept(properties);
 
                 return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
             }
@@ -108,8 +109,9 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[3]).get(), RegistryTypes.BLOCK, id))));
-                Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings( ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.BLOCK, id)));
+                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>) args[1]).
+                        accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>) args[3]).get(), RegistryTypes.BLOCK, id))));
+                Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings( ((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.BLOCK, id)));
                 return b;
             }
         };
@@ -117,13 +119,14 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                return Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[2]).get(), RegistryTypes.BLOCK, id))));
+                return Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>) args[1]).
+                        accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>) args[2]).get(), RegistryTypes.BLOCK, id))));
             }
         };
         ICallBack POIRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), (int)args[1], (int)args[2], (Block)args[3]);
+                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), (int) args[1], (int) args[2], (Block) args[3]);
             }
         };
 
@@ -191,10 +194,10 @@ public class VrglabsFabricInitializer {
                 FabricBlockEntityTypeBuilder.Factory factory = new FabricBlockEntityTypeBuilder.Factory() {
                     @Override
                     public BlockEntity create(BlockPos blockPos, BlockState blockState) {
-                        return ((IBlockEntityLoaderFunction<BlockEntity>)args[1]).create(blockPos, blockState);
+                        return ((IBlockEntityLoaderFunction<BlockEntity>) args[1]).create(blockPos, blockState);
                     }
                 };
-                return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
+                return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block) args[2]).build());
             }
         };
 
@@ -202,7 +205,7 @@ public class VrglabsFabricInitializer {
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), (RecipeSerializer)args[1]);
+                return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), (RecipeSerializer) args[1]);
             }
         };
 
@@ -216,7 +219,7 @@ public class VrglabsFabricInitializer {
         ICallBack ItemGroupRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), ((Supplier<CreativeModeTab>)args[1]).get());
+                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), ((Supplier<CreativeModeTab>) args[1]).get());
             }
         };
 
@@ -241,7 +244,7 @@ public class VrglabsFabricInitializer {
             public Object accept(Object... args) {
                 AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
 
-                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>) tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
 
                 return null;
             }
@@ -252,7 +255,7 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
-                AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
+                AzItemRendererRegistry.register((Supplier<AzItemRenderer>) tranformed_obj.GetAzureRenderer(), tranformed_obj);
                 return null;
             }
         }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
@@ -261,14 +264,14 @@ public class VrglabsFabricInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                Class clazz = (Class)args[1];
+                Class clazz = (Class) args[1];
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
                     AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
                     AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
@@ -428,11 +431,11 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.FieldsAnnotated));
-                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.FieldsAnnotated));
+                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -440,11 +443,11 @@ public class VrglabsFabricInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.TypesAnnotated));
-                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.TypesAnnotated));
+                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -452,7 +455,7 @@ public class VrglabsFabricInitializer {
 
             @Override
             public Object accept(Object... args) {
-                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block)((org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity)args[0]).getArgs().get("block")).getRegisteredObject();
+                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block) ((org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity) args[0]).getArgs().get("block")).getRegisteredObject();
             }
         };
     }

@@ -17,30 +17,30 @@ import org.vrglab.vrglabsLib.platform.services.ILibInitializer;
 public class LibInitializer implements ILibInitializer {
 
     @Override
-    public void LoadAzureLib(Object... Args) {
+    public void LoadAzureLib(Object... args) {
         ConfigIO.FILE_WATCH_MANAGER.startService();
         AzureLib.initialize();
         AzureLibMod.initRegistry();
         new FabricAzureLibNetwork();
         AzureLibMod.config = AzureLibMod.registerConfig(TestingConfig.class, ConfigFormats.json()).getConfigInstance();
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> ConfigIO.FILE_WATCH_MANAGER.stopService());
-        PayloadTypeRegistry.playS2C()
-                .register(
+        PayloadTypeRegistry.playS2C().
+                register(
                         AzBlockEntityDispatchCommandPacket.TYPE,
                         AzBlockEntityDispatchCommandPacket.CODEC
                 );
-        PayloadTypeRegistry.playS2C()
-                .register(
+        PayloadTypeRegistry.playS2C().
+                register(
                         AzEntityDispatchCommandPacket.TYPE,
                         AzEntityDispatchCommandPacket.CODEC
                 );
-        PayloadTypeRegistry.playS2C()
-                .register(
+        PayloadTypeRegistry.playS2C().
+                register(
                         AzItemStackDispatchCommandPacket.TYPE,
                         AzItemStackDispatchCommandPacket.CODEC
                 );
-        PayloadTypeRegistry.playS2C()
-                .register(
+        PayloadTypeRegistry.playS2C().
+                register(
                         SendConfigDataPacket.TYPE,
                         SendConfigDataPacket.CODEC
                 );

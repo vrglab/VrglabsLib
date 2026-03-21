@@ -10,13 +10,13 @@ public enum BootstrapType implements IRegistryType {
     AZURE_ITEM(UUID.randomUUID()),
     AZURE_ID(UUID.randomUUID());
 
-    private final UUID getTypeId;
+    private final UUID _getTypeId;
 
     BootstrapType(UUID type) {
-        getTypeId = type;
+        _getTypeId = type;
     }
 
     public UUID getTypeId() {
-        return getTypeId;
+        return _getTypeId;
     }
 }

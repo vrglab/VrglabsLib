@@ -35,8 +35,9 @@ public class FabricAzureLibNetwork implements AzureLibNetwork {
         boolean isClientBound
     ) {
         if (isClientBound) {
-            if (Services.PLATFORM.isEnvironmentClient())
+            if (Services.PLATFORM.isEnvironmentClient()) {
                 FabricAzureLibNetwork.registerPacket(payloadType, codec);
+            }
         } else {
             PayloadTypeRegistry.playC2S().register(payloadType, (StreamCodec<FriendlyByteBuf, P>) codec);
             ServerPlayNetworking.registerGlobalReceiver(payloadType, (packet, context) -> packet.handle());
@@ -49,8 +50,9 @@ public class FabricAzureLibNetwork implements AzureLibNetwork {
 
     @Override
     public void sendToTrackingEntityAndSelf(AbstractPacket packet, Entity entityToTrack) {
-        if (entityToTrack instanceof ServerPlayer pl)
+        if (entityToTrack instanceof ServerPlayer pl) {
             sendToPlayer(packet, pl);
+        }
 
         for (ServerPlayer player : PlayerLookup.tracking(entityToTrack)) {
             sendToPlayer(packet, player);

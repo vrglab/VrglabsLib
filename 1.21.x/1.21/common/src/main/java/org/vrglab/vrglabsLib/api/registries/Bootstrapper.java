@@ -6,9 +6,9 @@ import java.util.*;
 
 public class Bootstrapper {
 
-    private static class UnregisteredData{
-        public UnregisteredData(UUID registry_type, Object... args) {
-            this.registry_type = registry_type;
+    private static class UnregisteredData {
+         UnregisteredData(UUID registryType, Object... args) {
+            this.registryType = registryType;
             this.args = new ArrayList<>();
             for (Object argdata: args) {
                 this.args.add(argdata);
@@ -16,26 +16,26 @@ public class Bootstrapper {
         }
 
         public List<Object> args;
-        public UUID registry_type;
+        public UUID registryType;
         public boolean resolved;
 
-        public Object Obj = null;
+        public Object obj = null;
     }
 
-    private static Map<String, Map<UUID, ICallBack>> open_registeries = new HashMap<>();
-    private static Map<String, Set<Bootstrapper.UnregisteredData>> ready_to_load_registeries = new HashMap<>();
+    private static final Map<String, Map<UUID, ICallBack>> OPEN_REGISTRIES = new HashMap<>();
+    private static final Map<String, Set<Bootstrapper.UnregisteredData>> READY_TO_LOAD_REGISTRIES = new HashMap<>();
 
-    public static void initBootstrapper(ICallBack _registery, UUID _currentRegistryTypes, String modid){
-        if(open_registeries.containsKey(modid)){
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
-        } else{
-            open_registeries.put(modid, new HashMap<>());
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+    public static void initBootstrapper(ICallBack registry, UUID currentRegistryTypes, String modid){
+        if (OPEN_REGISTRIES.containsKey(modid)){
+            OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
+        } else {
+            OPEN_REGISTRIES.put(modid, new HashMap<>());
+            OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
         }
-        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
-            for (Bootstrapper.UnregisteredData data: ready_to_load_registeries.get(modid)) {
-                if(!data.resolved && data.registry_type == _currentRegistryTypes){
-                    data.Obj = _registery.accept(data.args.toArray());
+        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && !READY_TO_LOAD_REGISTRIES.get(modid).isEmpty()) {
+            for (Bootstrapper.UnregisteredData data: READY_TO_LOAD_REGISTRIES.get(modid)) {
+                if (!data.resolved && data.registryType == currentRegistryTypes){
+                    data.obj = registry.accept(data.args.toArray());
                     data.resolved = true;
                 }
             }
@@ -46,18 +46,18 @@ public class Bootstrapper {
         initBootstrapper(_registery, _currentRegistryTypes.getTypeId(), modid);
     }*/
 
-    public static Object SimpleRegister(UUID type, String Modid, Object... args){
-        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
-            return open_registeries.get(Modid).get(type).accept(args);
-        else {
+    public static Object SimpleRegister(UUID type, String modId, Object... args) {
+        if (OPEN_REGISTRIES.containsKey(modId) && OPEN_REGISTRIES.get(modId).containsKey(type)) {
+            return OPEN_REGISTRIES.get(modId).get(type).accept(args);
+        }else {
             Bootstrapper.UnregisteredData data = new Bootstrapper.UnregisteredData(type, args);
-            if(!ready_to_load_registeries.containsKey(Modid)) {
-                ready_to_load_registeries.put(Modid, new HashSet<>());
-                ready_to_load_registeries.get(Modid).add(data);
+            if (!READY_TO_LOAD_REGISTRIES.containsKey(modId)) {
+                READY_TO_LOAD_REGISTRIES.put(modId, new HashSet<>());
+                READY_TO_LOAD_REGISTRIES.get(modId).add(data);
+            } else {
+                READY_TO_LOAD_REGISTRIES.get(modId).add(data);
             }
-            else
-                ready_to_load_registeries.get(Modid).add(data);
-            return data.Obj;
+            return data.obj;
         }
     }
 

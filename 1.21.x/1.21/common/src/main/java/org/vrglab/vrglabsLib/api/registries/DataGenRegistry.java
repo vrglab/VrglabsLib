@@ -7,9 +7,9 @@ import java.util.*;
 
 public class DataGenRegistry {
 
-    private static class UnregisteredData{
-        public UnregisteredData(UUID registry_type, Object... args) {
-            this.registry_type = registry_type;
+    private static class UnregisteredData {
+         UnregisteredData(UUID registry_type, Object... args) {
+            this.registryType = registry_type;
             this.args = new ArrayList<>();
             for (Object argdata: args) {
                 this.args.add(argdata);
@@ -17,10 +17,10 @@ public class DataGenRegistry {
         }
 
         public List<Object> args;
-        public UUID registry_type;
+        public UUID registryType;
         public boolean resolved;
 
-        public Object Obj = null;
+        public Object obj = null;
     }
 
     private static Map<String, Map<UUID, ICallBack>> open_registeries = new HashMap<>();
@@ -28,38 +28,38 @@ public class DataGenRegistry {
 
 
     public static void initRegistery(ICallBack _registery, UUID _currentRegistryTypes, String modid){
-        if(open_registeries.containsKey(modid)){
+        if (open_registeries.containsKey(modid)) {
             open_registeries.get(modid).put(_currentRegistryTypes, _registery);
-        } else{
+        } else {
             open_registeries.put(modid, new HashMap<>());
             open_registeries.get(modid).put(_currentRegistryTypes, _registery);
         }
-        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
+        if (ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
             for (DataGenRegistry.UnregisteredData data: ready_to_load_registeries.get(modid)) {
-                if(!data.resolved && data.registry_type == _currentRegistryTypes){
-                    data.Obj = _registery.accept(data.args.toArray());
+                if (!data.resolved && data.registryType == _currentRegistryTypes) {
+                    data.obj = _registery.accept(data.args.toArray());
                     data.resolved = true;
                 }
             }
         }
     }
 
-    public static void initRegistery(ICallBack _registery, DataGenType _currentRegistryTypes, String modid){
+    public static void initRegistry(ICallBack _registery, DataGenType _currentRegistryTypes, String modid){
         initRegistery(_registery, _currentRegistryTypes.getTypeId(), modid);
     }
 
-    public static Object SimpleRegister(UUID type, String Modid, Object... args){
-        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type))
+    public static Object SimpleRegister(UUID type, String Modid, Object... args) {
+        if (open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type)) {
             return open_registeries.get(Modid).get(type).accept(args);
-        else {
+        } else {
             DataGenRegistry.UnregisteredData data = new DataGenRegistry.UnregisteredData(type, args);
-            if(!ready_to_load_registeries.containsKey(Modid)) {
+            if (!ready_to_load_registeries.containsKey(Modid)) {
                 ready_to_load_registeries.put(Modid, new HashSet<>());
                 ready_to_load_registeries.get(Modid).add(data);
-            }
-            else
+            } else {
                 ready_to_load_registeries.get(Modid).add(data);
-            return data.Obj;
+            }
+            return data.obj;
         }
     }
 

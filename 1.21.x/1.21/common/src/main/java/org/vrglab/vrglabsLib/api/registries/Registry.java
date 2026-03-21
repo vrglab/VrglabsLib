@@ -1,6 +1,5 @@
 package org.vrglab.vrglabsLib.api.registries;
 
-import net.minecraft.server.Bootstrap;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.TradeWithVillager;
 import net.minecraft.world.item.CreativeModeTab;
@@ -36,9 +35,9 @@ import java.util.function.Supplier;
  * @since 1.0.0
  */
 public class Registry {
-    private static class UnregisteredData{
-        public UnregisteredData(UUID registry_type, Object... args) {
-            this.registry_type = registry_type;
+    private static class UnregisteredData {
+        UnregisteredData(UUID registryType, Object... args) {
+            this.registryType = registryType;
             this.args = new ArrayList<>();
             for (Object argdata: args) {
                 this.args.add(argdata);
@@ -46,38 +45,38 @@ public class Registry {
         }
 
         public List<Object> args;
-        public UUID registry_type;
+        public UUID registryType;
         public boolean resolved;
 
-        public Object Obj = null;
+        public Object obj = null;
     }
 
-    private static Map<String, Map<UUID, ICallBack>> open_registeries = new HashMap<>();
-    private static Map<String, Set<UnregisteredData>> ready_to_load_registeries = new HashMap<>();
+    private static final Map<String, Map<UUID, ICallBack>> OPEN_REGISTRIES = new HashMap<>();
+    private static final Map<String, Set<UnregisteredData>> READY_TO_LOAD_REGISTRIES = new HashMap<>();
 
     /**
      * Initializes a Modloader's Registry to be used for loading of objects
      * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #initRegistry(ICallBack, IRegistryType, String)})</i></div>
-     * @param _registery The registry code
-     * @param _currentRegistryTypes the type of registry
+     * @param registry The registry code
+     * @param currentRegistryTypes the type of registry
      * @param modid the Mod ID
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static void initRegistry(ICallBack _registery, UUID _currentRegistryTypes, String modid){
-        if(open_registeries.containsKey(modid)){
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
-        } else{
-            open_registeries.put(modid, new HashMap());
-            open_registeries.get(modid).put(_currentRegistryTypes, _registery);
+    public static void initRegistry(ICallBack registry, UUID currentRegistryTypes, String modid) {
+        if (OPEN_REGISTRIES.containsKey(modid)) {
+            OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
+        } else {
+            OPEN_REGISTRIES.put(modid, new HashMap());
+            OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
         }
-        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
-            Constants.LOG.warn("Registry " +_currentRegistryTypes + " for " +  modid + " has unresolved cached object's for registering, Registering objects now ");
-            for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
-                if(!data.resolved && data.registry_type == _currentRegistryTypes){
-                    Constants.LOG.info("Registring " + _currentRegistryTypes + "  " +  data.args.toArray()[0] + " for " + modid);
-                    data.Obj = _registery.accept(data.args.toArray());
+        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && READY_TO_LOAD_REGISTRIES.get(modid).size() > 0) {
+            Constants.LOG.warn("Registry " +currentRegistryTypes + " for " +  modid + " has unresolved cached object's for registering, Registering objects now ");
+            for (UnregisteredData data: READY_TO_LOAD_REGISTRIES.get(modid)) {
+                if (!data.resolved && data.registryType == currentRegistryTypes) {
+                    Constants.LOG.info("Registring " + currentRegistryTypes + "  " +  data.args.toArray()[0] + " for " + modid);
+                    data.obj = registry.accept(data.args.toArray());
                     data.resolved = true;
                 }
             }
@@ -86,29 +85,29 @@ public class Registry {
 
     /**
      * Initializes a Modloader's Registry to be used for loading of objects
-     * @param _registery The registry code
-     * @param _currentRegistryTypes the type of registry
+     * @param registry The registry code
+     * @param currentRegistryTypes the type of registry
      * @param modid the Mod ID
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static void initRegistry(ICallBack _registery, IRegistryType _currentRegistryTypes, String modid){
-        initRegistry(_registery, _currentRegistryTypes.getTypeId(), modid);
+    public static void initRegistry(ICallBack registry, IRegistryType currentRegistryTypes, String modid){
+        initRegistry(registry, currentRegistryTypes.getTypeId(), modid);
     }
 
     /**
      * Creates an Event resolver for forge
      * @param eventData The event data
      * @param resolver The resolver code
-     * @param ResolveTypeOf The type of Object this event resolves
+     * @param resolveTypeOf The type of Object this event resolves
      * @param modid The  Mod ID
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static void ForgeEventResolver(Object eventData, ICallBack resolver, IRegistryType ResolveTypeOf, String modid){
-        ForgeEventResolver(eventData, resolver, ResolveTypeOf.getTypeId(), modid);
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, IRegistryType resolveTypeOf, String modid){
+        ForgeEventResolver(eventData, resolver, resolveTypeOf.getTypeId(), modid);
     }
 
     /**
@@ -116,17 +115,17 @@ public class Registry {
      * <div><i>(Using this function is extremely not recommended, unless you truly know what you are really doing, instead use {@link #ForgeEventResolver(Object, ICallBack, IRegistryType, String)})</i></div>
      * @param eventData The event data
      * @param resolver The resolver code
-     * @param ResolveTypeOf The type of Object this event resolves
-     * @param modid The  Mod ID
+     * @param resolveTypeOf The type of Object this event resolves
+     * @param modid The Mod ID
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static void ForgeEventResolver(Object eventData, ICallBack resolver, UUID ResolveTypeOf, String modid){
-        if(ready_to_load_registeries.containsKey(modid) && ready_to_load_registeries.get(modid).size() > 0) {
-            for (UnregisteredData data: ready_to_load_registeries.get(modid)) {
-                if(!data.resolved && data.registry_type == ResolveTypeOf){
-                    data.Obj = resolver.accept(data.args.toArray(), eventData);
+    public static void ForgeEventResolver(Object eventData, ICallBack resolver, UUID resolveTypeOf, String modid){
+        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && READY_TO_LOAD_REGISTRIES.get(modid).size() > 0) {
+            for (UnregisteredData data: READY_TO_LOAD_REGISTRIES.get(modid)) {
+                if (!data.resolved && data.registryType == resolveTypeOf) {
+                    data.obj = resolver.accept(data.args.toArray(), eventData);
                 }
             }
         }
@@ -137,35 +136,35 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The Item name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The supplier which gives us the Item Instance
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static <T extends Item> Object RegisterItem(String name, String Modid, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings) {
-        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
-        DataGenRegistry.RegisterItem(Modid, data);
+    public static <T extends Item> Object RegisterItem(String name, String modId, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings) {
+        Object data = SimpleRegister(RegistryTypes.ITEM, modId, name, aNew, settings);
+        DataGenRegistry.RegisterItem(modId, data);
         return data;
     }
 
-    public static <T extends Item> Object RegisterItem(String name, String Modid, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings, Class<T> clazz) {
+    public static <T extends Item> Object RegisterItem(String name, String modId, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings, Class<T> clazz) {
 
-        Object data = SimpleRegister(RegistryTypes.ITEM, Modid, name, aNew, settings);
+        Object data = SimpleRegister(RegistryTypes.ITEM, modId, name, aNew, settings);
 
-        if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ARMOR.getTypeId(), Modid, data, clazz);
+        if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ARMOR.getTypeId(), modId, data, clazz);
         }
 
-        if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
-            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ITEM.getTypeId(), Modid, data, clazz);
+        if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ITEM.getTypeId(), modId, data, clazz);
         }
 
-        if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class) || ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ID.getTypeId(), Modid, data, clazz);
+        if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class) || ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+            Bootstrapper.SimpleRegister(BootstrapType.AZURE_ID.getTypeId(), modId, data, clazz);
         }
-        DataGenRegistry.RegisterItem(Modid, data);
+        DataGenRegistry.RegisterItem(modId, data);
         return data;
     }
 
@@ -174,7 +173,7 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The Block name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The supplier which gives us the Block Instance
      * @param settings The {@link net.minecraft.world.item.Item.Properties} to use for the Blocks inventory Item
      * @return The registered data
@@ -182,9 +181,9 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterBlock(String name, String Modid, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<Item.Properties> settings, Supplier<BlockBehaviour.Properties> blockSettings) {
-        Object data = SimpleRegister(RegistryTypes.BLOCK, Modid, name, aNew, settings, blockSettings);
-        DataGenRegistry.RegisterBlock(Modid, data);
+    public static Object RegisterBlock(String name, String modId, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<Item.Properties> settings, Supplier<BlockBehaviour.Properties> blockSettings) {
+        Object data = SimpleRegister(RegistryTypes.BLOCK, modId, name, aNew, settings, blockSettings);
+        DataGenRegistry.RegisterBlock(modId, data);
         return data;
     }
 
@@ -193,7 +192,7 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The Block Entity name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The ::new which gives us the Block Entity Instance
      * @param block The block to attach the entity to (NOT converted using {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)})
      * @return The registered data
@@ -201,22 +200,22 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterBlockEntityType(String name, String Modid, IBlockEntityLoaderFunction aNew, Object block) {
-        return SimpleRegister(RegistryTypes.BLOCK_ENTITY_TYPE, Modid, name, aNew, block);
+    public static Object RegisterBlockEntityType(String name, String modId, IBlockEntityLoaderFunction aNew, Object block) {
+        return SimpleRegister(RegistryTypes.BLOCK_ENTITY_TYPE, modId, name, aNew, block);
     }
 
     /**
      * Register's a new Screen Handler for MC.
      * @param name The Screen Handler name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The ::new which gives us the Screen Handler Instance
      * @return The registered data (The return value of this Function CAN NOT be converted using {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)})
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterScreenHandlerType(String name, String Modid, IScreenHandlerTypeCreationFunction aNew) {
-        return SimpleRegister(RegistryTypes.SCREEN_HANDLER_TYPE, Modid, name, aNew);
+    public static Object RegisterScreenHandlerType(String name, String modId, IScreenHandlerTypeCreationFunction aNew) {
+        return SimpleRegister(RegistryTypes.SCREEN_HANDLER_TYPE, modId, name, aNew);
     }
 
     /**
@@ -238,15 +237,15 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The Block name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The supplier which gives us the Block Instance
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterItemlessBlock(String name, String Modid, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<BlockBehaviour.Properties> settingsSupplier) {
-        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, Modid, name, aNew, settingsSupplier);
+    public static Object RegisterItemlessBlock(String name, String modId, IClampedSingleCallback<Block, BlockBehaviour.Properties> aNew, Supplier<BlockBehaviour.Properties> settingsSupplier) {
+        return SimpleRegister(RegistryTypes.ITEMLESS_BLOCK, modId, name, aNew, settingsSupplier);
     }
 
     /**
@@ -254,7 +253,7 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The POI name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param block The block to attach the entity to (NOT converted using {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)})
      * @param tickcount The POI tick count
      * @param searchdistance The Search distance for the POI
@@ -263,8 +262,8 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterPOI(String name, String Modid, Object block, int tickcount, int searchdistance) {
-        return SimpleRegister(RegistryTypes.POI, Modid, name, tickcount, searchdistance, block);
+    public static Object RegisterPOI(String name, String modId, Object block, int tickcount, int searchdistance) {
+        return SimpleRegister(RegistryTypes.POI, modId, name, tickcount, searchdistance, block);
     }
 
     /**
@@ -272,7 +271,7 @@ public class Registry {
      * RegistryObject of the Object, to safely use the Object in other pieces of
      * code use {@link org.vrglab.vrglabsLib.Utils.Utils#convertToMcSafeType(Object)}
      * @param name The Villager Profession name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param aNew The POI name (aka ID)
      * @param itemImmutableSet Gatherable Items
      * @param blockImmutableSet Secondary Job Site's
@@ -282,54 +281,54 @@ public class Registry {
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object RegisterProfession(String name, String Modid, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
-        return SimpleRegister(RegistryTypes.PROFESSION, Modid, name, aNew, itemImmutableSet, blockImmutableSet, sound);
+    public static Object RegisterProfession(String name, String modId, String aNew, Item[] itemImmutableSet, Block[] blockImmutableSet, SoundEvent sound) {
+        return SimpleRegister(RegistryTypes.PROFESSION, modId, name, aNew, itemImmutableSet, blockImmutableSet, sound);
     }
 
-    public static void RegisterVillagerTrade(String name, String Modid, Object profession, int level, TradeWithVillager... trades) {
-        SimpleRegister(RegistryTypes.TRADE, Modid, name, profession, level, trades);
+    public static void RegisterVillagerTrade(String name, String modId, Object profession, int level, TradeWithVillager... trades) {
+        SimpleRegister(RegistryTypes.TRADE, modId, name, profession, level, trades);
     }
 
-    public static Object RegisterOreConfiguredFeature(String name, String Modid, Supplier<List<OreFeature>> targets, int size) {
-        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  Modid, name, Feature.ORE, targets, size);
+    public static Object RegisterOreConfiguredFeature(String name, String modId, Supplier<List<OreFeature>> targets, int size) {
+        return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  modId, name, Feature.ORE, targets, size);
     }
 
-    public static Object RegisterPlacedFeature(String name, String Modid, Object configured_feat, Object data) {
-        return SimpleRegister(RegistryTypes.PLACED_FEAT, Modid, name, configured_feat, data);
+    public static Object RegisterPlacedFeature(String name, String modId, Object configuredFeat, Object data) {
+        return SimpleRegister(RegistryTypes.PLACED_FEAT, modId, name, configuredFeat, data);
     }
 
-    public static void AddBiomeModification(String name, String Modid, Biomes biomeTypes, GenerationStep.Carving gen_step, Object Placed_ore) {
-        SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  Modid, name, biomeTypes, gen_step, Placed_ore);
+    public static void AddBiomeModification(String name, String modId, Biomes biomeTypes, GenerationStep.Carving genStep, Object placedOre) {
+        SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  modId, name, biomeTypes, genStep, placedOre);
     }
 
     /**
      *  Register's a new Recipe Serializer
      *
      * @param name The Villager Profession name (aka ID)
-     * @param Modid The Mod Id of the Registerar
-     * @param serializer_instance The instance to the Recipe Serializer class
+     * @param modId The Mod Id of the Registerar
+     * @param serializerInstance The instance to the Recipe Serializer class
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static Object RegisterRecipeSerializer(String name, String Modid, RecipeSerializer serializer_instance) {
-        return SimpleRegister(RegistryTypes.RECIPE_SERIALIZER, Modid, name, serializer_instance);
+    public static Object RegisterRecipeSerializer(String name, String modId, RecipeSerializer serializerInstance) {
+        return SimpleRegister(RegistryTypes.RECIPE_SERIALIZER, modId, name, serializerInstance);
     }
 
     /**
      *  Register's a new Recipe Type
      *
      * @param name The Villager Profession name (aka ID)
-     * @param Modid The Mod Id of the Registerar
-     * @param type_instance The instance to the Recipe Type class
+     * @param modId The Mod Id of the Registerar
+     * @param typeInstance The instance to the Recipe Type class
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static Object RegisterRecipeType(String name, String Modid, RecipeType type_instance) {
-        return SimpleRegister(RegistryTypes.RECIPE_TYPE, Modid, name, type_instance);
+    public static Object RegisterRecipeType(String name, String modId, RecipeType typeInstance) {
+        return SimpleRegister(RegistryTypes.RECIPE_TYPE, modId, name, typeInstance);
     }
 
 
@@ -337,28 +336,28 @@ public class Registry {
      *  Register's a new Creative mode tab
      *
      * @param name The tab name (aka ID)
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param tab The instance to the tab
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0-mc1.20.4
      */
-    public static Object RegisterCreativeModeTab(String name, String Modid, Supplier<CreativeModeTab> tab) {
-       return SimpleRegister(RegistryTypes.CREATIVE_MODE_TAB,  Modid, name, tab);
+    public static Object RegisterCreativeModeTab(String name, String modId, Supplier<CreativeModeTab> tab) {
+       return SimpleRegister(RegistryTypes.CREATIVE_MODE_TAB,  modId, name, tab);
     }
 
     /**
      * Sends data to the modloader for something to be registered for MC
      * @param type The type to use for registeration
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param args All the arguments needed to register the Object (On the callback end of this interaction the arguments are fed in the EXACT same order)
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.0.0
      */
-    public static Object SimpleRegister(IRegistryType type, String Modid, Object... args){
-       return SimpleRegister(type.getTypeId(), Modid, args);
+    public static Object SimpleRegister(IRegistryType type, String modId, Object... args){
+       return SimpleRegister(type.getTypeId(), modId, args);
     }
 
 
@@ -366,28 +365,27 @@ public class Registry {
      * Sends data to the modloader for something to be registered for MC
      * <div><i>(Using this function is extremely not recommended, unless you trully know what you are really doing, instead use {@link #SimpleRegister(IRegistryType, String, Object...)})</i></div>
      * @param type The type to use for registeration
-     * @param Modid The Mod Id of the Registerar
+     * @param modId The Mod Id of the Registerar
      * @param args All the arguments needed to register the Object (On the callback end of this interaction the arguments are fed in the EXACT same order)
      * @return The registered data
      *
      * @author Arad Bozorgmehr
      * @since 1.1.0
      */
-    public static Object SimpleRegister(UUID type, String Modid, Object... args){
-        if(open_registeries.containsKey(Modid) && open_registeries.get(Modid).containsKey(type)) {
-            Constants.LOG.info("Registry of type" + type + " is registering " +  args[0] + " for " + Modid);
-            return open_registeries.get(Modid).get(type).accept(args);
-        }
-        else {
-            Constants.LOG.error("Registry "+ type + " is not yet initialized caching object " +  args[0] + " in mod " + Modid + " for later registration");
+    public static Object SimpleRegister(UUID type, String modId, Object... args){
+        if (OPEN_REGISTRIES.containsKey(modId) && OPEN_REGISTRIES.get(modId).containsKey(type)) {
+            Constants.LOG.info("Registry of type" + type + " is registering " +  args[0] + " for " + modId);
+            return OPEN_REGISTRIES.get(modId).get(type).accept(args);
+        } else {
+            Constants.LOG.error("Registry "+ type + " is not yet initialized caching object " +  args[0] + " in mod " + modId + " for later registration");
             UnregisteredData data = new UnregisteredData(type, args);
-            if(!ready_to_load_registeries.containsKey(Modid)) {
-                ready_to_load_registeries.put(Modid, new HashSet<>());
-                ready_to_load_registeries.get(Modid).add(data);
+            if (!READY_TO_LOAD_REGISTRIES.containsKey(modId)) {
+                READY_TO_LOAD_REGISTRIES.put(modId, new HashSet<>());
+                READY_TO_LOAD_REGISTRIES.get(modId).add(data);
+            } else {
+                READY_TO_LOAD_REGISTRIES.get(modId).add(data);
             }
-            else
-                ready_to_load_registeries.get(Modid).add(data);
-            return data.Obj;
+            return data.obj;
         }
     }
 }

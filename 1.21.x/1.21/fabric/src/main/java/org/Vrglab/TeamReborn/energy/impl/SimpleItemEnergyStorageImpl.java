@@ -17,100 +17,100 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 public class SimpleItemEnergyStorageImpl implements EnergyStorage {
-	public static EnergyStorage createSimpleStorage(ContainerItemContext ctx, long capacity, long maxInsert, long maxExtract) {
-		StoragePreconditions.notNegative(capacity);
-		StoragePreconditions.notNegative(maxInsert);
-		StoragePreconditions.notNegative(maxExtract);
+    public static EnergyStorage createSimpleStorage(ContainerItemContext ctx, long capacity, long maxInsert, long maxExtract) {
+        StoragePreconditions.notNegative(capacity);
+        StoragePreconditions.notNegative(maxInsert);
+        StoragePreconditions.notNegative(maxExtract);
 
-		net.minecraft.world.item.Item startingItem = ctx.getItemVariant().getItem();
+        net.minecraft.world.item.Item startingItem = ctx.getItemVariant().getItem();
 
-		return new DelegatingEnergyStorage(
-				new SimpleItemEnergyStorageImpl(ctx, capacity, maxInsert, maxExtract),
-				() -> ctx.getItemVariant().isOf(startingItem) && ctx.getAmount() > 0
-		);
-	}
+        return new DelegatingEnergyStorage(
+                new SimpleItemEnergyStorageImpl(ctx, capacity, maxInsert, maxExtract),
+                () -> ctx.getItemVariant().isOf(startingItem) && ctx.getAmount() > 0
+        );
+    }
 
-	private final ContainerItemContext ctx;
-	private final long capacity;
-	private final long maxInsert, maxExtract;
+    private final ContainerItemContext _ctx;
+    private final long _capacity;
+    private final long _maxInsert, _maxExtract;
 
-	private SimpleItemEnergyStorageImpl(ContainerItemContext ctx, long capacity, long maxInsert, long maxExtract) {
-		this.ctx = ctx;
-		this.capacity = capacity;
-		this.maxInsert = maxInsert;
-		this.maxExtract = maxExtract;
-	}
+    private SimpleItemEnergyStorageImpl(ContainerItemContext ctx, long capacity, long maxInsert, long maxExtract) {
+        this._ctx = ctx;
+        this._capacity = capacity;
+        this._maxInsert = maxInsert;
+        this._maxExtract = maxExtract;
+    }
 
-	/**
-	 * Try to set the energy of the stack to {@code energyAmountPerCount}, return true if success.
-	 */
-	private boolean trySetEnergy(long energyAmountPerCount, long count, TransactionContext transaction) {
-		ItemStack newStack = ctx.getItemVariant().toStack();
-		SimpleEnergyItem.setStoredEnergyUnchecked(newStack, energyAmountPerCount);
-		ItemVariant newVariant = ItemVariant.of(newStack);
+    /**
+     * Try to set the energy of the stack to {@code energyAmountPerCount}, return true if success.
+     */
+    private boolean trySetEnergy(long energyAmountPerCount, long count, TransactionContext transaction) {
+        ItemStack newStack = _ctx.getItemVariant().toStack();
+        SimpleEnergyItem.setStoredEnergyUnchecked(newStack, energyAmountPerCount);
+        ItemVariant newVariant = ItemVariant.of(newStack);
 
-		// Try to convert exactly `count` items.
-		try (Transaction nested = transaction.openNested()) {
-			if (ctx.extract(ctx.getItemVariant(), count, nested) == count && ctx.insert(newVariant, count, nested) == count) {
-				nested.commit();
-				return true;
-			}
-		}
+        // Try to convert exactly `count` items.
+        try (Transaction nested = transaction.openNested()) {
+            if (_ctx.extract(_ctx.getItemVariant(), count, nested) == count && _ctx.insert(newVariant, count, nested) == count) {
+                nested.commit();
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean supportsInsertion() {
-		return maxInsert > 0;
-	}
+    @Override
+    public boolean supportsInsertion() {
+        return _maxInsert > 0;
+    }
 
-	@Override
-	public long insert(long maxAmount, TransactionContext transaction) {
-		long count = ctx.getAmount();
+    @Override
+    public long insert(long maxAmount, TransactionContext transaction) {
+        long count = _ctx.getAmount();
 
-		long maxAmountPerCount = maxAmount / count;
-		long currentAmountPerCount = getAmount() / count;
-		long insertedPerCount = Math.min(maxInsert, Math.min(maxAmountPerCount, capacity - currentAmountPerCount));
+        long maxAmountPerCount = maxAmount / count;
+        long currentAmountPerCount = getAmount() / count;
+        long insertedPerCount = Math.min(_maxInsert, Math.min(maxAmountPerCount, _capacity - currentAmountPerCount));
 
-		if (insertedPerCount > 0) {
-			if (trySetEnergy(currentAmountPerCount + insertedPerCount, count, transaction)) {
-				return insertedPerCount * count;
-			}
-		}
+        if (insertedPerCount > 0) {
+            if (trySetEnergy(currentAmountPerCount + insertedPerCount, count, transaction)) {
+                return insertedPerCount * count;
+            }
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	@Override
-	public boolean supportsExtraction() {
-		return maxExtract > 0;
-	}
+    @Override
+    public boolean supportsExtraction() {
+        return _maxExtract > 0;
+    }
 
-	@Override
-	public long extract(long maxAmount, TransactionContext transaction) {
-		long count = ctx.getAmount();
+    @Override
+    public long extract(long maxAmount, TransactionContext transaction) {
+        long count = _ctx.getAmount();
 
-		long maxAmountPerCount = maxAmount / count;
-		long currentAmountPerCount = getAmount() / count;
-		long extractedPerCount = Math.min(maxExtract, Math.min(maxAmountPerCount, currentAmountPerCount));
+        long maxAmountPerCount = maxAmount / count;
+        long currentAmountPerCount = getAmount() / count;
+        long extractedPerCount = Math.min(_maxExtract, Math.min(maxAmountPerCount, currentAmountPerCount));
 
-		if (extractedPerCount > 0) {
-			if (trySetEnergy(currentAmountPerCount - extractedPerCount, count, transaction)) {
-				return extractedPerCount * count;
-			}
-		}
+        if (extractedPerCount > 0) {
+            if (trySetEnergy(currentAmountPerCount - extractedPerCount, count, transaction)) {
+                return extractedPerCount * count;
+            }
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	@Override
-	public long getAmount() {
-		return ctx.getAmount() * SimpleEnergyItem.getStoredEnergyUnchecked(ctx.getItemVariant().getComponents());
-	}
+    @Override
+    public long getAmount() {
+        return _ctx.getAmount() * SimpleEnergyItem.getStoredEnergyUnchecked(_ctx.getItemVariant().getComponents());
+    }
 
-	@Override
-	public long getCapacity() {
-		return ctx.getAmount() * capacity;
-	}
+    @Override
+    public long get_capacity() {
+        return _ctx.getAmount() * _capacity;
+    }
 }
