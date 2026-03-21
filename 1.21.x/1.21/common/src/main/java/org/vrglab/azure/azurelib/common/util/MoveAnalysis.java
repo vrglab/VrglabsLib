@@ -15,32 +15,32 @@ public class MoveAnalysis {
     /**
      * The {@link Entity} whose movement is being analyzed.
      */
-    private final Entity entity;
+    private final Entity _entity;
 
     /**
      * The tick count of the last update. Used to avoid redundant updates.
      */
-    private int lastTick;
+    private int _lastTick;
 
     /**
      * The position of the entity at the last update.
      */
-    private Vec3 lastPosition;
+    private Vec3 _lastPosition;
 
     /**
      * The change in the entity’s X-coordinate since the last update.
      */
-    private double deltaX;
+    private double _deltaX;
 
     /**
      * The change in the entity’s Y-coordinate since the last update.
      */
-    private double deltaY;
+    private double _deltaY;
 
     /**
      * The change in the entity’s Z-coordinate since the last update.
      */
-    private double deltaZ;
+    private double _deltaZ;
 
     /**
      * Constructs a new {@code MoveAnalysis} instance for the specified entity.
@@ -48,8 +48,8 @@ public class MoveAnalysis {
      * @param entity The {@link Entity} to analyze.
      */
     public MoveAnalysis(Entity entity) {
-        this.entity = entity;
-        this.lastPosition = entity.position();
+        this._entity = entity;
+        this._lastPosition = entity.position();
     }
 
     /**
@@ -60,27 +60,27 @@ public class MoveAnalysis {
      * </p>
      */
     public void update() {
-        if (entity.tickCount == lastTick) {
+        if (_entity.tickCount == _lastTick) {
             // Only update on tick differences.
             return;
         }
 
-        var prevPos = lastPosition;
+        var prevPos = _lastPosition;
         var prevPosX = prevPos.x;
         var prevPosY = prevPos.y;
         var prevPosZ = prevPos.z;
 
-        var pos = entity.position();
+        var pos = _entity.position();
         var posX = pos.x;
         var posY = pos.y;
         var posZ = pos.z;
 
-        this.deltaX = posX - prevPosX;
-        this.deltaY = posY - prevPosY;
-        this.deltaZ = posZ - prevPosZ;
+        this._deltaX = posX - prevPosX;
+        this._deltaY = posY - prevPosY;
+        this._deltaZ = posZ - prevPosZ;
 
-        this.lastPosition = entity.position();
-        this.lastTick = entity.tickCount;
+        this._lastPosition = _entity.position();
+        this._lastTick = _entity.tickCount;
     }
 
     /**
@@ -92,7 +92,7 @@ public class MoveAnalysis {
      * @return {@code true} if the entity is moving horizontally; {@code false} otherwise.
      */
     public boolean isMovingHorizontally() {
-        return deltaX != 0 || deltaZ != 0;
+        return _deltaX != 0 || _deltaZ != 0;
     }
 
     /**
@@ -104,7 +104,7 @@ public class MoveAnalysis {
      * @return {@code true} if the entity is moving vertically; {@code false} otherwise.
      */
     public boolean isMovingVertically() {
-        return deltaY != 0;
+        return _deltaY != 0;
     }
 
     /**

@@ -29,16 +29,16 @@ public class AzProvider<K, T> {
 
     protected final BiFunction<Entity, T, ResourceLocation> modelLocationProvider;
 
-    protected final Function<T, K> UUIDProvider;
+    protected final Function<T, K> uuidProvider;
 
     public AzProvider(
         Supplier<AzAnimator<K, T>> animatorSupplier,
         BiFunction<Entity, T, ResourceLocation> modelLocationProvider,
-        Function<T, K> UUIDProvider
+        Function<T, K> uuidProvider
     ) {
         this.animatorSupplier = animatorSupplier;
         this.modelLocationProvider = modelLocationProvider;
-        this.UUIDProvider = UUIDProvider;
+        this.uuidProvider = uuidProvider;
     }
 
     /**
@@ -95,7 +95,7 @@ public class AzProvider<K, T> {
             cachedAnimator = animatorSupplier.get();
             if (cachedAnimator != null) {
                 // Create a per-instance context now
-                var ctx = cachedAnimator.getOrCreateContext(UUIDProvider.apply(animatable));
+                var ctx = cachedAnimator.getOrCreateContext(uuidProvider.apply(animatable));
 
                 // Install a deep-copied model into the bone cache BEFORE controllers
                 var modelLocation = modelLocationProvider.apply(entity, animatable);

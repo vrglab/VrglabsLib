@@ -11,4 +11,6 @@ package org.vrglab.azure.azurelib.common.util.state;
  * provide relevant properties or methods that a state or state machine would require during its lifecycle operations
  * (e.g., onEnter, onUpdate, onExit for states).
  */
-public interface StateMachineContext {}
+public interface StateMachineContext {
+
+}

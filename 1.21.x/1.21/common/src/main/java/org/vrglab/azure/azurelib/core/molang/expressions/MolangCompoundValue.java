@@ -47,8 +47,9 @@ public class MolangCompoundValue extends MolangValue {
         for (MolangValue molangValue : this.values) {
             builder.add(molangValue.toString());
 
-            if (molangValue.isReturnValue())
+            if (molangValue.isReturnValue()) {
                 break;
+            }
         }
 
         return builder.toString();

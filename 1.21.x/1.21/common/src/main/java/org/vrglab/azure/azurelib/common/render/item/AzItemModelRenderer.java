@@ -105,8 +105,8 @@ public class AzItemModelRenderer extends AzModelRenderer<UUID, ItemStack> {
             // Check all animation controllers to see if any are playing
             for (var controller : animator.getAnimationControllerContainer().getAll()) {
                 if (
-                    controller instanceof AzAnimationController<?> azController && azController.stateMachine()
-                        .isPlaying()
+                    controller instanceof AzAnimationController<?> azController && azController.stateMachine().
+                            isPlaying()
                 ) {
                     isAnimationPlaying = true;
                     break;

@@ -43,18 +43,19 @@ public interface AzureTicker {
             data.setCurrentVibration(vibrationInfo);
             var vec3 = vibrationInfo.pos();
             data.setTravelTimeInTicks(user.calculateTravelTimeInTicks(vibrationInfo.distance()));
-            if (Services.PLATFORM.isDevelopmentEnvironment())
+            if (Services.PLATFORM.isDevelopmentEnvironment()) {
                 serverLevel.sendParticles(
-                    new VibrationParticleOption(user.getPositionSource(), data.getTravelTimeInTicks()),
-                    vec3.x,
-                    vec3.y,
-                    vec3.z,
-                    1,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0
+                        new VibrationParticleOption(user.getPositionSource(), data.getTravelTimeInTicks()),
+                        vec3.x,
+                        vec3.y,
+                        vec3.z,
+                        1,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
                 );
+            }
             user.onDataChanged();
             data.getSelectionStrategy().startOver();
         });

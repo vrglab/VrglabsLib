@@ -35,8 +35,8 @@ public record Color(int argbInt) {
         color -> color.argbInt
     );
 
-    public static final Codec<Color> CODEC = Codec.either(STRING_CODEC, RGBA_CODEC)
-        .comapFlatMap(
+    public static final Codec<Color> CODEC = Codec.either(STRING_CODEC, RGBA_CODEC).
+        comapFlatMap(
             either -> either.map(DataResult::success, DataResult::success),
             Either::left
         );
@@ -247,17 +247,21 @@ public record Color(int argbInt) {
         int b = getBlue();
         int i = (int) (1 / (1 - (1 / factor)));
 
-        if (r == 0 && g == 0 && b == 0)
+        if (r == 0 && g == 0 && b == 0) {
             return ofRGBA(i, i, i, getAlpha());
+        }
 
-        if (r > 0 && r < i)
+        if (r > 0 && r < i) {
             r = i;
+        }
 
-        if (g > 0 && g < i)
+        if (g > 0 && g < i) {
             g = i;
+        }
 
-        if (b > 0 && b < i)
+        if (b > 0 && b < i) {
             b = i;
+        }
 
         return ofRGBA(
             Math.min((int) (r / (1 / factor)), 255),
@@ -285,11 +289,13 @@ public record Color(int argbInt) {
 
     @Override
     public boolean equals(Object other) {
-        if (this == other)
+        if (this == other) {
             return true;
+        }
 
-        if (getClass() != other.getClass())
+        if (getClass() != other.getClass()) {
             return false;
+        }
 
         return hashCode() == other.hashCode();
     }

@@ -62,17 +62,20 @@ public class AzBlockAndItemLayer<K, T> implements AzRenderLayer<K, T> {
         var stack = itemStackForBone(bone, animatable);
         var blockState = blockStateForBone(bone, animatable);
 
-        if (stack == null && blockState == null)
+        if (stack == null && blockState == null) {
             return;
+        }
 
         context.poseStack().pushPose();
         RenderUtils.translateAndRotateMatrixForBone(context.poseStack(), bone);
 
-        if (stack != null)
+        if (stack != null) {
             renderItemForBone(context, bone, stack, animatable);
+        }
 
-        if (blockState != null)
+        if (blockState != null) {
             renderBlockForBone(context, bone, blockState, animatable);
+        }
 
         context.setVertexConsumer(context.multiBufferSource().getBuffer(context.renderType()));
 
@@ -128,9 +131,9 @@ public class AzBlockAndItemLayer<K, T> implements AzRenderLayer<K, T> {
         T animatable
     ) {
         if (context.animatable() instanceof LivingEntity livingEntity) {
-            Minecraft.getInstance()
-                .getItemRenderer()
-                .renderStatic(
+            Minecraft.getInstance().
+                 getItemRenderer().
+                 renderStatic(
                     livingEntity,
                     itemStack,
                     getTransformTypeForStack(bone, itemStack, animatable),
@@ -143,9 +146,9 @@ public class AzBlockAndItemLayer<K, T> implements AzRenderLayer<K, T> {
                     livingEntity.getId()
                 );
         } else {
-            Minecraft.getInstance()
-                .getItemRenderer()
-                .renderStatic(
+            Minecraft.getInstance().
+                getItemRenderer().
+                renderStatic(
                     itemStack,
                     getTransformTypeForStack(bone, itemStack, animatable),
                     context.packedLight(),
@@ -177,9 +180,9 @@ public class AzBlockAndItemLayer<K, T> implements AzRenderLayer<K, T> {
         context.poseStack().translate(-0.25f, -0.25f, -0.25f);
         context.poseStack().scale(0.5f, 0.5f, 0.5f);
 
-        Minecraft.getInstance()
-            .getBlockRenderer()
-            .renderSingleBlock(
+        Minecraft.getInstance().
+            getBlockRenderer().
+            renderSingleBlock(
                 blockState,
                 context.poseStack(),
                 context.multiBufferSource(),

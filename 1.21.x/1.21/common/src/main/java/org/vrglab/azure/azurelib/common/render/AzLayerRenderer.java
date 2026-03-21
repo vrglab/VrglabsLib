@@ -17,10 +17,10 @@ import org.vrglab.azure.azurelib.common.render.layer.AzRenderLayer;
  */
 public class AzLayerRenderer<K, T> {
 
-    private final Supplier<Collection<AzRenderLayer<K, T>>> renderLayerSupplier;
+    private final Supplier<Collection<AzRenderLayer<K, T>>> _renderLayerSupplier;
 
     public AzLayerRenderer(Supplier<Collection<AzRenderLayer<K, T>>> renderLayerSupplier) {
-        this.renderLayerSupplier = renderLayerSupplier;
+        this._renderLayerSupplier = renderLayerSupplier;
     }
 
     /**
@@ -28,7 +28,7 @@ public class AzLayerRenderer<K, T> {
      * {@link AzRenderLayer#preRender pre-render} actions.
      */
     protected void preApplyRenderLayers(AzRendererPipelineContext<K, T> context) {
-        for (var renderLayer : renderLayerSupplier.get()) {
+        for (var renderLayer : _renderLayerSupplier.get()) {
             renderLayer.preRender(context);
         }
     }
@@ -38,7 +38,7 @@ public class AzLayerRenderer<K, T> {
      * {@link AzRenderLayer#renderForBone per-bone} render actions.
      */
     public void applyRenderLayersForBone(AzRendererPipelineContext<K, T> context, AzBone bone) {
-        for (var renderLayer : renderLayerSupplier.get()) {
+        for (var renderLayer : _renderLayerSupplier.get()) {
             renderLayer.renderForBone(context, bone);
         }
     }
@@ -47,7 +47,7 @@ public class AzLayerRenderer<K, T> {
      * Render the various {@link AzRenderLayer RenderLayers} that have been registered to this renderer
      */
     protected void applyRenderLayers(AzRendererPipelineContext<K, T> context) {
-        for (var renderLayer : renderLayerSupplier.get()) {
+        for (var renderLayer : _renderLayerSupplier.get()) {
             renderLayer.render(context);
         }
     }

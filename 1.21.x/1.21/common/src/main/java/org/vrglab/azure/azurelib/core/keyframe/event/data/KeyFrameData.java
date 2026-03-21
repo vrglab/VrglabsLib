@@ -17,32 +17,34 @@ import org.vrglab.azure.azurelib.common.animation.controller.keyframe.AzKeyframe
  */
 public abstract class KeyFrameData {
 
-    private final double startTick;
+    private final double _startTick;
 
     protected KeyFrameData(double startTick) {
-        this.startTick = startTick;
+        this._startTick = startTick;
     }
 
     /**
      * Gets the start tick of the keyframe instruction
      */
     public double getStartTick() {
-        return this.startTick;
+        return this._startTick;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (obj == null || getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
 
         return this.hashCode() == obj.hashCode();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.startTick);
+        return Objects.hashCode(this._startTick);
     }
 }

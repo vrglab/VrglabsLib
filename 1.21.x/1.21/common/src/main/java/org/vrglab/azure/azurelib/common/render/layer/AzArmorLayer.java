@@ -101,8 +101,8 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
 
         context.poseStack().pushPose();
         if (
-            armorStack.getItem() instanceof BlockItem blockItem && blockItem
-                .getBlock() instanceof AbstractSkullBlock skullBlock
+            armorStack.getItem() instanceof BlockItem blockItem && blockItem.
+                    getBlock() instanceof AbstractSkullBlock skullBlock
         ) {
             renderSkullAsArmor(context, bone, armorStack, skullBlock);
         } else {
@@ -242,10 +242,10 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
         var trim = armorStack.get(DataComponents.TRIM);
 
         if (trim != null) {
-            var sprite = Minecraft.getInstance()
-                .getModelManager()
-                .getAtlas(Sheets.ARMOR_TRIMS_SHEET)
-                .getSprite(slot == EquipmentSlot.LEGS ? trim.innerTexture(material) : trim.outerTexture(material));
+            var sprite = Minecraft.getInstance().
+                    getModelManager().
+                    getAtlas(Sheets.ARMOR_TRIMS_SHEET).
+                    getSprite(slot == EquipmentSlot.LEGS ? trim.innerTexture(material) : trim.outerTexture(material));
             var buffer = sprite.wrap(
                 context.multiBufferSource().getBuffer(Sheets.armorTrimsSheet(trim.pattern().value().decal()))
             );
@@ -253,14 +253,15 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
             modelPart.render(context.poseStack(), buffer, context.packedLight(), context.packedOverlay());
         }
 
-        if (armorStack.hasFoil())
+        if (armorStack.hasFoil()) {
             modelPart.render(
-                context.poseStack(),
-                getVanillaArmorBuffer(context, armorStack, slot, bone, null, true),
-                context.packedLight(),
-                context.packedOverlay(),
-                Color.WHITE.argbInt()
+                    context.poseStack(),
+                    getVanillaArmorBuffer(context, armorStack, slot, bone, null, true),
+                    context.packedLight(),
+                    context.packedOverlay(),
+                    Color.WHITE.argbInt()
             );
+        }
     }
 
     /**
@@ -289,8 +290,8 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
             return context.multiBufferSource().getBuffer(RenderType.armorEntityGlint());
         }
 
-        return context.multiBufferSource()
-            .getBuffer(RenderType.armorCutoutNoCull(layer.texture(slot == EquipmentSlot.LEGS)));
+        return context.multiBufferSource().
+                getBuffer(RenderType.armorCutoutNoCull(layer.texture(slot == EquipmentSlot.LEGS)));
     }
 
     /**
@@ -323,8 +324,8 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
         AbstractSkullBlock skullBlock
     ) {
         var type = skullBlock.getType();
-        var model = SkullBlockRenderer.createSkullRenderers(Minecraft.getInstance().getEntityModels())
-            .get(type);
+        var model = SkullBlockRenderer.createSkullRenderers(Minecraft.getInstance().getEntityModels()).
+                get(type);
         var renderType = SkullBlockRenderer.getRenderType(type, stack.get(DataComponents.PROFILE));
 
         context.poseStack().pushPose();
@@ -360,7 +361,7 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
         ModelPart sourcePart
     ) {
         var firstCube = bone.getCubes().getFirst();
-        var armorCube = (ModelPart.Cube)ReflectionUtil.getField(sourcePart, "cubes", java.util.List.class).getFirst();
+        var armorCube = (ModelPart.Cube) ReflectionUtil.getField(sourcePart, "cubes", java.util.List.class).getFirst();
         var armorBoneSizeX = firstCube.size().x();
         var armorBoneSizeY = firstCube.size().y();
         var armorBoneSizeZ = firstCube.size().z();

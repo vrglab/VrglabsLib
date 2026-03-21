@@ -21,10 +21,13 @@ public class Sign extends Function {
     public double get() {
         double value = this.getArg(0);
 
-        if (value < 0)
+        if (value < 0) {
             return -1;
-        if (value > 0)
+        }
+
+        if (value > 0) {
             return 1;
+        }
         return 0;
     }
 }

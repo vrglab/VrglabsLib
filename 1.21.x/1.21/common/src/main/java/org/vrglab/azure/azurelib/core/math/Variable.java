@@ -12,33 +12,33 @@ package org.vrglab.azure.azurelib.core.math;
  */
 public class Variable implements IValue {
 
-    private String name;
+    private final String _name;
 
-    private double value;
+    private double _value;
 
     public Variable(String name, double value) {
-        this.name = name;
-        this.value = value;
+        this._name = name;
+        this._value = value;
     }
 
     /**
      * Set the value of this variable
      */
     public void set(double value) {
-        this.value = value;
+        this._value = value;
     }
 
     @Override
     public double get() {
-        return this.value;
+        return this._value;
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
 
     @Override
     public String toString() {
-        return this.name;
+        return this._name;
     }
 }

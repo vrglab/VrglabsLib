@@ -14,43 +14,48 @@ import org.vrglab.azure.azurelib.common.animation.controller.keyframe.AzKeyframe
  */
 public class ParticleKeyframeData extends KeyFrameData {
 
-    private final String effect;
+    private final String _effect;
 
-    private final String locator;
+    private final String _locator;
 
-    private final String script;
+    private final String _script;
 
     public ParticleKeyframeData(double startTick, String effect, String locator, String script) {
         super(startTick);
 
-        this.script = script;
-        this.locator = locator;
-        this.effect = effect;
+        this._script = script;
+        this._locator = locator;
+        this._effect = effect;
     }
 
     /**
      * Gets the effect id given by the {@link AzKeyframe} instruction from the {@code animation.json}
      */
     public String getEffect() {
-        return this.effect;
+        return this._effect;
     }
 
     /**
      * Gets the locator string given by the {@link AzKeyframe} instruction from the {@code animation.json}
      */
     public String getLocator() {
-        return this.locator;
+        return this._locator;
     }
 
     /**
      * Gets the script string given by the {@link AzKeyframe} instruction from the {@code animation.json}
      */
     public String script() {
-        return this.script;
+        return this._script;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartTick(), effect, locator, script);
+        return Objects.hash(getStartTick(), _effect, _locator, _script);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

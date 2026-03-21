@@ -13,10 +13,13 @@ public class EaseOutElastic extends EasingFunction {
 
     @Override
     protected double ease(double t) {
-        if (t == 0)
+        if (t == 0) {
             return 0;
-        if (t == 1)
+        }
+
+        if (t == 1) {
             return 1;
+        }
         return Math.pow(2, -10 * t) * Math.sin((t - 0.1) * C4) + 1;
     }
 }

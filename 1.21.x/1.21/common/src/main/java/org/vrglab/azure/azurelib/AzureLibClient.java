@@ -49,9 +49,9 @@ public final class AzureLibClient {
      */
     @Nullable
     public static Screen getConfigScreen(String configId, Screen previous) {
-        return ConfigHolderRegistry.getConfig(configId)
-            .map(holder -> getConfigScreenForHolder(holder, previous))
-            .orElse(null);
+        return ConfigHolderRegistry.getConfig(configId).
+                map(holder -> getConfigScreenForHolder(holder, previous)).
+                orElse(null);
     }
 
     /**
@@ -64,8 +64,9 @@ public final class AzureLibClient {
      */
     public static Screen getConfigScreenByGroup(String group, Screen previous) {
         List<ConfigHolder<?>> list = ConfigHolderRegistry.getConfigsByGroup(group);
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return null;
+        }
         return getConfigScreenByGroup(list, group, previous);
     }
 

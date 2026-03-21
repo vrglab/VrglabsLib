@@ -115,7 +115,7 @@ public enum Operation {
         }
     };
 
-    public final static Set<String> OPERATORS = new HashSet<String>();
+    public static final Set<String> OPERATORS = new HashSet<String>();
 
     static {
         for (Operation op : values()) {
@@ -133,7 +133,7 @@ public enum Operation {
      */
     public final int value;
 
-    private Operation(String sign, int value) {
+    Operation(String sign, int value) {
         this.sign = sign;
         this.value = value;
     }

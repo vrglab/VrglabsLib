@@ -42,8 +42,8 @@ public class AzItemGuiRenderUtil {
                 ? bufferSource
                 :  ReflectionUtil.getField(Minecraft.getInstance().levelRenderer, "renderBuffers", RenderBuffers.class).bufferSource();
         var textureLocation = config.textureLocation(context.currentEntity(), stack);
-        var renderType = rendererPipeline.context()
-            .getDefaultRenderType(
+        var renderType = rendererPipeline.context().
+            getDefaultRenderType(
                 stack,
                 textureLocation,
                 bSource,

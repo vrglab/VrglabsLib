@@ -26,27 +26,27 @@ import org.vrglab.azure.azurelib.common.render.AzProvider;
  */
 public abstract class AzItemRenderer {
 
-    private final AzItemRendererConfig config;
+    private final AzItemRendererConfig _config;
 
-    private final AzProvider<UUID, ItemStack> provider;
+    private final AzProvider<UUID, ItemStack> _provider;
 
     public final AzItemRendererPipeline rendererPipeline;
 
     @Nullable
-    private AzItemAnimator reusedAzItemAnimator;
+    private AzItemAnimator _reusedAzItemAnimator;
 
     protected AzItemRenderer(
         AzItemRendererConfig config
     ) {
         this.rendererPipeline = createPipeline(config);
-        this.provider = new AzProvider<>(
+        this._provider = new AzProvider<>(
             config::createAnimator,
             config::modelLocation,
             animator -> animator.get(
                 AzureLib.AZ_ID.get()
             )
         );
-        this.config = config;
+        this._config = config;
     }
 
     protected AzItemRendererPipeline createPipeline(AzItemRendererConfig config) {
@@ -61,14 +61,14 @@ public abstract class AzItemRenderer {
         int packedLight
     ) {
         var context = rendererPipeline.context();
-        var model = provider.provideBakedModel(context.currentEntity(), stack);
+        var model = _provider.provideBakedModel(context.currentEntity(), stack);
         var itemContext = (AzItemRendererPipelineContext) context;
 
         itemContext.setTransformType(transformType);
 
         prepareAnimator(stack, model);
 
-        AzItemGuiRenderUtil.renderInGui(config, rendererPipeline, stack, model, stack, poseStack, source, packedLight);
+        AzItemGuiRenderUtil.renderInGui(_config, rendererPipeline, stack, model, stack, poseStack, source, packedLight);
     }
 
     public void renderByItem(
@@ -79,17 +79,17 @@ public abstract class AzItemRenderer {
         int packedLight
     ) {
         var context = rendererPipeline.context();
-        var model = provider.provideBakedModel(context.currentEntity(), stack);
+        var model = _provider.provideBakedModel(context.currentEntity(), stack);
         var partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaTicks();
-        var textureLocation = config.textureLocation(context.currentEntity(), stack);
+        var textureLocation = _config.textureLocation(context.currentEntity(), stack);
         var renderType = rendererPipeline.context()
             .getDefaultRenderType(
                 stack,
                 textureLocation,
                 source,
                 partialTick,
-                config.getRenderType(context.currentEntity(), stack),
-                config.alpha(stack)
+                _config.getRenderType(context.currentEntity(), stack),
+                _config.alpha(stack)
             );
         // TODO: Why the null check here?
         var withGlint = stack != null && stack.hasFoil();
@@ -105,17 +105,17 @@ public abstract class AzItemRenderer {
 
     private void prepareAnimator(ItemStack stack, AzBakedModel model) {
         // Point the renderer's current animator reference to the cached entity animator before rendering.
-        reusedAzItemAnimator = (AzItemAnimator) provider.provideAnimator(
+        _reusedAzItemAnimator = (AzItemAnimator) _provider.provideAnimator(
             rendererPipeline.context().currentEntity(),
             stack
         );
     }
 
     public @Nullable AzItemAnimator getAnimator() {
-        return reusedAzItemAnimator;
+        return _reusedAzItemAnimator;
     }
 
     public AzItemRendererConfig config() {
-        return config;
+        return _config;
     }
 }

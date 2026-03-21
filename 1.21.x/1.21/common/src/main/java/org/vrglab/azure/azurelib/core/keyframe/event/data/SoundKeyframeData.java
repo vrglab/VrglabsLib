@@ -14,23 +14,28 @@ import org.vrglab.azure.azurelib.common.animation.controller.keyframe.AzKeyframe
  */
 public class SoundKeyframeData extends KeyFrameData {
 
-    private final String sound;
+    private final String _sound;
 
     public SoundKeyframeData(Double startTick, String sound) {
         super(startTick);
 
-        this.sound = sound;
+        this._sound = sound;
     }
 
     /**
      * Gets the sound id given by the {@link AzKeyframe} instruction from the {@code animation.json}
      */
     public String getSound() {
-        return this.sound;
+        return this._sound;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartTick(), this.sound);
+        return Objects.hash(getStartTick(), this._sound);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

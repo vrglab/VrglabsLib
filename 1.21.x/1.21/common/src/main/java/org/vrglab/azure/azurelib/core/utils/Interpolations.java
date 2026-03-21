@@ -179,12 +179,17 @@ public class Interpolations {
      * to specify a more customized range
      */
     public static float envelope(float x, float lowIn, float lowOut, float highIn, float highOut) {
-        if (x < lowIn || x > highOut)
+        if (x < lowIn || x > highOut) {
             return 0;
-        if (x < lowOut)
+        }
+
+        if (x < lowOut) {
             return (x - lowIn) / (lowOut - lowIn);
-        if (x > highIn)
+        }
+
+        if (x > highIn) {
             return 1 - (x - highIn) / (highOut - highIn);
+        }
 
         return 1;
     }
@@ -324,12 +329,17 @@ public class Interpolations {
      * to specify a more customized range
      */
     public static double envelope(double x, double lowIn, double lowOut, double highIn, double highOut) {
-        if (x < lowIn || x > highOut)
+        if (x < lowIn || x > highOut) {
             return 0;
-        if (x < lowOut)
+        }
+
+        if (x < lowOut) {
             return (x - lowIn) / (lowOut - lowIn);
-        if (x > highIn)
+        }
+
+        if (x > highIn) {
             return 1 - (x - highIn) / (highOut - highIn);
+        }
 
         return 1;
     }

@@ -15,7 +15,7 @@ import org.vrglab.azure.azurelib.core.math.Variable;
  */
 public class LazyVariable extends Variable {
 
-    private DoubleSupplier valueSupplier;
+    private DoubleSupplier _valueSupplier;
 
     public LazyVariable(String name, double value) {
         this(name, () -> value);
@@ -24,7 +24,7 @@ public class LazyVariable extends Variable {
     public LazyVariable(String name, DoubleSupplier valueSupplier) {
         super(name, 0);
 
-        this.valueSupplier = valueSupplier;
+        this._valueSupplier = valueSupplier;
     }
 
     /**
@@ -39,14 +39,14 @@ public class LazyVariable extends Variable {
      */
     @Override
     public void set(double value) {
-        this.valueSupplier = () -> value;
+        this._valueSupplier = () -> value;
     }
 
     /**
      * Set the new value supplier for the variable
      */
     public void set(DoubleSupplier valueSupplier) {
-        this.valueSupplier = valueSupplier;
+        this._valueSupplier = valueSupplier;
     }
 
     /**
@@ -54,6 +54,6 @@ public class LazyVariable extends Variable {
      */
     @Override
     public double get() {
-        return this.valueSupplier.getAsDouble();
+        return this._valueSupplier.getAsDouble();
     }
 }

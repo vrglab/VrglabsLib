@@ -23,17 +23,17 @@ public abstract class AzRendererPipeline<K, T> implements AzPhasedRenderer<K, T>
 
     protected final AzRendererConfig<K, T> config;
 
-    private final AzRendererPipelineContext<K, T> context;
+    private final AzRendererPipelineContext<K, T> _context;
 
-    private final AzLayerRenderer<K, T> layerRenderer;
+    private final AzLayerRenderer<K, T> _layerRenderer;
 
-    private final AzModelRenderer<K, T> modelRenderer;
+    private final AzModelRenderer<K, T> _modelRenderer;
 
     protected AzRendererPipeline(AzRendererConfig<K, T> config) {
         this.config = config;
-        this.context = createContext(this);
-        this.layerRenderer = createLayerRenderer(config);
-        this.modelRenderer = createModelRenderer(layerRenderer);
+        this._context = createContext(this);
+        this._layerRenderer = createLayerRenderer(config);
+        this._modelRenderer = createModelRenderer(_layerRenderer);
     }
 
     /**
@@ -94,15 +94,15 @@ public abstract class AzRendererPipeline<K, T> implements AzPhasedRenderer<K, T>
         float partialTick,
         int packedLight
     ) {
-        renderType = context.getDefaultRenderType(
+        renderType = _context.getDefaultRenderType(
             animatable,
-            config.textureLocation(context.currentEntity, animatable),
+            config.textureLocation(_context.currentEntity, animatable),
             bufferSource,
             partialTick,
-            config.getRenderType(context.currentEntity, animatable),
+            config.getRenderType(_context.currentEntity, animatable),
             config.alpha(animatable)
         );
-        context.populate(
+        _context.populate(
             animatable,
             model,
             bufferSource,
@@ -115,17 +115,17 @@ public abstract class AzRendererPipeline<K, T> implements AzPhasedRenderer<K, T>
 
         poseStack.pushPose();
 
-        preRender(context, false);
+        preRender(_context, false);
 
-        layerRenderer.preApplyRenderLayers(context);
-        modelRenderer.render(context, false);
-        layerRenderer.applyRenderLayers(context);
-        postRender(context, false);
+        _layerRenderer.preApplyRenderLayers(_context);
+        _modelRenderer.render(_context, false);
+        _layerRenderer.applyRenderLayers(_context);
+        postRender(_context, false);
 
         poseStack.popPose();
 
-        renderFinal(context);
-        doPostRenderCleanup(context);
+        renderFinal(_context);
+        doPostRenderCleanup(_context);
     }
 
     /**
@@ -139,7 +139,7 @@ public abstract class AzRendererPipeline<K, T> implements AzPhasedRenderer<K, T>
         poseStack.pushPose();
 
         preRender(context, true);
-        modelRenderer.render(context, true);
+        _modelRenderer.render(context, true);
         postRender(context, true);
 
         poseStack.popPose();
@@ -194,6 +194,6 @@ public abstract class AzRendererPipeline<K, T> implements AzPhasedRenderer<K, T>
      *         pipeline, containing relevant rendering data and configurations for processing animations and models.
      */
     public AzRendererPipelineContext<K, T> context() {
-        return context;
+        return _context;
     }
 }

@@ -49,8 +49,9 @@ public record CommonUtils() {
         areaEffectCloudEntity.setRadiusPerTick(
             -areaEffectCloudEntity.getRadius() / areaEffectCloudEntity.getDuration()
         );
-        if (hasEffect && effect != null && !entity.hasEffect(effect))
+        if (hasEffect && effect != null && !entity.hasEffect(effect)) {
             areaEffectCloudEntity.addEffect(new MobEffectInstance(effect, effectTime, 0));
+        }
         entity.level().addFreshEntity(areaEffectCloudEntity);
     }
 
@@ -74,8 +75,8 @@ public record CommonUtils() {
             tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
         } else {
             // Otherwise, place a new ticking light block
-            entity.level()
-                .setBlockAndUpdate(lightBlockPos, AzureBlocksRegistry.TICKING_LIGHT_BLOCK.get().defaultBlockState());
+            entity.level().
+                    setBlockAndUpdate(lightBlockPos, AzureBlocksRegistry.TICKING_LIGHT_BLOCK.get().defaultBlockState());
         }
     }
 

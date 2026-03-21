@@ -34,8 +34,9 @@ public enum Interpolation {
         public float interpolate(float a, float b, float x) {
             x *= 2;
 
-            if (x < 1F)
+            if (x < 1F) {
                 return a + (b - a) / 2 * x * x;
+            }
 
             x -= 1;
 
@@ -63,8 +64,9 @@ public enum Interpolation {
         public float interpolate(float a, float b, float x) {
             x *= 2;
 
-            if (x < 1F)
+            if (x < 1F) {
                 return a + (b - a) / 2 * x * x * x;
+            }
 
             x -= 2;
 
@@ -99,15 +101,19 @@ public enum Interpolation {
 
         @Override
         public float interpolate(float a, float b, float x) {
-            if (x == 0)
+            if (x == 0) {
                 return a;
-            if (x == 1)
+            }
+
+            if (x == 1) {
                 return b;
+            }
 
             x *= 2;
 
-            if (x < 1F)
+            if (x < 1F) {
                 return a + (b - a) / 2 * (float) Math.pow(2, 10 * (x - 1));
+            }
 
             x -= 1;
 
@@ -117,7 +123,7 @@ public enum Interpolation {
 
     public final String key;
 
-    private Interpolation(String key) {
+    Interpolation(String key) {
         this.key = key;
     }
 

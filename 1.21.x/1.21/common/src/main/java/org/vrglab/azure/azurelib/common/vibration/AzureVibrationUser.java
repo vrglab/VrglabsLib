@@ -60,20 +60,25 @@ public class AzureVibrationUser implements VibrationSystem.User {
 
     @Override
     public boolean isValidVibration(Holder<GameEvent> gameEvent, @NotNull Context context) {
-        if (!gameEvent.is(this.getListenableEvents()))
+        if (!gameEvent.is(this.getListenableEvents())) {
             return false;
+        }
 
         var entity = context.sourceEntity();
         if (entity != null) {
-            if (entity.isSpectator())
+            if (entity.isSpectator()) {
                 return false;
-            if (entity.isSteppingCarefully() && gameEvent.is(GameEventTags.IGNORE_VIBRATIONS_SNEAKING))
+            }
+            if (entity.isSteppingCarefully() && gameEvent.is(GameEventTags.IGNORE_VIBRATIONS_SNEAKING)) {
                 return false;
-            if (entity.dampensVibrations())
+            }
+            if (entity.dampensVibrations()) {
                 return false;
+            }
         }
-        if (context.affectedState() != null)
+        if (context.affectedState() != null) {
             return !context.affectedState().is(BlockTags.DAMPENS_VIBRATIONS);
+        }
         return true;
     }
 
@@ -85,10 +90,11 @@ public class AzureVibrationUser implements VibrationSystem.User {
         GameEvent.@NotNull Context context
     ) {
         if (
-            mob.isNoAi() || mob.isDeadOrDying() || !mob.level().getWorldBorder().isWithinBounds(blockPos) || mob
-                .isRemoved()
-        )
+            mob.isNoAi() || mob.isDeadOrDying() || !mob.level().getWorldBorder().isWithinBounds(blockPos) || mob.
+                    isRemoved()
+        ) {
             return false;
+        }
         var entity = context.sourceEntity();
         return !(entity instanceof LivingEntity livingEntity) || canTargetEntity(livingEntity);
     }
@@ -107,28 +113,39 @@ public class AzureVibrationUser implements VibrationSystem.User {
 
     @Contract(value = "null->false")
     public boolean canTargetEntity(@Nullable Entity entity) {
-        if (!(entity instanceof LivingEntity livingEntity))
+        if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
-        if (this.mob.level() != entity.level())
+        }
+        if (this.mob.level() != entity.level()) {
             return false;
-        if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity))
+        }
+        if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity)) {
             return false;
-        if (this.mob.isVehicle())
+        }
+        if (this.mob.isVehicle()) {
             return false;
-        if (this.mob.isAlliedTo(entity))
+        }
+        if (this.mob.isAlliedTo(entity)) {
             return false;
-        if (livingEntity.getType() == EntityType.ARMOR_STAND)
+        }
+        if (livingEntity.getType() == EntityType.ARMOR_STAND) {
             return false;
-        if (livingEntity.getType() == EntityType.WARDEN)
+        }
+        if (livingEntity.getType() == EntityType.WARDEN) {
             return false;
-        if (livingEntity instanceof Bat)
+        }
+        if (livingEntity instanceof Bat) {
             return false;
-        if (livingEntity.isInvulnerable())
+        }
+        if (livingEntity.isInvulnerable()) {
             return false;
-        if (livingEntity.isDeadOrDying())
+        }
+        if (livingEntity.isDeadOrDying()) {
             return false;
-        if (!this.mob.level().getWorldBorder().isWithinBounds(livingEntity.getBoundingBox()))
+        }
+        if (!this.mob.level().getWorldBorder().isWithinBounds(livingEntity.getBoundingBox())) {
             return false;
+        }
         return true;
     }
 }

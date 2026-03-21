@@ -52,7 +52,7 @@ jobs:
         if: matrix.project.runTests
         run: chmod +x ./gradlew
 
-      - name: Run unit tests
+      - name: Run checkstyle checks
         if: matrix.project.runTests
         run: ./gradlew checkstyleMain
   unit-tests:

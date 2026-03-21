@@ -27,23 +27,23 @@ import org.vrglab.azure.azurelib.common.animation.primitive.AzKeyframes;
  */
 public record JsonUtil() {
 
-    public static final Gson GEO_GSON = new GsonBuilder().setLenient()
-        .registerTypeAdapter(Bone.class, Bone.deserializer())
-        .registerTypeAdapter(Cube.class, Cube.deserializer())
-        .registerTypeAdapter(FaceUV.class, FaceUV.deserializer())
-        .registerTypeAdapter(LocatorClass.class, LocatorClass.deserializer())
-        .registerTypeAdapter(LocatorValue.class, LocatorValue.deserializer())
-        .registerTypeAdapter(MinecraftGeometry.class, MinecraftGeometry.deserializer())
-        .registerTypeAdapter(Model.class, Model.deserializer())
-        .registerTypeAdapter(ModelProperties.class, ModelProperties.deserializer())
-        .registerTypeAdapter(PolyMesh.class, PolyMesh.deserializer())
-        .registerTypeAdapter(PolysUnion.class, PolysUnion.deserializer())
-        .registerTypeAdapter(TextureMesh.class, TextureMesh.deserializer())
-        .registerTypeAdapter(UVFaces.class, UVFaces.deserializer())
-        .registerTypeAdapter(UVUnion.class, UVUnion.deserializer())
-        .registerTypeAdapter(AzKeyframes.class, new AzKeyframesAdapter())
-        .registerTypeAdapter(AzBakedAnimations.class, new AzBakedAnimationsAdapter())
-        .create();
+    public static final Gson GEO_GSON = new GsonBuilder().setLenient().
+            registerTypeAdapter(Bone.class, Bone.deserializer()).
+            registerTypeAdapter(Cube.class, Cube.deserializer()).
+            registerTypeAdapter(FaceUV.class, FaceUV.deserializer()).
+            registerTypeAdapter(LocatorClass.class, LocatorClass.deserializer()).
+            registerTypeAdapter(LocatorValue.class, LocatorValue.deserializer()).
+            registerTypeAdapter(MinecraftGeometry.class, MinecraftGeometry.deserializer()).
+            registerTypeAdapter(Model.class, Model.deserializer()).
+            registerTypeAdapter(ModelProperties.class, ModelProperties.deserializer()).
+            registerTypeAdapter(PolyMesh.class, PolyMesh.deserializer()).
+            registerTypeAdapter(PolysUnion.class, PolysUnion.deserializer()).
+            registerTypeAdapter(TextureMesh.class, TextureMesh.deserializer()).
+            registerTypeAdapter(UVFaces.class, UVFaces.deserializer()).
+            registerTypeAdapter(UVUnion.class, UVUnion.deserializer()).
+            registerTypeAdapter(AzKeyframes.class, new AzKeyframesAdapter()).
+            registerTypeAdapter(AzBakedAnimations.class, new AzBakedAnimationsAdapter()).
+            create();
 
     /**
      * Convert a {@link JsonArray} of doubles to a {@code double[]}.<br>
@@ -51,8 +51,9 @@ public record JsonUtil() {
      * Ensures a minimum size of 3, as this is the expected usage of this method
      */
     public static double[] jsonArrayToDoubleArray(@Nullable JsonArray array) throws JsonParseException {
-        if (array == null)
+        if (array == null) {
             return new double[3];
+        }
 
         double[] output = new double[array.size()];
 
@@ -93,8 +94,9 @@ public record JsonUtil() {
      *                           object
      */
     public static <T> List<T> jsonArrayToList(@Nullable JsonArray array, Function<JsonElement, T> elementTransformer) {
-        if (array == null)
+        if (array == null) {
             return new ObjectArrayList<>();
+        }
 
         List<T> list = new ObjectArrayList<>(array.size());
 

@@ -1,8 +1,25 @@
 package org.vrglab.vrglabsLib.Utils;
 
+
 import java.lang.reflect.*;
 
 public class ReflectionUtil {
+
+    public static <T> boolean equateObjects(Object a, Object b) {
+        if (a == b) {
+            return true;
+        }
+
+        if (b == null || a == null) {
+            return false;
+        }
+
+        if (a.getClass() != b.getClass()) {
+            return false;
+        }
+
+        return a.hashCode() == b.hashCode();
+    }
 
     public static <T> T getField(Object target, String fieldName, Class<T> type) {
         try {

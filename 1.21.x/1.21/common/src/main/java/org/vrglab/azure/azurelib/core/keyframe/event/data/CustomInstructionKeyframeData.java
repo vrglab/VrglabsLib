@@ -14,23 +14,29 @@ import org.vrglab.azure.azurelib.common.animation.controller.keyframe.AzKeyframe
  */
 public class CustomInstructionKeyframeData extends KeyFrameData {
 
-    private final String instructions;
+    private final String _instructions;
 
     public CustomInstructionKeyframeData(double startTick, String instructions) {
         super(startTick);
 
-        this.instructions = instructions;
+        this._instructions = instructions;
     }
 
     /**
      * Gets the instructions string given by the {@link AzKeyframe} instruction from the {@code animation.json}
      */
     public String getInstructions() {
-        return this.instructions;
+        return this._instructions;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartTick(), instructions);
+        return Objects.hash(getStartTick(), _instructions);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

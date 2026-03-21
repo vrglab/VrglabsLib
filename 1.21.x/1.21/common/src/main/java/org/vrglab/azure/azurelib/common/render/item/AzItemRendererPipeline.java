@@ -21,7 +21,7 @@ import org.vrglab.azure.azurelib.common.render.AzRendererPipelineContext;
  */
 public class AzItemRendererPipeline extends AzRendererPipeline<UUID, ItemStack> {
 
-    private final AzItemRenderer itemRenderer;
+    private final AzItemRenderer _itemRenderer;
 
     protected Matrix4f itemRenderTranslations = new Matrix4f();
 
@@ -29,7 +29,7 @@ public class AzItemRendererPipeline extends AzRendererPipeline<UUID, ItemStack> 
 
     public AzItemRendererPipeline(AzItemRendererConfig config, AzItemRenderer itemRenderer) {
         super(config);
-        this.itemRenderer = itemRenderer;
+        this._itemRenderer = itemRenderer;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AzItemRendererPipeline extends AzRendererPipeline<UUID, ItemStack> 
         var poseStack = itemContext.poseStack();
         this.itemRenderTranslations = new Matrix4f(poseStack.last().pose());
 
-        var config = itemRenderer.config();
+        var config = _itemRenderer.config();
         var scaleWidth = config.scaleWidth(context.animatable());
         var scaleHeight = config.scaleHeight(context.animatable());
         scaleModelForRender(itemContext, scaleWidth, scaleHeight, isReRender);
@@ -71,15 +71,15 @@ public class AzItemRendererPipeline extends AzRendererPipeline<UUID, ItemStack> 
         }
 
         // If the item model has the leftArm or rightArm bone, hide them.
-        Stream.of("leftArm", "rightArm")
-            .forEach(
-                boneName -> context
-                    .bakedModel()
-                    .getBone(boneName)
-                    .ifPresent(bone -> {
-                        bone.setHidden(true);
-                        bone.setChildrenHidden(false);
-                    })
+        Stream.of("leftArm", "rightArm").
+                forEach(
+                boneName -> context.
+                        bakedModel().
+                        getBone(boneName).
+                        ifPresent(bone -> {
+                            bone.setHidden(true);
+                            bone.setChildrenHidden(false);
+                        })
             );
 
         if (config.alpha(context.animatable()) < 1) {
@@ -110,6 +110,6 @@ public class AzItemRendererPipeline extends AzRendererPipeline<UUID, ItemStack> 
     }
 
     public AzItemRenderer getRenderer() {
-        return itemRenderer;
+        return _itemRenderer;
     }
 }

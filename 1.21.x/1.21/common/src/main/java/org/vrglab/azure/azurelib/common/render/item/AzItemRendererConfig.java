@@ -25,11 +25,11 @@ import org.vrglab.azure.azurelib.common.render.layer.AzRenderLayer;
  */
 public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
 
-    private final boolean useEntityGuiLighting;
+    private final boolean _useEntityGuiLighting;
 
-    private final boolean useNewOffset;
+    private final boolean _useNewOffset;
 
-    private final Predicate<ItemDisplayContext> shouldAnimateInContext;
+    private final Predicate<ItemDisplayContext> _shouldAnimateInContext;
 
     private AzItemRendererConfig(
         Supplier<AzAnimator<UUID, ItemStack>> animatorProvider,
@@ -68,21 +68,21 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
             boneTextureOverrideProvider,
             boneRenderTypeOverrideProvider
         );
-        this.useEntityGuiLighting = useEntityGuiLighting;
-        this.useNewOffset = useNewOffset;
-        this.shouldAnimateInContext = shouldAnimateInContext;
+        this._useEntityGuiLighting = useEntityGuiLighting;
+        this._useNewOffset = useNewOffset;
+        this._shouldAnimateInContext = shouldAnimateInContext;
     }
 
     public boolean useEntityGuiLighting() {
-        return useEntityGuiLighting;
+        return _useEntityGuiLighting;
     }
 
     public boolean useNewOffset() {
-        return useNewOffset;
+        return _useNewOffset;
     }
 
     public boolean shouldAnimateInContext(ItemDisplayContext context) {
-        return shouldAnimateInContext.test(context);
+        return _shouldAnimateInContext.test(context);
     }
 
     public static Builder builder(
@@ -101,11 +101,11 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
 
     public static class Builder extends AzRendererConfig.Builder<UUID, ItemStack> {
 
-        private boolean useEntityGuiLighting;
+        private boolean _useEntityGuiLighting;
 
-        private boolean useNewOffset;
+        private boolean _useNewOffset;
 
-        private Predicate<ItemDisplayContext> shouldAnimateInContext;
+        private Predicate<ItemDisplayContext> _shouldAnimateInContext;
 
         protected Builder(
             Function<ItemStack, ResourceLocation> modelLocationProvider,
@@ -113,9 +113,9 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
         ) {
             super((a, b) -> modelLocationProvider.apply(b), (a, b) -> textureLocationProvider.apply(b));
             this.renderTypeProvider = (a, b) -> RenderType.entityCutoutNoCull(textureLocationProvider.apply(b));
-            this.useEntityGuiLighting = false;
-            this.useNewOffset = false;
-            this.shouldAnimateInContext = $ -> true;
+            this._useEntityGuiLighting = false;
+            this._useNewOffset = false;
+            this._shouldAnimateInContext = $ -> true;
             this.modelRendererProvider = (entityRendererPipeline, layer) -> new AzItemModelRenderer(
                 (AzItemRendererPipeline) entityRendererPipeline,
                 layer
@@ -227,7 +227,7 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
         }
 
         public Builder useEntityGuiLighting() {
-            this.useEntityGuiLighting = true;
+            this._useEntityGuiLighting = true;
             return this;
         }
 
@@ -236,7 +236,7 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
          *                     4.11.
          */
         public Builder useNewOffset(boolean useNewOffset) {
-            this.useNewOffset = useNewOffset;
+            this._useNewOffset = useNewOffset;
             return this;
         }
 
@@ -248,7 +248,7 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
          * @return The current instance of the {@code Builder} for method chaining.
          */
         public Builder setShouldAnimateInContext(Predicate<ItemDisplayContext> shouldAnimateInContext) {
-            this.shouldAnimateInContext = shouldAnimateInContext;
+            this._shouldAnimateInContext = shouldAnimateInContext;
             return this;
         }
 
@@ -273,7 +273,7 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
             }
 
             var finalDisabledContexts = Set.copyOf(disabledContexts);
-            this.shouldAnimateInContext = context -> !finalDisabledContexts.contains(context);
+            this._shouldAnimateInContext = context -> !finalDisabledContexts.contains(context);
             return this;
         }
 
@@ -297,12 +297,12 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
             }
 
             var finalEnabledContexts = Set.copyOf(enabledContexts);
-            this.shouldAnimateInContext = finalEnabledContexts::contains;
+            this._shouldAnimateInContext = finalEnabledContexts::contains;
             return this;
         }
 
         public Builder disableAnimationInAllContexts() {
-            this.shouldAnimateInContext = context -> false;
+            this._shouldAnimateInContext = context -> false;
             return this;
         }
 
@@ -322,9 +322,9 @@ public class AzItemRendererConfig extends AzRendererConfig<UUID, ItemStack> {
                 baseConfig::alpha,
                 baseConfig::scaleHeight,
                 baseConfig::scaleWidth,
-                useEntityGuiLighting,
-                useNewOffset,
-                shouldAnimateInContext,
+                    _useEntityGuiLighting,
+                    _useNewOffset,
+                    _shouldAnimateInContext,
                 baseConfig::modelRendererProvider,
                 baseConfig::pipelineContext,
                 baseConfig::boneTextureOverrideProvider,

@@ -21,20 +21,20 @@ import org.vrglab.azure.azurelib.common.render.AzRendererPipelineContext;
  */
 public class AzItemRendererPipelineContext extends AzRendererPipelineContext<UUID, ItemStack> {
 
-    private boolean translucent = false;
+    private boolean _translucent = false;
 
-    private ItemDisplayContext transformType;
+    private ItemDisplayContext _transformType;
 
     public AzItemRendererPipelineContext(AzRendererPipeline<UUID, ItemStack> rendererPipeline) {
         super(rendererPipeline);
     }
 
     public ItemDisplayContext getTransformType() {
-        return transformType;
+        return _transformType;
     }
 
     public void setTransformType(ItemDisplayContext transformType) {
-        this.transformType = transformType;
+        this._transformType = transformType;
     }
 
     /**
@@ -45,7 +45,7 @@ public class AzItemRendererPipelineContext extends AzRendererPipelineContext<UUI
      *                    an opaque effect.
      */
     public void setTranslucent(boolean translucent) {
-        this.translucent = translucent;
+        this._translucent = translucent;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class AzItemRendererPipelineContext extends AzRendererPipelineContext<UUI
         RenderType defaultRenderType,
         float alpha
     ) {
-        return translucent
+        return _translucent
             ? RenderType.itemEntityTranslucentCull(texture)
             : defaultRenderType;
     }

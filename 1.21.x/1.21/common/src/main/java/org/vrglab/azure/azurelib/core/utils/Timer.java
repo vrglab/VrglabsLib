@@ -7,31 +7,31 @@ package org.vrglab.azure.azurelib.core.utils;
 
 public class Timer {
 
-    private final long duration;
+    private final long _duration;
 
-    private boolean enabled;
+    private boolean _enabled;
 
-    private long time;
+    private long _time;
 
     public Timer(long duration) {
-        this.duration = duration;
+        this._duration = duration;
     }
 
     public long getRemaining() {
-        return this.time - System.currentTimeMillis();
+        return this._time - System.currentTimeMillis();
     }
 
     public void mark() {
-        this.mark(this.duration);
+        this.mark(this._duration);
     }
 
     public void mark(long duration) {
-        this.enabled = true;
-        this.time = System.currentTimeMillis() + duration;
+        this._enabled = true;
+        this._time = System.currentTimeMillis() + duration;
     }
 
     public void reset() {
-        this.enabled = false;
+        this._enabled = false;
     }
 
     public boolean checkReset() {
@@ -45,15 +45,15 @@ public class Timer {
     }
 
     public boolean check() {
-        return this.enabled && this.isTime();
+        return this._enabled && this.isTime();
     }
 
     public boolean isTime() {
-        return System.currentTimeMillis() >= this.time;
+        return System.currentTimeMillis() >= this._time;
     }
 
     public boolean checkRepeat() {
-        if (!this.enabled) {
+        if (!this._enabled) {
             this.mark();
         }
 

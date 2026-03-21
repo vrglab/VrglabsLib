@@ -9,32 +9,32 @@ package org.vrglab.azure.azurelib.common.util.state;
  */
 public abstract class StateMachine<C extends StateMachineContext, T extends State<C>> {
 
-    private final C reusableContext;
+    private final C _reusableContext;
 
-    private T state;
+    private T _state;
 
     public StateMachine(T initialState) {
-        this.state = initialState;
-        this.reusableContext = createContext();
+        this._state = initialState;
+        this._reusableContext = createContext();
     }
 
     protected abstract C createContext();
 
     public void update(C context) {
-        state.onUpdate(context);
+        _state.onUpdate(context);
     }
 
     public C getContext() {
-        return reusableContext;
+        return _reusableContext;
     }
 
     public T getState() {
-        return state;
+        return _state;
     }
 
     public void setState(T newState) {
-        state.onExit(reusableContext);
-        this.state = newState;
-        newState.onEnter(reusableContext);
+        _state.onExit(_reusableContext);
+        this._state = newState;
+        newState.onEnter(_reusableContext);
     }
 }

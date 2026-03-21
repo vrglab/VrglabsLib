@@ -9,10 +9,10 @@ import java.util.List;
 
 public class AzListStreamCodec<T> implements StreamCodec<FriendlyByteBuf, List<T>> {
 
-    private final StreamCodec<FriendlyByteBuf, T> codec;
+    private final StreamCodec<FriendlyByteBuf, T> _codec;
 
     public AzListStreamCodec(StreamCodec<FriendlyByteBuf, T> codec) {
-        this.codec = codec;
+        this._codec = codec;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class AzListStreamCodec<T> implements StreamCodec<FriendlyByteBuf, List<T
         var list = new ArrayList<T>(size);
 
         for (int i = 0; i < size; i++) {
-            list.add(codec.decode(buf));
+            list.add(_codec.decode(buf));
         }
 
         return list;
@@ -30,6 +30,6 @@ public class AzListStreamCodec<T> implements StreamCodec<FriendlyByteBuf, List<T
     @Override
     public void encode(FriendlyByteBuf buf, List<T> elements) {
         buf.writeByte(elements.size());
-        elements.forEach(element -> codec.encode(buf, element));
+        elements.forEach(element -> _codec.encode(buf, element));
     }
 }

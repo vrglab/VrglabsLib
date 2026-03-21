@@ -30,35 +30,35 @@ public abstract class AzRendererPipelineContext<K, T> {
 
     public ResourceLocation textureOverride;
 
-    private final AzRendererPipeline<K, T> rendererPipeline;
+    private final AzRendererPipeline<K, T> _rendererPipeline;
 
     protected T animatable;
 
     protected @Nullable Entity currentEntity;
 
-    private AzBakedModel bakedModel;
+    private AzBakedModel _bakedModel;
 
-    private MultiBufferSource multiBufferSource;
+    private MultiBufferSource _multiBufferSource;
 
-    private int packedLight;
+    private int _packedLight;
 
-    private int packedOverlay;
+    private int _packedOverlay;
 
-    private float partialTick;
+    private float _partialTick;
 
-    private PoseStack poseStack;
+    private PoseStack _poseStack;
 
-    private int renderColor;
+    private int _renderColor;
 
-    private @Nullable RenderType renderType;
+    private @Nullable RenderType _renderType;
 
-    private VertexConsumer vertexConsumer;
+    private VertexConsumer _vertexConsumer;
 
     protected static final Map<ResourceLocation, IntIntPair> TEXTURE_DIMENSIONS_CACHE =
         new Object2ObjectOpenHashMap<>();
 
     protected AzRendererPipelineContext(AzRendererPipeline<K, T> rendererPipeline) {
-        this.rendererPipeline = rendererPipeline;
+        this._rendererPipeline = rendererPipeline;
     }
 
     /**
@@ -87,30 +87,30 @@ public abstract class AzRendererPipelineContext<K, T> {
         VertexConsumer vertexConsumer
     ) {
         this.animatable = animatable;
-        this.bakedModel = bakedModel;
-        this.multiBufferSource = multiBufferSource;
-        this.packedLight = packedLight;
-        this.packedOverlay = getPackedOverlay(animatable, 0, partialTick);
-        this.partialTick = partialTick;
-        this.poseStack = poseStack;
-        this.renderType = renderType;
-        this.vertexConsumer = vertexConsumer;
-        this.renderColor = getRenderColor(animatable, partialTick, packedLight).argbInt();
+        this._bakedModel = bakedModel;
+        this._multiBufferSource = multiBufferSource;
+        this._packedLight = packedLight;
+        this._packedOverlay = getPackedOverlay(animatable, 0, partialTick);
+        this._partialTick = partialTick;
+        this._poseStack = poseStack;
+        this._renderType = renderType;
+        this._vertexConsumer = vertexConsumer;
+        this._renderColor = getRenderColor(animatable, partialTick, packedLight).argbInt();
 
         if (renderType == null) {
-            var textureLocation = rendererPipeline.config().textureLocation(currentEntity, animatable);
-            this.renderType = getDefaultRenderType(
+            var textureLocation = _rendererPipeline.config().textureLocation(currentEntity, animatable);
+            this._renderType = getDefaultRenderType(
                 animatable,
                 textureLocation,
                 multiBufferSource,
                 partialTick,
-                rendererPipeline.config().getRenderType(currentEntity, animatable),
-                rendererPipeline.config().alpha(animatable)
+                _rendererPipeline.config().getRenderType(currentEntity, animatable),
+                _rendererPipeline.config().alpha(animatable)
             );
         }
 
-        if (vertexConsumer == null && this.renderType != null) {
-            this.vertexConsumer = multiBufferSource.getBuffer(this.renderType);
+        if (vertexConsumer == null && this._renderType != null) {
+            this._vertexConsumer = multiBufferSource.getBuffer(this._renderType);
         }
     }
 
@@ -146,7 +146,7 @@ public abstract class AzRendererPipelineContext<K, T> {
     }
 
     public AzRendererPipeline<K, T> rendererPipeline() {
-        return rendererPipeline;
+        return _rendererPipeline;
     }
 
     public T animatable() {
@@ -162,59 +162,59 @@ public abstract class AzRendererPipelineContext<K, T> {
     }
 
     public AzBakedModel bakedModel() {
-        return bakedModel;
+        return _bakedModel;
     }
 
     public MultiBufferSource multiBufferSource() {
-        return multiBufferSource;
+        return _multiBufferSource;
     }
 
     public int packedLight() {
-        return packedLight;
+        return _packedLight;
     }
 
     public void setPackedLight(int packedLight) {
-        this.packedLight = packedLight;
+        this._packedLight = packedLight;
     }
 
     public int packedOverlay() {
-        return packedOverlay;
+        return _packedOverlay;
     }
 
     public void setPackedOverlay(int packedOverlay) {
-        this.packedOverlay = packedOverlay;
+        this._packedOverlay = packedOverlay;
     }
 
     public float partialTick() {
-        return partialTick;
+        return _partialTick;
     }
 
     public PoseStack poseStack() {
-        return poseStack;
+        return _poseStack;
     }
 
     public int renderColor() {
-        return renderColor;
+        return _renderColor;
     }
 
     public void setRenderColor(int renderColor) {
-        this.renderColor = renderColor;
+        this._renderColor = renderColor;
     }
 
     public @Nullable RenderType renderType() {
-        return renderType;
+        return _renderType;
     }
 
     public void setRenderType(@Nullable RenderType renderType) {
-        this.renderType = renderType;
+        this._renderType = renderType;
     }
 
     public VertexConsumer vertexConsumer() {
-        return vertexConsumer;
+        return _vertexConsumer;
     }
 
     public void setVertexConsumer(VertexConsumer vertexConsumer) {
-        this.vertexConsumer = vertexConsumer;
+        this._vertexConsumer = vertexConsumer;
     }
 
     /**

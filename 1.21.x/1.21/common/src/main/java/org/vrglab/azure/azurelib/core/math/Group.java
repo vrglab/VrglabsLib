@@ -10,19 +10,19 @@ package org.vrglab.azure.azurelib.core.math;
  */
 public class Group implements IValue {
 
-    private IValue value;
+    private final IValue _value;
 
     public Group(IValue value) {
-        this.value = value;
+        this._value = value;
     }
 
     @Override
     public double get() {
-        return this.value.get();
+        return this._value.get();
     }
 
     @Override
     public String toString() {
-        return "(" + this.value.toString() + ")";
+        return "(" + this._value.toString() + ")";
     }
 }

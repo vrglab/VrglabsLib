@@ -31,17 +31,17 @@ import org.vrglab.azure.azurelib.common.util.client.RenderUtils;
  */
 public class AzModelRenderer<K, T> {
 
-    private final Matrix4f poseStateCache = new Matrix4f();
+    private final Matrix4f _poseStateCache = new Matrix4f();
 
-    private final Vector3f normalScratch = new Vector3f();
+    private final Vector3f _normalScratch = new Vector3f();
 
-    private final AzRendererPipeline<K, T> rendererPipeline;
+    private final AzRendererPipeline<K, T> _rendererPipeline;
 
     protected final AzLayerRenderer<K, T> layerRenderer;
 
     public AzModelRenderer(AzRendererPipeline<K, T> rendererPipeline, AzLayerRenderer<K, T> layerRenderer) {
         this.layerRenderer = layerRenderer;
-        this.rendererPipeline = rendererPipeline;
+        this._rendererPipeline = rendererPipeline;
     }
 
     /**
@@ -51,13 +51,13 @@ public class AzModelRenderer<K, T> {
         var animatable = context.animatable();
         var model = context.bakedModel();
 
-        rendererPipeline.updateAnimatedTextureFrame(animatable);
+        _rendererPipeline.updateAnimatedTextureFrame(animatable);
 
         for (var bone : model.getTopLevelBones()) {
             renderRecursively(context, bone, isReRender);
         }
 
-        var config = rendererPipeline.config();
+        var config = _rendererPipeline.config();
         config.renderEntry(context);
     }
 
@@ -85,8 +85,9 @@ public class AzModelRenderer<K, T> {
                 context.packedOverlay(),
                 context.renderColor()
             )
-        )
+        ) {
             renderCubesOfBone(context, bone);
+        }
 
         if (!isReRender) {
             layerRenderer.applyRenderLayersForBone(context, bone);
@@ -121,8 +122,9 @@ public class AzModelRenderer<K, T> {
      * {@link AzModelRenderer#renderCubesOfBone} separately
      */
     protected void renderChildBones(AzRendererPipelineContext<K, T> context, AzBone bone, boolean isReRender) {
-        if (bone.isHidingChildren())
+        if (bone.isHidingChildren()) {
             return;
+        }
 
         for (var childBone : bone.getChildBones()) {
             renderRecursively(context, childBone, isReRender);
@@ -141,16 +143,16 @@ public class AzModelRenderer<K, T> {
         RenderUtils.translateAwayFromPivotPoint(poseStack, cube);
 
         var normalisedPoseState = poseStack.last().normal();
-        var poseState = poseStateCache.set(poseStack.last().pose());
+        var poseState = _poseStateCache.set(poseStack.last().pose());
 
         for (var quad : cube.quads()) {
             if (quad == null) {
                 continue;
             }
 
-            normalScratch.set(quad.normal());
-            normalisedPoseState.transform(normalScratch);
-            var normal = normalScratch;
+            _normalScratch.set(quad.normal());
+            normalisedPoseState.transform(_normalScratch);
+            var normal = _normalScratch;
 
             RenderUtils.fixInvertedFlatCube(cube, normal);
             createVerticesOfQuad(context, quad, poseState, normal);
@@ -169,7 +171,7 @@ public class AzModelRenderer<K, T> {
     ) {
         var buffer = context.vertexConsumer();
         var color = context.renderColor();
-        var config = rendererPipeline.config();
+        var config = _rendererPipeline.config();
         var packedOverlay = context.packedOverlay();
         var packedLight = context.packedLight();
         var boneTextureSize = context.computeTextureSize(context.getTextureOverride());
@@ -183,8 +185,8 @@ public class AzModelRenderer<K, T> {
             if (context.getTextureOverride() != null && boneTextureSize != null && entityTextureSize != null) {
                 var texU = (vertex.texU() * entityTextureSize.firstInt()) / boneTextureSize.firstInt();
                 var texV = (vertex.texV() * entityTextureSize.secondInt()) / boneTextureSize.secondInt();
-                context.vertexConsumer()
-                    .addVertex(
+                context.vertexConsumer().
+                    addVertex(
                         vector4f.x(),
                         vector4f.y(),
                         vector4f.z(),
@@ -297,7 +299,7 @@ public class AzModelRenderer<K, T> {
         AzRendererPipelineContext<K, T> context,
         AzBone bone
     ) {
-        var config = rendererPipeline.config();
+        var config = _rendererPipeline.config();
         var currentBuffer = context.vertexConsumer();
         var bufferSource = context.multiBufferSource();
         var renderType = context.renderType();

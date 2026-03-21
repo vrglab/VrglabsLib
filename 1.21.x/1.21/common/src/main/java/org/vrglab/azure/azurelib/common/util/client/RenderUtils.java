@@ -51,14 +51,17 @@ public class RenderUtils {
         float rotY = bone.getRotY();
         float rotZ = bone.getRotZ();
 
-        if (rotZ != 0)
+        if (rotZ != 0) {
             poseStack.mulPose(Z_QUATERNION_CACHE.rotationXYZ(0f, 0f, rotZ));
+        }
 
-        if (rotY != 0)
+        if (rotY != 0) {
             poseStack.mulPose(Y_QUATERNION_CACHE.rotationXYZ(0f, rotY, 0f));
+        }
 
-        if (rotX != 0)
+        if (rotX != 0) {
             poseStack.mulPose(X_QUATERNION_CACHE.rotationXYZ(rotX, 0f, 0f));
+        }
     }
 
     public static void rotateMatrixAroundCube(PoseStack poseStack, GeoCube cube) {
@@ -149,8 +152,9 @@ public class RenderUtils {
      */
     @Nullable
     public static IntIntPair getTextureDimensions(ResourceLocation texture) {
-        if (texture == null)
+        if (texture == null) {
             return null;
+        }
 
         AbstractTexture originalTexture = null;
         Minecraft mc = Minecraft.getInstance();
@@ -162,8 +166,9 @@ public class RenderUtils {
             e.printStackTrace();
         }
 
-        if (originalTexture == null)
+        if (originalTexture == null) {
             return null;
+        }
 
         NativeImage image = null;
 
@@ -224,14 +229,17 @@ public class RenderUtils {
      * This performs a pseudo-ABS function to help resolve some of those issues.
      */
     public static void fixInvertedFlatCube(GeoCube cube, Vector3f normal) {
-        if (normal.x() < 0 && (cube.size().y() == 0 || cube.size().z() == 0))
+        if (normal.x() < 0 && (cube.size().y() == 0 || cube.size().z() == 0)) {
             normal.mul(-1, 1, 1);
+        }
 
-        if (normal.y() < 0 && (cube.size().x() == 0 || cube.size().z() == 0))
+        if (normal.y() < 0 && (cube.size().x() == 0 || cube.size().z() == 0)) {
             normal.mul(1, -1, 1);
+        }
 
-        if (normal.z() < 0 && (cube.size().x() == 0 || cube.size().y() == 0))
+        if (normal.z() < 0 && (cube.size().x() == 0 || cube.size().y() == 0)) {
             normal.mul(1, 1, -1);
+        }
     }
 
     /**

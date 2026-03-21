@@ -27,35 +27,35 @@ import org.vrglab.azure.azurelib.common.render.layer.AzRenderLayer;
  */
 public class AzRendererConfig<K, T> {
 
-    private final Supplier<@Nullable AzAnimator<K, T>> animatorProvider;
+    private final Supplier<@Nullable AzAnimator<K, T>> _animatorProvider;
 
-    private final BiFunction<@Nullable Entity, T, ResourceLocation> modelLocationProvider;
+    private final BiFunction<@Nullable Entity, T, ResourceLocation> _modelLocationProvider;
 
-    private final BiFunction<AzRendererPipeline<K, T>, AzLayerRenderer<K, T>, AzModelRenderer<K, T>> modelRendererProvider;
+    private final BiFunction<AzRendererPipeline<K, T>, AzLayerRenderer<K, T>, AzModelRenderer<K, T>> _modelRendererProvider;
 
-    private final Function<AzRendererPipeline<K, T>, AzRendererPipelineContext<K, T>> pipelineContextFunction;
+    private final Function<AzRendererPipeline<K, T>, AzRendererPipelineContext<K, T>> _pipelineContextFunction;
 
-    private final BiFunction<@Nullable Entity, T, RenderType> renderTypeFunction;
+    private final BiFunction<@Nullable Entity, T, RenderType> _renderTypeFunction;
 
-    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> preRenderEntry;
+    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> _preRenderEntry;
 
-    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> renderEntry;
+    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> _renderEntry;
 
-    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> postRenderEntry;
+    private final Function<AzRendererPipelineContext<K, T>, AzRendererPipelineContext<K, T>> _postRenderEntry;
 
-    private final List<AzRenderLayer<K, T>> renderLayers;
+    private final List<AzRenderLayer<K, T>> _renderLayers;
 
-    private final BiFunction<@Nullable Entity, T, ResourceLocation> textureLocationProvider;
+    private final BiFunction<@Nullable Entity, T, ResourceLocation> _textureLocationProvider;
 
-    private final Function<T, Float> alphaFunction;
+    private final Function<T, Float> _alphaFunction;
 
-    private final Function<T, Float> scaleHeight;
+    private final Function<T, Float> _scaleHeight;
 
-    private final Function<T, Float> scaleWidth;
+    private final Function<T, Float> _scaleWidth;
 
-    private final @Nullable Function<AzBone, ResourceLocation> boneTextureOverrideProvider;
+    private final @Nullable Function<AzBone, ResourceLocation> _boneTextureOverrideProvider;
 
-    private final @Nullable Function<AzBone, RenderType> boneRenderTypeOverrideProvider;
+    private final @Nullable Function<AzBone, RenderType> _boneRenderTypeOverrideProvider;
 
     public AzRendererConfig(
         Supplier<AzAnimator<K, T>> animatorProvider,
@@ -74,25 +74,25 @@ public class AzRendererConfig<K, T> {
         Function<AzBone, ResourceLocation> boneTextureOverrideProvider,
         Function<AzBone, RenderType> boneRenderTypeOverrideProvider
     ) {
-        this.animatorProvider = animatorProvider;
-        this.modelLocationProvider = modelLocationProvider;
-        this.modelRendererProvider = modelRendererProvider;
-        this.pipelineContextFunction = pipelineContextFunction;
-        this.renderTypeFunction = renderTypeFunction;
-        this.renderLayers = Collections.unmodifiableList(renderLayers);
-        this.preRenderEntry = preRenderEntry;
-        this.renderEntry = renderEntry;
-        this.postRenderEntry = postRenderEntry;
-        this.textureLocationProvider = textureLocationProvider;
-        this.alphaFunction = alphaFunction;
-        this.scaleHeight = scaleHeight;
-        this.scaleWidth = scaleWidth;
-        this.boneTextureOverrideProvider = boneTextureOverrideProvider;
-        this.boneRenderTypeOverrideProvider = boneRenderTypeOverrideProvider;
+        this._animatorProvider = animatorProvider;
+        this._modelLocationProvider = modelLocationProvider;
+        this._modelRendererProvider = modelRendererProvider;
+        this._pipelineContextFunction = pipelineContextFunction;
+        this._renderTypeFunction = renderTypeFunction;
+        this._renderLayers = Collections.unmodifiableList(renderLayers);
+        this._preRenderEntry = preRenderEntry;
+        this._renderEntry = renderEntry;
+        this._postRenderEntry = postRenderEntry;
+        this._textureLocationProvider = textureLocationProvider;
+        this._alphaFunction = alphaFunction;
+        this._scaleHeight = scaleHeight;
+        this._scaleWidth = scaleWidth;
+        this._boneTextureOverrideProvider = boneTextureOverrideProvider;
+        this._boneRenderTypeOverrideProvider = boneRenderTypeOverrideProvider;
     }
 
     public @Nullable AzAnimator<K, T> createAnimator() {
-        return animatorProvider.get();
+        return _animatorProvider.get();
     }
 
     public ResourceLocation modelLocation(T animatable) {
@@ -100,11 +100,11 @@ public class AzRendererConfig<K, T> {
     }
 
     public ResourceLocation modelLocation(@Nullable Entity entity, T animatable) {
-        return modelLocationProvider.apply(entity, animatable);
+        return _modelLocationProvider.apply(entity, animatable);
     }
 
     public AzRendererPipelineContext<K, T> pipelineContext(AzRendererPipeline<K, T> pipeline) {
-        return pipelineContextFunction.apply(pipeline);
+        return _pipelineContextFunction.apply(pipeline);
     }
 
     public ResourceLocation textureLocation(T animatable) {
@@ -112,14 +112,14 @@ public class AzRendererConfig<K, T> {
     }
 
     public ResourceLocation textureLocation(@Nullable Entity entity, T animatable) {
-        return textureLocationProvider.apply(entity, animatable);
+        return _textureLocationProvider.apply(entity, animatable);
     }
 
     public AzModelRenderer<K, T> modelRendererProvider(
         AzRendererPipeline<K, T> pipeline,
         AzLayerRenderer<K, T> layerRenderer
     ) {
-        return modelRendererProvider.apply(pipeline, layerRenderer);
+        return _modelRendererProvider.apply(pipeline, layerRenderer);
     }
 
     public RenderType getRenderType(T animatable) {
@@ -127,43 +127,43 @@ public class AzRendererConfig<K, T> {
     }
 
     public RenderType getRenderType(@Nullable Entity entity, T animatable) {
-        return renderTypeFunction.apply(entity, animatable);
+        return _renderTypeFunction.apply(entity, animatable);
     }
 
     public List<AzRenderLayer<K, T>> renderLayers() {
-        return renderLayers;
+        return _renderLayers;
     }
 
     public AzRendererPipelineContext<K, T> preRenderEntry(AzRendererPipelineContext<K, T> animatable) {
-        return preRenderEntry.apply(animatable);
+        return _preRenderEntry.apply(animatable);
     }
 
     public AzRendererPipelineContext<K, T> renderEntry(AzRendererPipelineContext<K, T> animatable) {
-        return renderEntry.apply(animatable);
+        return _renderEntry.apply(animatable);
     }
 
     public AzRendererPipelineContext<K, T> postRenderEntry(AzRendererPipelineContext<K, T> animatable) {
-        return postRenderEntry.apply(animatable);
+        return _postRenderEntry.apply(animatable);
     }
 
     public float alpha(T entity) {
-        return alphaFunction.apply(entity);
+        return _alphaFunction.apply(entity);
     }
 
     public float scaleHeight(T entity) {
-        return scaleHeight.apply(entity);
+        return _scaleHeight.apply(entity);
     }
 
     public float scaleWidth(T entity) {
-        return scaleWidth.apply(entity);
+        return _scaleWidth.apply(entity);
     }
 
     public @Nullable ResourceLocation boneTextureOverrideProvider(AzBone bone) {
-        return boneTextureOverrideProvider.apply(bone);
+        return _boneTextureOverrideProvider.apply(bone);
     }
 
     public @Nullable RenderType boneRenderTypeOverrideProvider(AzBone bone) {
-        return boneRenderTypeOverrideProvider.apply(bone);
+        return _boneRenderTypeOverrideProvider.apply(bone);
     }
 
     public static class Builder<K, T> {
@@ -194,9 +194,9 @@ public class AzRendererConfig<K, T> {
 
         protected Function<T, Float> scaleWidth;
 
-        private @Nullable Function<AzBone, ResourceLocation> boneTextureOverrideProvider;
+        private @Nullable Function<AzBone, ResourceLocation> _boneTextureOverrideProvider;
 
-        private @Nullable Function<AzBone, RenderType> boneRenderTypeOverrideProvider;
+        private @Nullable Function<AzBone, RenderType> _boneRenderTypeOverrideProvider;
 
         protected Builder(
             BiFunction<@Nullable Entity, T, ResourceLocation> modelLocationProvider,
@@ -215,21 +215,21 @@ public class AzRendererConfig<K, T> {
             this.alphaFunction = $ -> 1.0F;
             this.scaleHeight = $ -> 1.0F;
             this.scaleWidth = $ -> 1.0F;
-            this.boneTextureOverrideProvider = $ -> null;
-            this.boneRenderTypeOverrideProvider = $ -> null;
+            this._boneTextureOverrideProvider = $ -> null;
+            this._boneRenderTypeOverrideProvider = $ -> null;
         }
 
         public Builder<K, T> setBoneTextureOverrideProvider(
             Function<AzBone, ResourceLocation> boneTextureOverrideProvider
         ) {
-            this.boneTextureOverrideProvider = boneTextureOverrideProvider;
+            this._boneTextureOverrideProvider = boneTextureOverrideProvider;
             return this;
         }
 
         public Builder<K, T> setBoneRenderTypeOverrideProvider(
             Function<AzBone, RenderType> boneRenderTypeOverrideProvider
         ) {
-            this.boneRenderTypeOverrideProvider = boneRenderTypeOverrideProvider;
+            this._boneRenderTypeOverrideProvider = boneRenderTypeOverrideProvider;
             return this;
         }
 
@@ -390,8 +390,8 @@ public class AzRendererConfig<K, T> {
                 alphaFunction,
                 scaleHeight,
                 scaleWidth,
-                boneTextureOverrideProvider,
-                boneRenderTypeOverrideProvider
+                    _boneTextureOverrideProvider,
+                    _boneRenderTypeOverrideProvider
             );
         }
     }

@@ -11,10 +11,13 @@ public class EaseInOutExpo extends EasingFunction {
 
     @Override
     protected double ease(double t) {
-        if (t == 0)
+        if (t == 0) {
             return 0;
-        if (t == 1)
+        }
+
+        if (t == 1) {
             return 1;
+        }
         return t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
     }
 }
