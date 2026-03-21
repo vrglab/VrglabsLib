@@ -21,7 +21,40 @@ jobs:
       - id: projects
         run: |
           echo 'projects=[{"path":"1.21.x/1.21","name":"1.21","runTests":true}]' >> "$GITHUB_OUTPUT"
+  checkstyle:
+    needs: define-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.define-matrix.outputs.projects) }}
 
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.project.path }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+
+      - name: Make wrapper executable
+        if: matrix.project.runTests
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        if: matrix.project.runTests
+        run: ./gradlew checkstyleMain
   unit-tests:
     needs: define-matrix
     runs-on: ubuntu-latest

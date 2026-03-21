@@ -1,7 +1,7 @@
 package org.vrglab.vrglabsLib.api.autoRegistry.World;
 
 import net.minecraft.resources.ResourceLocation;
-import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
+import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -16,7 +16,7 @@ public abstract class AutoRegistryObject<T> {
     protected Map<String, Object> args;
 
     public Supplier<T> getSupplier() {
-        return (Supplier<T>)args.get("supplier");
+        return (Supplier<T>) args.get("supplier");
     }
 
     public Map<String, Object> getArgs() {
@@ -32,7 +32,7 @@ public abstract class AutoRegistryObject<T> {
     }
 
     public T getRegisteredObject() {
-        return (T) TypeTransformer.ObjectToType.accept(rawData);
+        return Utils.convertToMcSafeType(rawData);
     }
 
     public void setRegistryData(Object data) {

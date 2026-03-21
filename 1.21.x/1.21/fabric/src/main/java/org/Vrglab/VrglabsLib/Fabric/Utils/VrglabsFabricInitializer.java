@@ -3,7 +3,6 @@ package org.vrglab.vrglabsLib.Fabric.Utils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
 import org.vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchCommandPacket;
 import org.vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
@@ -34,15 +32,11 @@ import org.vrglab.reflections.util.FilterBuilder;
 import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
-import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
 import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
-import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Supplier;
@@ -87,141 +81,85 @@ public class VrglabsFabricInitializer {
         setOreGenHelperStatics();
         setNetworkStatics();
 
-        TypeTransformer.ObjectToType = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return args[0];
-            }
+        ICallBack ItemRegistryCallBack = args -> {
+            ResourceLocation id = Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class));
+
+            Item.Properties properties = Utils.typeCasterSupplierfied(args[2], Item.Properties.class).get();
+            Item itemToRegister = Utils.typeCasterIClampedCallBackafied(args[1], Item.class).accept(properties);
+
+            return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
         };
 
-        ICallBack ItemRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                ResourceLocation id = CreateNewId(modid, args[0].toString());
-
-                Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, id);
-                Item itemToRegister = ((IClampedCallBack<Item>) args[1]).accept(properties);
-
-                return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
-            }
-        };
-        ICallBack BlockRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                ResourceLocation id = CreateNewId(modid, args[0].toString());
-                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>) args[1]).
-                        accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>) args[3]).get(), RegistryTypes.BLOCK, id))));
-                Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings( ((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.BLOCK, id)));
-                return b;
-            }
-        };
-        ICallBack ItemlessBlockRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                ResourceLocation id = CreateNewId(modid, args[0].toString());
-                return Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>) args[1]).
-                        accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>) args[2]).get(), RegistryTypes.BLOCK, id))));
-            }
-        };
-        ICallBack POIRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), (int) args[1], (int) args[2], (Block) args[3]);
-            }
+        ICallBack BlockRegistryCallBack = args -> {
+            ResourceLocation id = Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class));
+            Block b = Registry.register(BuiltInRegistries.BLOCK, id, Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class).
+                    accept(Utils.typeCasterSupplierfied(args[3], BlockBehaviour.Properties.class).get()));
+            Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.typeCasterSupplierfied(args[2], Item.Properties.class).get()));
+            return b;
         };
 
-        ICallBack ProfesionRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-               /* return Registry.register(Registries.VILLAGER_PROFESSION, CreateNewId(modid, args[0].toString()),
-                        VillagerProfessionBuilder.create().id(CreateNewId(modid, args[0].toString()))
-                                .workstation(RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), CreateNewId(modid, args[1].toString())))
-                                .harvestableItems(args[2] == null ? null: (Item[])args[2]).secondaryJobSites(args[3] == null ? null: (Block[])args[3])
-                                .workSound((args.length >= 5 && args[4] == null) ? null : (SoundEvent)args[4]).build());*/
-                return null;
-            }
+        ICallBack ItemlessBlockRegistryCallBack = args -> {
+            ResourceLocation id = Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class));
+            return Registry.register(BuiltInRegistries.BLOCK, id, Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class).
+                    accept(Utils.typeCasterSupplierfied(args[2], BlockBehaviour.Properties.class).get()));
         };
 
-        ICallBack TradeRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-               /* TradeOfferHelper.registerVillagerOffers((VillagerProfession) args[1] ,(int)args[2],
-                        factories -> {
-                            for (TradeOffer data: (TradeOffer[])args[3]) {
-                                factories.add(((entity, random) -> data));
-                            }
-                        });*/
-                return null;
-            }
+        ICallBack POIRegistryCallBack = args -> PointOfInterestHelper.register(Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class)), (int) args[1], (int) args[2], (Block) args[3]);
+
+        ICallBack ProfesionRegistryCallBack = args -> {
+           /* return Registry.register(Registries.VILLAGER_PROFESSION, CreateNewId(modid, Utils.typeCaster(args[0], String.class)),
+                    VillagerProfessionBuilder.create().id(CreateNewId(modid, Utils.typeCaster(args[0], String.class)))
+                            .workstation(RegistryKey.of(Registries.POINT_OF_INTEREST_TYPE.getKey(), CreateNewId(modid, args[1].toString())))
+                            .harvestableItems(args[2] == null ? null: (Item[])args[2]).secondaryJobSites(args[3] == null ? null: (Block[])args[3])
+                            .workSound((args.length >= 5 && args[4] == null) ? null : (SoundEvent)args[4]).build());*/
+            return null;
         };
 
-        ICallBack OreGenRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-               /* RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, CreateNewId(modid, args[0].toString()));
-                Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, r, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
-                return r;*/
-                return null;
-            }
+        ICallBack TradeRegistryCallBack = args -> {
+           /* TradeOfferHelper.registerVillagerOffers((VillagerProfession) args[1] ,(int)args[2],
+                    factories -> {
+                        for (TradeOffer data: (TradeOffer[])args[3]) {
+                            factories.add(((entity, random) -> data));
+                        }
+                    });*/
+            return null;
         };
 
-        ICallBack PlacedFeatCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-               /* RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, CreateNewId(modid, args[0].toString()));
-                Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid, r, args[1], args[2]);
-                return r;*/
-                return  null;
-            }
+        ICallBack OreGenRegistryCallBack = args -> {
+           /* RegistryKey r = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, CreateNewId(modid, Utils.typeCaster(args[0], String.class)));
+            Bootstrapper.SimpleRegister(BootstrapType.CONFIGUERED_FEAT_ORES, modid, r, new ConfiguredFeature((Feature) args[1], new OreFeatureConfig(((Supplier<List<OreFeatureConfig.Target>>) args[2]).get(),  (int)args[3])));
+            return r;*/
+            return null;
         };
 
-        ICallBack BiomeModCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                /*VinillaBiomeTypes types = (VinillaBiomeTypes) args[1];
-                switch (types){
-                    case END -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
-                    case NETHER -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
-                    case OVERWORLD -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
-                }*/
-                return null;
-            }
+        ICallBack PlacedFeatCallBack = args -> {
+           /* RegistryKey r = RegistryKey.of(RegistryKeys.PLACED_FEATURE, CreateNewId(modid, Utils.typeCaster(args[0], String.class)));
+            Bootstrapper.SimpleRegister(BootstrapType.PLACED_FEAT, modid, r, args[1], args[2]);
+            return r;*/
+            return  null;
         };
 
-        ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                FabricBlockEntityTypeBuilder.Factory factory = new FabricBlockEntityTypeBuilder.Factory() {
-                    @Override
-                    public BlockEntity create(BlockPos blockPos, BlockState blockState) {
-                        return ((IBlockEntityLoaderFunction<BlockEntity>) args[1]).create(blockPos, blockState);
-                    }
-                };
-                return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block) args[2]).build());
-            }
+        ICallBack BiomeModCallBack = args -> {
+            /*VinillaBiomeTypes types = (VinillaBiomeTypes) args[1];
+            switch (types){
+                case END -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
+                case NETHER -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
+                case OVERWORLD -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), (GenerationStep.Feature) args[2], (RegistryKey<PlacedFeature>) args[3]);
+            }*/
+            return null;
+        };
+
+        ICallBack BlockEntityTypeRegistryCallBack = args -> {
+            FabricBlockEntityTypeBuilder.Factory factory = (blockPos, blockState) -> ((IBlockEntityLoaderFunction<BlockEntity>) args[1]).create(blockPos, blockState);
+            return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class)), FabricBlockEntityTypeBuilder.create(factory, (Block) args[2]).build());
         };
 
 
-        ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), (RecipeSerializer) args[1]);
-            }
-        };
+        ICallBack RecipeSerializerRegistryCallBack = args -> Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class)), Utils.typeCaster(args[1], RecipeSerializer.class));
 
-        ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.RECIPE_TYPE, CreateNewId(modid, args[0].toString()), (RecipeType) args[1]);
-            }
-        };
+        ICallBack RecipeTypeRegistryCallBack = args -> Registry.register(BuiltInRegistries.RECIPE_TYPE, Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class)), Utils.typeCaster(args[1], RecipeType.class));
 
-        ICallBack ItemGroupRegistryCallBack = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), ((Supplier<CreativeModeTab>) args[1]).get());
-            }
-        };
+        ICallBack ItemGroupRegistryCallBack = args -> Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Utils.CreateNewId(modid, Utils.typeCaster(args[0], String.class)), ((Supplier<CreativeModeTab>) args[1]).get());
 
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ItemGroupRegistryCallBack, RegistryTypes.CREATIVE_MODE_TAB, modid);
         org.vrglab.vrglabsLib.api.registries.Registry.initRegistry(ItemRegistryCallBack, RegistryTypes.ITEM, modid);
@@ -239,50 +177,37 @@ public class VrglabsFabricInitializer {
     }
 
     public static void CreateClient(String modid) {
-        Bootstrapper.initBootstrapper(new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+        Bootstrapper.initBootstrapper(args -> {
+            AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
 
-                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>) tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+            AzArmorRendererRegistry.register(Utils.typeCasterSupplierfied(tranformed_obj.GetAzureRenderer(), AzArmorRenderer.class), tranformed_obj.asItem());
 
-                return null;
-            }
+            return null;
         }, BootstrapType.AZURE_ARMOR.getTypeId(),  modid);
 
 
-        Bootstrapper.initBootstrapper(new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
-                AzItemRendererRegistry.register((Supplier<AzItemRenderer>) tranformed_obj.GetAzureRenderer(), tranformed_obj);
-                return null;
-            }
+        Bootstrapper.initBootstrapper(args -> {
+            AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
+            AzItemRendererRegistry.register(Utils.typeCasterSupplierfied(tranformed_obj.GetAzureRenderer(), AzItemRenderer.class), tranformed_obj);
+            return null;
         }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
 
 
-        Bootstrapper.initBootstrapper(new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                Class clazz = (Class) args[1];
+        Bootstrapper.initBootstrapper(args -> {
+            Class<?> clazz = (Class<?>) args[1];
 
-                if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-                    AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
-                    AzIdentityRegistry.register(tranformed_obj);
-                }
-
-                if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
-                    AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
-                    AzIdentityRegistry.register(tranformed_obj);
-                }
-
-                return null;
+            if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
+                AzIdentityRegistry.register(tranformed_obj);
             }
-        }, BootstrapType.AZURE_ID.getTypeId(),  modid);
-    }
 
-    public static ResourceLocation CreateNewId(String modid, String pathId ){
-        return ResourceLocation.fromNamespaceAndPath(modid, pathId);
+            if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
+                AzIdentityRegistry.register(tranformed_obj);
+            }
+
+            return null;
+        }, BootstrapType.AZURE_ID.getTypeId(),  modid);
     }
 
    /* public static void configureBootstrapped(RegistryWrapper.WrapperLookup Wrapper, FabricDynamicRegistryProvider.Entries entries, RegistryKey... keys) {
@@ -427,36 +352,26 @@ public class VrglabsFabricInitializer {
     }
 
     private static void createAutoRegistry() {
-        AutoRegistryLoader.collectAnnotatedFieldsForMod = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                Reflections reflections = new Reflections(
-                        new ConfigurationBuilder().
-                                forPackage(args[0].toString()).
-                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
-                                setScanners(Scanners.FieldsAnnotated));
-                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>) args[1]);
-            }
+        AutoRegistryLoader.collectAnnotatedFieldsForMod = args -> {
+            Reflections reflections = new Reflections(
+                    new ConfigurationBuilder().
+                            forPackage(Utils.typeCaster(args[0], String.class)).
+                            filterInputsBy(new FilterBuilder().includePackage(Utils.typeCaster(args[0], String.class))).
+                            setScanners(Scanners.FieldsAnnotated));
+            return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>) args[1]);
         };
 
-        AutoRegistryLoader.collectAnnotatedTypesForMod = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                Reflections reflections = new Reflections(
-                        new ConfigurationBuilder().
-                                forPackage(args[0].toString()).
-                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
-                                setScanners(Scanners.TypesAnnotated));
-                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>) args[1]);
-            }
+        AutoRegistryLoader.collectAnnotatedTypesForMod = args -> {
+            Reflections reflections = new Reflections(
+                    new ConfigurationBuilder().
+                            forPackage(Utils.typeCaster(args[0], String.class)).
+                            filterInputsBy(new FilterBuilder().includePackage(Utils.typeCaster(args[0], String.class))).
+                            setScanners(Scanners.TypesAnnotated));
+            return reflections.getTypesAnnotatedWith((Class<? extends Annotation>) args[1]);
         };
 
-        AutoRegistryLoader.entityTypeBlockSelector = new ICallBack() {
-
-            @Override
-            public Object accept(Object... args) {
-                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block) ((org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity) args[0]).getArgs().get("block")).getRegisteredObject();
-            }
-        };
+        AutoRegistryLoader.entityTypeBlockSelector = args -> Utils.typeCaster(
+                Utils.typeCaster(args[0], org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity.class).getArgs().get("block"),
+                org.vrglab.vrglabsLib.api.autoRegistry.World.Block.class).getRegisteredObject();
     }
 }

@@ -39,9 +39,7 @@ public class Registry {
         UnregisteredData(UUID registryType, Object... args) {
             this.registryType = registryType;
             this.args = new ArrayList<>();
-            for (Object argdata: args) {
-                this.args.add(argdata);
-            }
+            Collections.addAll(this.args, args);
         }
 
         public List<Object> args;
@@ -68,14 +66,14 @@ public class Registry {
         if (OPEN_REGISTRIES.containsKey(modid)) {
             OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
         } else {
-            OPEN_REGISTRIES.put(modid, new HashMap());
+            OPEN_REGISTRIES.put(modid, new HashMap<>());
             OPEN_REGISTRIES.get(modid).put(currentRegistryTypes, registry);
         }
-        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && READY_TO_LOAD_REGISTRIES.get(modid).size() > 0) {
-            Constants.LOG.warn("Registry " +currentRegistryTypes + " for " +  modid + " has unresolved cached object's for registering, Registering objects now ");
+        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && !READY_TO_LOAD_REGISTRIES.get(modid).isEmpty()) {
+            Constants.LOG.warn("Registry {} for {} has unresolved cached object's for registering, Registering objects now", currentRegistryTypes, modid);
             for (UnregisteredData data: READY_TO_LOAD_REGISTRIES.get(modid)) {
                 if (!data.resolved && data.registryType == currentRegistryTypes) {
-                    Constants.LOG.info("Registring " + currentRegistryTypes + "  " +  data.args.toArray()[0] + " for " + modid);
+                    Constants.LOG.info("Registering " + currentRegistryTypes + "  " +  data.args.toArray()[0] + " for " + modid);
                     data.obj = registry.accept(data.args.toArray());
                     data.resolved = true;
                 }
@@ -122,7 +120,7 @@ public class Registry {
      * @since 1.1.0
      */
     public static void ForgeEventResolver(Object eventData, ICallBack resolver, UUID resolveTypeOf, String modid){
-        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && READY_TO_LOAD_REGISTRIES.get(modid).size() > 0) {
+        if (READY_TO_LOAD_REGISTRIES.containsKey(modid) && !READY_TO_LOAD_REGISTRIES.get(modid).isEmpty()) {
             for (UnregisteredData data: READY_TO_LOAD_REGISTRIES.get(modid)) {
                 if (!data.resolved && data.registryType == resolveTypeOf) {
                     data.obj = resolver.accept(data.args.toArray(), eventData);
@@ -374,10 +372,10 @@ public class Registry {
      */
     public static Object SimpleRegister(UUID type, String modId, Object... args){
         if (OPEN_REGISTRIES.containsKey(modId) && OPEN_REGISTRIES.get(modId).containsKey(type)) {
-            Constants.LOG.info("Registry of type" + type + " is registering " +  args[0] + " for " + modId);
+            Constants.LOG.info("Registry {} registering {} for {}", type, args[0], modId);
             return OPEN_REGISTRIES.get(modId).get(type).accept(args);
         } else {
-            Constants.LOG.error("Registry "+ type + " is not yet initialized caching object " +  args[0] + " in mod " + modId + " for later registration");
+            Constants.LOG.error("Registry {} is not yet initialized, caching object {} in {} for later registration", type, args[0], modId);
             UnregisteredData data = new UnregisteredData(type, args);
             if (!READY_TO_LOAD_REGISTRIES.containsKey(modId)) {
                 READY_TO_LOAD_REGISTRIES.put(modId, new HashSet<>());

@@ -6,8 +6,7 @@ import org.vrglab.vrglabsLib.platform.Services;
 public class VrglabsInitializer {
 
 
-    public static void Initialize(String ModId, String modPackage, Object... args)
-    {
+    public static void Initialize(String ModId, String modPackage, Object... args) {
         Constants.LOG.info("Initializing VrglabsLib");
 
         Constants.LOG.info("Initializing Autoregistration");
@@ -17,13 +16,11 @@ public class VrglabsInitializer {
         InitializeAzureLib(args);
     }
 
-    public static void InitializeAutoregistration(String ModId, String modPackage)
-    {
+    public static void InitializeAutoregistration(String ModId, String modPackage) {
         AutoRegistryLoader.LoadAllInPackage(modPackage, ModId);
     }
 
-    public static void InitializeAzureLib(Object... args)
-    {
+    public static void InitializeAzureLib(Object... args) {
         Services.LIB_INITIALIZER.LoadAzureLib(args);
     }
 }

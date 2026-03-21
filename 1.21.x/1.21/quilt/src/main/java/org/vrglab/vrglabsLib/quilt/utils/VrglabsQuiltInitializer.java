@@ -88,20 +88,13 @@ public class VrglabsQuiltInitializer {
         setOreGenHelperStatics();
         setNetworkStatics();
 
-        TypeTransformer.ObjectToType = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return args[0];
-            }
-        };
-
         ICallBack ItemRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
 
-                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.ITEM, id);
-                Item itemToRegister = ((IClampedCallBack<Item>)args[1]).accept(properties);
+                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, id);
+                Item itemToRegister = ((IClampedCallBack<Item>) args[1]).accept(properties);
 
                 return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
             }
@@ -241,7 +234,7 @@ public class VrglabsQuiltInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
 
                 AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
 
@@ -253,7 +246,7 @@ public class VrglabsQuiltInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
                 AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
                 return null;
             }
@@ -266,12 +259,12 @@ public class VrglabsQuiltInitializer {
                 Class clazz = (Class)args[1];
 
                 if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-                    AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 
                 if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
-                    AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 

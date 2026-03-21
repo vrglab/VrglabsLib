@@ -41,7 +41,6 @@ import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.helpers.OreGenFeatCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.PlacementModifierCreationHelper;
-import org.vrglab.vrglabsLib.api.helpers.TypeTransformer;
 import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
 import org.vrglab.vrglabsLib.api.registries.Registry;
 import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
@@ -65,10 +64,11 @@ public class VrglabsNeoForgeInitializer {
 
 
     public static ICallBack TradeRegistryEventCallback = new ICallBack() {
+        @SuppressWarnings("checkstyle:EmptyBlock")
         @Override
         public Object accept(Object... args) {
             Object[] arg = (Object[]) args[0];
-            if(((VillagerTradesEvent)args[1]).getType() == ((DeferredHolder<VillagerProfession, ?>)arg[1]).get()) {
+            if (((VillagerTradesEvent) args[1]).getType() == ((DeferredHolder<VillagerProfession, ?>) arg[1]).get()) {
                /* Int2ObjectMap<List<TradeOffers.Factory>> trades = ((VillagerTradesEvent)args[1]).getTrades();
                 for (TradeOffer data: (TradeOffer[])arg[3]) {
                     trades.get((int)arg[2]).add((trader, rand) -> data);
@@ -84,14 +84,6 @@ public class VrglabsNeoForgeInitializer {
     public static void Create(IEventBus eventBus, String modid) {
         createAutoRegistry(modid);
 
-
-
-        TypeTransformer.ObjectToType = new ICallBack() {
-            @Override
-            public Object accept(Object... args) {
-                return ((DeferredHolder)args[0]).get();
-            }
-        };
         createEnergyCallBacks();
         createOreGenStatics();
         createNetworkStatics();
@@ -124,7 +116,7 @@ public class VrglabsNeoForgeInitializer {
             @Override
             public Object accept(Object... args) {
 
-                Supplier< ? extends Item> supplier = new Supplier<Item>() {
+                Supplier<? extends Item> supplier = new Supplier<Item>() {
 
                     /**
                      * Gets a result.
@@ -133,8 +125,8 @@ public class VrglabsNeoForgeInitializer {
                      */
                     @Override
                     public Item get() {
-                        Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.ITEM, ResourceLocation.parse(args[0].toString()));
-                        return ((IClampedCallBack<Item>)args[1]).accept(properties);
+                        Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, ResourceLocation.parse(args[0].toString()));
+                        return ((IClampedCallBack<Item>) args[1]).accept(properties);
                     }
                 };
 
@@ -257,7 +249,7 @@ public class VrglabsNeoForgeInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
 
                 AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
 
@@ -269,7 +261,7 @@ public class VrglabsNeoForgeInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
                 AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
                 return null;
             }
@@ -282,12 +274,12 @@ public class VrglabsNeoForgeInitializer {
                 Class clazz = (Class)args[1];
 
                 if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-                    AzureArmor tranformed_obj = (AzureArmor) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 
                 if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
-                    AzureItem tranformed_obj = (AzureItem) TypeTransformer.ObjectToType.accept(args[0]);
+                    AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 
