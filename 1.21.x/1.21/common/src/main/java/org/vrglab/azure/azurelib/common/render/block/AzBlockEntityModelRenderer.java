@@ -121,8 +121,9 @@ public class AzBlockEntityModelRenderer<T extends BlockEntity> extends AzModelRe
                 context.packedOverlay(),
                 context.renderColor()
             )
-        )
+        ) {
             super.renderCubesOfBone(context, bone);
+        }
 
         if (!isReRender) {
             layerRenderer.applyRenderLayersForBone(context, bone);
@@ -139,11 +140,13 @@ public class AzBlockEntityModelRenderer<T extends BlockEntity> extends AzModelRe
     protected Direction getFacing(T block) {
         BlockState blockState = block.getBlockState();
 
-        if (blockState.hasProperty(HorizontalDirectionalBlock.FACING))
+        if (blockState.hasProperty(HorizontalDirectionalBlock.FACING)) {
             return blockState.getValue(HorizontalDirectionalBlock.FACING);
+        }
 
-        if (blockState.hasProperty(DirectionalBlock.FACING))
+        if (blockState.hasProperty(DirectionalBlock.FACING)) {
             return blockState.getValue(DirectionalBlock.FACING);
+        }
 
         return Direction.NORTH;
     }

@@ -17,9 +17,9 @@ import org.vrglab.azure.azurelib.common.config.format.IConfigFormat;
 
 public class LongArrayValue extends ConfigValue<long[]> implements ArrayValue {
 
-    private boolean fixedSize;
+    private boolean _fixedSize;
 
-    private IntegerValue.Range range;
+    private IntegerValue.Range _range;
 
     public LongArrayValue(ValueData<long[]> valueData) {
         super(valueData);
@@ -27,21 +27,21 @@ public class LongArrayValue extends ConfigValue<long[]> implements ArrayValue {
 
     @Override
     public boolean isFixedSize() {
-        return fixedSize;
+        return _fixedSize;
     }
 
     @Override
     protected void readFieldData(Field field) {
-        this.fixedSize = field.getAnnotation(Configurable.FixedSize.class) != null;
+        this._fixedSize = field.getAnnotation(Configurable.FixedSize.class) != null;
         Configurable.Range intRange = field.getAnnotation(Configurable.Range.class);
-        this.range = intRange != null
+        this._range = intRange != null
             ? IntegerValue.Range.newBoundedRange(intRange.min(), intRange.max())
             : IntegerValue.Range.unboundedLong();
     }
 
     @Override
     protected long[] getCorrectedValue(long[] in) {
-        if (this.fixedSize) {
+        if (this._fixedSize) {
             long[] defaultArray = this.valueData.getDefaultValue();
             if (in.length != defaultArray.length) {
                 ConfigUtils.logArraySizeCorrectedMessage(
@@ -52,12 +52,13 @@ public class LongArrayValue extends ConfigValue<long[]> implements ArrayValue {
                 in = defaultArray;
             }
         }
-        if (this.range == null)
+        if (this._range == null) {
             return in;
+        }
         for (int i = 0; i < in.length; i++) {
             long value = in[i];
-            if (!this.range.isWithin(value)) {
-                long corrected = this.range.clamp(value);
+            if (!this._range.isWithin(value)) {
+                long corrected = this._range.clamp(value);
                 ConfigUtils.logCorrectedMessage(this.getId() + "[" + i + "]", value, corrected);
                 in[i] = corrected;
             }
@@ -91,7 +92,7 @@ public class LongArrayValue extends ConfigValue<long[]> implements ArrayValue {
     }
 
     public IntegerValue.Range getRange() {
-        return range;
+        return _range;
     }
 
     public static final class Adapter extends TypeAdapter {

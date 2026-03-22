@@ -23,9 +23,9 @@ import org.vrglab.azure.azurelib.common.render.armor.compat.ShoulderSurfingCompa
 
 public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack> {
 
-    private final AzArmorModel<?> armorModel;
+    private final AzArmorModel<?> _armorModel;
 
-    private final AzArmorRenderer armorRenderer;
+    private final AzArmorRenderer _armorRenderer;
 
     protected Matrix4f entityRenderTranslations = new Matrix4f();
 
@@ -33,8 +33,8 @@ public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack>
 
     public AzArmorRendererPipeline(AzRendererConfig<UUID, ItemStack> config, AzArmorRenderer armorRenderer) {
         super(config);
-        this.armorModel = new AzArmorModel<>(this);
-        this.armorRenderer = armorRenderer;
+        this._armorModel = new AzArmorModel<>(this);
+        this._armorRenderer = armorRenderer;
     }
 
     @Override
@@ -74,20 +74,21 @@ public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack>
         var scaleHeight = config.scaleHeight(context.animatable());
 
         var animatable = armorContext.animatable();
-        var model = armorRenderer.provider().provideBakedModel(context().currentEntity(), animatable);
+        var model = _armorRenderer.provider().provideBakedModel(context().currentEntity(), animatable);
         var poseStack = armorContext.poseStack();
 
         this.entityRenderTranslations = new Matrix4f(poseStack.last().pose());
 
-        armorModel.applyBaseModel(baseModel);
+        _armorModel.applyBaseModel(baseModel);
         boneContext.grabRelevantBones(model, config.boneProvider());
         boneContext.applyBaseTransformations(baseModel);
         scaleModelForBaby(armorContext, isReRender);
         scaleModelForRender(context, scaleWidth, scaleHeight, isReRender);
         scaleBoneWithModelPart(armorContext, boneContext, isReRender);
 
-        if (AzAnimatorAccessor.getOrNull(context().currentEntity()) == null)
+        if (AzAnimatorAccessor.getOrNull(context().currentEntity()) == null) {
             boneContext.applyBoneVisibilityBySlot(currentSlot);
+        }
 
         var alphaValue = config.alpha(context.animatable());
         if (ShoulderSurfingCompat.isLoaded() && ShoulderSurfingCompat.getAlpha(armorContext.currentEntity()) < 1) {
@@ -134,24 +135,31 @@ public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack>
 
         switch (currentSlot) {
             case HEAD -> {
-                if (boneContext.head != null)
+                if (boneContext.head != null) {
                     setBoneScale(boneContext.head, baseModel.head);
+                }
             }
             case CHEST -> {
-                if (boneContext.head != null)
+                if (boneContext.head != null) {
                     setBoneScale(boneContext.leftArm, baseModel.leftArm);
-                if (boneContext.rightArm != null)
+                }
+                if (boneContext.rightArm != null) {
                     setBoneScale(boneContext.rightArm, baseModel.rightArm);
-                if (boneContext.body != null)
+                }
+                if (boneContext.body != null) {
                     setBoneScale(boneContext.body, baseModel.body);
-                if (boneContext.waist != null)
+                }
+                if (boneContext.waist != null) {
                     setBoneScale(boneContext.waist, baseModel.body);
+                }
             }
             case FEET, LEGS -> {
-                if (boneContext.leftLeg != null)
+                if (boneContext.leftLeg != null) {
                     setBoneScale(boneContext.leftLeg, baseModel.leftLeg);
-                if (boneContext.rightLeg != null)
+                }
+                if (boneContext.rightLeg != null) {
                     setBoneScale(boneContext.rightLeg, baseModel.rightLeg);
+                }
             }
         }
     }
@@ -208,7 +216,7 @@ public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack>
     }
 
     public AzArmorModel armorModel() {
-        return armorModel;
+        return _armorModel;
     }
 
     @Override
@@ -222,6 +230,6 @@ public class AzArmorRendererPipeline extends AzRendererPipeline<UUID, ItemStack>
     }
 
     public AzArmorRenderer renderer() {
-        return armorRenderer;
+        return _armorRenderer;
     }
 }

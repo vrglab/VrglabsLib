@@ -16,14 +16,14 @@ public class AzureBlocksRegistry {
     public static final Supplier<TickingLightBlock> TICKING_LIGHT_BLOCK = registerBlock(
         "lightblock",
         () -> new TickingLightBlock(
-            BlockBehaviour.Properties.of()
-                .sound(SoundType.CANDLE)
-                .lightLevel(TickingLightBlock.LIGHT_EMISSION)
-                .pushReaction(PushReaction.DESTROY)
-                .noLootTable()
-                .noCollission()
-                .replaceable()
-                .noOcclusion()
+            BlockBehaviour.Properties.of().
+                    sound(SoundType.CANDLE).
+                    lightLevel(TickingLightBlock.LIGHT_EMISSION).
+                    pushReaction(PushReaction.DESTROY).
+                    noLootTable().
+                    noCollission().
+                    replaceable().
+                    noOcclusion()
         )
     );
 

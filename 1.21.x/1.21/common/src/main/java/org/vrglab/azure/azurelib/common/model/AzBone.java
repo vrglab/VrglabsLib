@@ -18,306 +18,306 @@ import org.vrglab.azure.azurelib.common.cache.object.GeoCube;
  */
 public class AzBone {
 
-    private final AzBoneMetadata metadata;
+    private final AzBoneMetadata _metadata;
 
-    private final List<AzBone> children = new ObjectArrayList<>();
+    private final List<AzBone> _children = new ObjectArrayList<>();
 
-    private final List<GeoCube> cubes = new ObjectArrayList<>();
+    private final List<GeoCube> _cubes = new ObjectArrayList<>();
 
-    private final Matrix4f modelSpaceMatrix = new Matrix4f();
+    private final Matrix4f _modelSpaceMatrix = new Matrix4f();
 
-    private final Matrix4f localSpaceMatrix = new Matrix4f();
+    private final Matrix4f _localSpaceMatrix = new Matrix4f();
 
-    private final Matrix4f worldSpaceMatrix = new Matrix4f();
+    private final Matrix4f _worldSpaceMatrix = new Matrix4f();
 
-    private AzBoneSnapshot initialSnapshot;
+    private AzBoneSnapshot _initialSnapshot;
 
-    private boolean hidden;
+    private boolean _hidden;
 
-    private boolean childrenHidden = false;
+    private boolean _childrenHidden = false;
 
-    private final Vector3f pivot;
+    private final Vector3f _pivot;
 
-    private final Vector3f position;
+    private final Vector3f _position;
 
-    private final Vector3f rotation;
+    private final Vector3f _rotation;
 
-    private final Vector3f scale;
+    private final Vector3f _scale;
 
-    private boolean positionChanged = false;
+    private boolean _positionChanged = false;
 
-    private boolean rotationChanged = false;
+    private boolean _rotationChanged = false;
 
-    private boolean scaleChanged = false;
+    private boolean _scaleChanged = false;
 
-    private Matrix3f worldSpaceNormal = new Matrix3f();
+    private Matrix3f _worldSpaceNormal = new Matrix3f();
 
-    private boolean trackingMatrices;
+    private boolean _trackingMatrices;
 
     public AzBone(AzBoneMetadata metadata) {
-        this.metadata = metadata;
-        this.trackingMatrices = false;
-        this.hidden = metadata.dontRender() == Boolean.TRUE;
+        this._metadata = metadata;
+        this._trackingMatrices = false;
+        this._hidden = metadata.dontRender() == Boolean.TRUE;
 
-        this.position = new Vector3f();
-        this.pivot = new Vector3f();
-        this.rotation = new Vector3f();
-        this.scale = new Vector3f(1, 1, 1);
+        this._position = new Vector3f();
+        this._pivot = new Vector3f();
+        this._rotation = new Vector3f();
+        this._scale = new Vector3f(1, 1, 1);
 
-        this.worldSpaceNormal.identity();
-        this.worldSpaceMatrix.identity();
-        this.localSpaceMatrix.identity();
-        this.modelSpaceMatrix.identity();
+        this._worldSpaceNormal.identity();
+        this._worldSpaceMatrix.identity();
+        this._localSpaceMatrix.identity();
+        this._modelSpaceMatrix.identity();
     }
 
     public String getName() {
-        return metadata.name();
+        return _metadata.name();
     }
 
     public AzBone getParent() {
-        return metadata.parent();
+        return _metadata.parent();
     }
 
     public float getRotX() {
-        return this.rotation.x;
+        return this._rotation.x;
     }
 
     public void setRotX(float value) {
-        this.rotation.x = value;
+        this._rotation.x = value;
 
         markRotationAsChanged();
     }
 
     public float getRotY() {
-        return this.rotation.y;
+        return this._rotation.y;
     }
 
     public void setRotY(float value) {
-        this.rotation.y = value;
+        this._rotation.y = value;
 
         markRotationAsChanged();
     }
 
     public float getRotZ() {
-        return this.rotation.z;
+        return this._rotation.z;
     }
 
     public void setRotZ(float value) {
-        this.rotation.z = value;
+        this._rotation.z = value;
 
         markRotationAsChanged();
     }
 
     public float getPosX() {
-        return this.position.x;
+        return this._position.x;
     }
 
     public void setPosX(float value) {
-        this.position.x = value;
+        this._position.x = value;
 
         markPositionAsChanged();
     }
 
     public float getPosY() {
-        return this.position.y;
+        return this._position.y;
     }
 
     public void setPosY(float value) {
-        this.position.y = value;
+        this._position.y = value;
 
         markPositionAsChanged();
     }
 
     public float getPosZ() {
-        return this.position.z;
+        return this._position.z;
     }
 
     public void setPosZ(float value) {
-        this.position.z = value;
+        this._position.z = value;
 
         markPositionAsChanged();
     }
 
     public float getScaleX() {
-        return this.scale.x;
+        return this._scale.x;
     }
 
     public void setScaleX(float value) {
-        this.scale.x = value;
+        this._scale.x = value;
 
         markScaleAsChanged();
     }
 
     public float getScaleY() {
-        return this.scale.y;
+        return this._scale.y;
     }
 
     public void setScaleY(float value) {
-        this.scale.y = value;
+        this._scale.y = value;
 
         markScaleAsChanged();
     }
 
     public float getScaleZ() {
-        return this.scale.z;
+        return this._scale.z;
     }
 
     public void setScaleZ(float value) {
-        this.scale.z = value;
+        this._scale.z = value;
 
         markScaleAsChanged();
     }
 
     public boolean isHidden() {
-        return this.hidden;
+        return this._hidden;
     }
 
     public void setHidden(boolean hidden) {
-        this.hidden = hidden;
+        this._hidden = hidden;
 
         setChildrenHidden(hidden);
     }
 
     public void setChildrenHidden(boolean hideChildren) {
-        this.childrenHidden = hideChildren;
+        this._childrenHidden = hideChildren;
     }
 
     public float getPivotX() {
-        return this.pivot.x;
+        return this._pivot.x;
     }
 
     public void setPivotX(float value) {
-        this.pivot.x = value;
+        this._pivot.x = value;
     }
 
     public float getPivotY() {
-        return this.pivot.y;
+        return this._pivot.y;
     }
 
     public void setPivotY(float value) {
-        this.pivot.y = value;
+        this._pivot.y = value;
     }
 
     public float getPivotZ() {
-        return this.pivot.z;
+        return this._pivot.z;
     }
 
     public void setPivotZ(float value) {
-        this.pivot.z = value;
+        this._pivot.z = value;
     }
 
     public boolean isHidingChildren() {
-        return this.childrenHidden;
+        return this._childrenHidden;
     }
 
     public void markScaleAsChanged() {
-        this.scaleChanged = true;
+        this._scaleChanged = true;
     }
 
     public void markRotationAsChanged() {
-        this.rotationChanged = true;
+        this._rotationChanged = true;
     }
 
     public void markPositionAsChanged() {
-        this.positionChanged = true;
+        this._positionChanged = true;
     }
 
     public boolean hasScaleChanged() {
-        return this.scaleChanged;
+        return this._scaleChanged;
     }
 
     public boolean hasRotationChanged() {
-        return this.rotationChanged;
+        return this._rotationChanged;
     }
 
     public boolean hasPositionChanged() {
-        return this.positionChanged;
+        return this._positionChanged;
     }
 
     public void resetStateChanges() {
-        this.scaleChanged = false;
-        this.rotationChanged = false;
-        this.positionChanged = false;
+        this._scaleChanged = false;
+        this._rotationChanged = false;
+        this._positionChanged = false;
     }
 
     public AzBoneSnapshot getInitialAzSnapshot() {
-        return this.initialSnapshot;
+        return this._initialSnapshot;
     }
 
     public List<AzBone> getChildBones() {
-        return this.children;
+        return this._children;
     }
 
     public void saveInitialSnapshot() {
-        if (this.initialSnapshot == null) {
-            this.initialSnapshot = new AzBoneSnapshot(this);
+        if (this._initialSnapshot == null) {
+            this._initialSnapshot = new AzBoneSnapshot(this);
         }
     }
 
     public Boolean getMirror() {
-        return metadata.mirror();
+        return _metadata.mirror();
     }
 
     public Double getInflate() {
-        return metadata.inflate();
+        return _metadata.inflate();
     }
 
     public Boolean shouldNeverRender() {
-        return metadata.dontRender();
+        return _metadata.dontRender();
     }
 
     public Boolean getReset() {
-        return metadata.reset();
+        return _metadata.reset();
     }
 
     public List<GeoCube> getCubes() {
-        return this.cubes;
+        return this._cubes;
     }
 
     public boolean isTrackingMatrices() {
-        return trackingMatrices;
+        return _trackingMatrices;
     }
 
     public void setTrackingMatrices(boolean trackingMatrices) {
-        this.trackingMatrices = trackingMatrices;
+        this._trackingMatrices = trackingMatrices;
     }
 
     public Matrix4f getModelSpaceMatrix() {
         setTrackingMatrices(true);
 
-        return this.modelSpaceMatrix;
+        return this._modelSpaceMatrix;
     }
 
     public void setModelSpaceMatrix(Matrix4f matrix) {
-        this.modelSpaceMatrix.set(matrix);
+        this._modelSpaceMatrix.set(matrix);
     }
 
     public Matrix4f getLocalSpaceMatrix() {
         setTrackingMatrices(true);
 
-        return this.localSpaceMatrix;
+        return this._localSpaceMatrix;
     }
 
     public void setLocalSpaceMatrix(Matrix4f matrix) {
-        this.localSpaceMatrix.set(matrix);
+        this._localSpaceMatrix.set(matrix);
     }
 
     public Matrix4f getWorldSpaceMatrix() {
         setTrackingMatrices(true);
 
-        return this.worldSpaceMatrix;
+        return this._worldSpaceMatrix;
     }
 
     public void setWorldSpaceMatrix(Matrix4f matrix) {
-        this.worldSpaceMatrix.set(matrix);
+        this._worldSpaceMatrix.set(matrix);
     }
 
     public Matrix3f getWorldSpaceNormal() {
-        return worldSpaceNormal;
+        return _worldSpaceNormal;
     }
 
     public void setWorldSpaceNormal(Matrix3f matrix) {
-        this.worldSpaceNormal = matrix;
+        this._worldSpaceNormal = matrix;
     }
 
     /**
@@ -340,9 +340,9 @@ public class AzBone {
 
     public void setModelPosition(Vector3d pos) {
         // Doesn't work on bones with parent transforms
-        AzBone parent = metadata.parent();
-        Matrix4f matrix = (parent == null ? new Matrix4f().identity() : new Matrix4f(parent.getModelSpaceMatrix()))
-            .invert();
+        AzBone parent = _metadata.parent();
+        Matrix4f matrix = (parent == null ? new Matrix4f().identity() : new Matrix4f(parent.getModelSpaceMatrix())).
+                invert();
         Vector4f vec = matrix.transform(
             new Vector4f(-(float) pos.x / 16f, (float) pos.y / 16f, (float) pos.z / 16f, 1)
         );
@@ -411,29 +411,29 @@ public class AzBone {
     }
 
     public AzBone deepCopy() {
-        AzBone copy = new AzBone(this.metadata);
+        AzBone copy = new AzBone(this._metadata);
 
         // Copy basic flags
-        copy.hidden = this.hidden;
-        copy.childrenHidden = this.childrenHidden;
+        copy._hidden = this._hidden;
+        copy._childrenHidden = this._childrenHidden;
 
         // Copy transforms
-        copy.pivot.set(this.pivot);
-        copy.position.set(this.position);
-        copy.rotation.set(this.rotation);
-        copy.scale.set(this.scale);
+        copy._pivot.set(this._pivot);
+        copy._position.set(this._position);
+        copy._rotation.set(this._rotation);
+        copy._scale.set(this._scale);
 
         // matrices
-        copy.modelSpaceMatrix.set(this.modelSpaceMatrix);
-        copy.localSpaceMatrix.set(this.localSpaceMatrix);
-        copy.worldSpaceMatrix.set(this.worldSpaceMatrix);
+        copy._modelSpaceMatrix.set(this._modelSpaceMatrix);
+        copy._localSpaceMatrix.set(this._localSpaceMatrix);
+        copy._worldSpaceMatrix.set(this._worldSpaceMatrix);
 
         // Copy cubes (geometry)
-        copy.cubes.addAll(this.cubes); // shallow copy OK if cubes are immutable
+        copy._cubes.addAll(this._cubes); // shallow copy OK if cubes are immutable
 
         // Copy children recursively
-        for (AzBone child : this.children) {
-            copy.children.add(child.deepCopy());
+        for (AzBone child : this._children) {
+            copy._children.add(child.deepCopy());
         }
 
         // Finally, initialize a snapshot for this bone
@@ -443,11 +443,13 @@ public class AzBone {
     }
 
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (obj == null || getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
 
         return hashCode() == obj.hashCode();
     }

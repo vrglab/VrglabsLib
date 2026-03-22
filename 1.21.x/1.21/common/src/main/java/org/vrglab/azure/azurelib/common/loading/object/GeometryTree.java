@@ -48,8 +48,9 @@ public record GeometryTree(
             if (index == 0) {
                 index = bones.size() - 1;
 
-                if (index == -1)
+                if (index == -1) {
                     break;
+                }
             } else {
                 index--;
             }
@@ -60,13 +61,15 @@ public record GeometryTree(
 
     private static BoneStructure findBoneStructureInTree(Map<String, BoneStructure> bones, String boneName) {
         for (BoneStructure entry : bones.values()) {
-            if (boneName.equals(entry.self().name()))
+            if (boneName.equals(entry.self().name())) {
                 return entry;
+            }
 
             BoneStructure subStructure = findBoneStructureInTree(entry.children(), boneName);
 
-            if (subStructure != null)
+            if (subStructure != null) {
                 return subStructure;
+            }
         }
 
         return null;

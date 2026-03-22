@@ -79,8 +79,8 @@ public class ReflectionUtilsPredicates {
             if (input != null) {
                 Annotation[] inputAnnotations = input.getAnnotations();
                 if (inputAnnotations.length == annotations.length) {
-                    return IntStream.range(0, inputAnnotations.length)
-                            .allMatch(i -> ReflectionUtilsPredicates.areAnnotationMembersMatching(inputAnnotations[i], annotations[i]));
+                    return IntStream.range(0, inputAnnotations.length).
+                            allMatch(i -> ReflectionUtilsPredicates.areAnnotationMembersMatching(inputAnnotations[i], annotations[i]));
                 }
             }
             return true;

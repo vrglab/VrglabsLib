@@ -13,168 +13,170 @@ import org.joml.Vector3f;
  */
 public class AzBoneSnapshot {
 
-    private final AzBone bone;
+    private final AzBone _bone;
 
-    private final Vector3f offsetPosition;
+    private final Vector3f _offsetPosition;
 
-    private final Vector3f rotation;
+    private final Vector3f _rotation;
 
-    private final Vector3f scale;
+    private final Vector3f _scale;
 
-    private double lastResetRotationTick = 0;
+    private double _lastResetRotationTick = 0;
 
-    private double lastResetPositionTick = 0;
+    private double _lastResetPositionTick = 0;
 
-    private double lastResetScaleTick = 0;
+    private double _lastResetScaleTick = 0;
 
-    private boolean rotAnimInProgress = true;
+    private boolean _rotAnimInProgress = true;
 
-    private boolean posAnimInProgress = true;
+    private boolean _posAnimInProgress = true;
 
-    private boolean scaleAnimInProgress = true;
+    private boolean _scaleAnimInProgress = true;
 
     public AzBoneSnapshot(AzBone bone) {
-        this.bone = bone;
-        this.offsetPosition = new Vector3f(bone.getPosX(), bone.getPosY(), bone.getPosZ());
-        this.rotation = new Vector3f(bone.getRotX(), bone.getRotY(), bone.getRotZ());
-        this.scale = new Vector3f(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
+        this._bone = bone;
+        this._offsetPosition = new Vector3f(bone.getPosX(), bone.getPosY(), bone.getPosZ());
+        this._rotation = new Vector3f(bone.getRotX(), bone.getRotY(), bone.getRotZ());
+        this._scale = new Vector3f(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
     }
 
     public static AzBoneSnapshot copy(AzBoneSnapshot snapshot) {
-        AzBoneSnapshot newSnapshot = new AzBoneSnapshot(snapshot.bone);
+        AzBoneSnapshot newSnapshot = new AzBoneSnapshot(snapshot._bone);
 
-        newSnapshot.offsetPosition.set(snapshot.offsetPosition);
-        newSnapshot.rotation.set(snapshot.rotation);
-        newSnapshot.scale.set(snapshot.scale);
+        newSnapshot._offsetPosition.set(snapshot._offsetPosition);
+        newSnapshot._rotation.set(snapshot._rotation);
+        newSnapshot._scale.set(snapshot._scale);
 
         return newSnapshot;
     }
 
     public AzBone getBone() {
-        return this.bone;
+        return this._bone;
     }
 
     public float getScaleX() {
-        return this.scale.x;
+        return this._scale.x;
     }
 
     public float getScaleY() {
-        return this.scale.y;
+        return this._scale.y;
     }
 
     public float getScaleZ() {
-        return this.scale.z;
+        return this._scale.z;
     }
 
     public float getOffsetX() {
-        return this.offsetPosition.x;
+        return this._offsetPosition.x;
     }
 
     public float getOffsetY() {
-        return this.offsetPosition.y;
+        return this._offsetPosition.y;
     }
 
     public float getOffsetZ() {
-        return this.offsetPosition.z;
+        return this._offsetPosition.z;
     }
 
     public float getRotX() {
-        return this.rotation.x;
+        return this._rotation.x;
     }
 
     public float getRotY() {
-        return this.rotation.y;
+        return this._rotation.y;
     }
 
     public float getRotZ() {
-        return this.rotation.z;
+        return this._rotation.z;
     }
 
     public double getLastResetRotationTick() {
-        return this.lastResetRotationTick;
+        return this._lastResetRotationTick;
     }
 
     public double getLastResetPositionTick() {
-        return this.lastResetPositionTick;
+        return this._lastResetPositionTick;
     }
 
     public double getLastResetScaleTick() {
-        return this.lastResetScaleTick;
+        return this._lastResetScaleTick;
     }
 
     public boolean isRotAnimInProgress() {
-        return this.rotAnimInProgress;
+        return this._rotAnimInProgress;
     }
 
     public boolean isPosAnimInProgress() {
-        return this.posAnimInProgress;
+        return this._posAnimInProgress;
     }
 
     public boolean isScaleAnimInProgress() {
-        return this.scaleAnimInProgress;
+        return this._scaleAnimInProgress;
     }
 
     /**
      * Update the scale state of this snapshot
      */
     public void updateScale(float scaleX, float scaleY, float scaleZ) {
-        scale.set(scaleX, scaleY, scaleZ);
+        _scale.set(scaleX, scaleY, scaleZ);
     }
 
     /**
      * Update the offset state of this snapshot
      */
     public void updateOffset(float offsetX, float offsetY, float offsetZ) {
-        offsetPosition.set(offsetX, offsetY, offsetZ);
+        _offsetPosition.set(offsetX, offsetY, offsetZ);
     }
 
     /**
      * Update the rotation state of this snapshot
      */
     public void updateRotation(float rotX, float rotY, float rotZ) {
-        rotation.set(rotX, rotY, rotZ);
+        _rotation.set(rotX, rotY, rotZ);
     }
 
     public void startPosAnim() {
-        this.posAnimInProgress = true;
+        this._posAnimInProgress = true;
     }
 
     public void stopPosAnim(double tick) {
-        this.posAnimInProgress = false;
-        this.lastResetPositionTick = tick;
+        this._posAnimInProgress = false;
+        this._lastResetPositionTick = tick;
     }
 
     public void startRotAnim() {
-        this.rotAnimInProgress = true;
+        this._rotAnimInProgress = true;
     }
 
     public void stopRotAnim(double tick) {
-        this.rotAnimInProgress = false;
-        this.lastResetRotationTick = tick;
+        this._rotAnimInProgress = false;
+        this._lastResetRotationTick = tick;
     }
 
     public void startScaleAnim() {
-        this.scaleAnimInProgress = true;
+        this._scaleAnimInProgress = true;
     }
 
     public void stopScaleAnim(double tick) {
-        this.scaleAnimInProgress = false;
-        this.lastResetScaleTick = tick;
+        this._scaleAnimInProgress = false;
+        this._lastResetScaleTick = tick;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (obj == null || getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
 
         return hashCode() == obj.hashCode();
     }
 
     @Override
     public int hashCode() {
-        return this.bone.getName().hashCode();
+        return this._bone.getName().hashCode();
     }
 }

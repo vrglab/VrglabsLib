@@ -16,17 +16,17 @@ import org.vrglab.azure.azurelib.common.render.AzRendererConfig;
 
 public class AzArmorRenderer {
 
-    private Entity entity;
+    private Entity _entity;
 
-    private final AzProvider<UUID, ItemStack> provider;
+    private final AzProvider<UUID, ItemStack> _provider;
 
-    private final AzArmorRendererPipeline rendererPipeline;
+    private final AzArmorRendererPipeline _rendererPipeline;
 
     @Nullable
-    private AzItemAnimator reusedAzItemAnimator;
+    private AzItemAnimator _reusedAzItemAnimator;
 
     public AzArmorRenderer(AzArmorRendererConfig config) {
-        this.provider = new AzProvider<>(
+        this._provider = new AzProvider<>(
             config::createAnimator,
             config::modelLocation,
             animator -> {
@@ -36,7 +36,7 @@ public class AzArmorRenderer {
                 return animator.get(AzureLib.AZ_ID.get());
             }
         );
-        this.rendererPipeline = createPipeline(config);
+        this._rendererPipeline = createPipeline(config);
     }
 
     protected AzArmorRendererPipeline createPipeline(AzRendererConfig config) {
@@ -64,28 +64,28 @@ public class AzArmorRenderer {
             return;
         }
 
-        this.entity = entity;
+        this._entity = entity;
 
-        rendererPipeline.context().prepare(entity, stack, slot, baseModel);
+        _rendererPipeline.context().prepare(entity, stack, slot, baseModel);
 
-        var model = provider.provideBakedModel(entity, stack);
+        var model = _provider.provideBakedModel(entity, stack);
         prepareAnimator(stack, model);
     }
 
     private void prepareAnimator(ItemStack stack, AzBakedModel model) {
         // Point the renderer's current animator reference to the cached entity animator before rendering.
-        reusedAzItemAnimator = (AzItemAnimator) provider.provideAnimator(entity, stack);
+        _reusedAzItemAnimator = (AzItemAnimator) _provider.provideAnimator(_entity, stack);
     }
 
     public @Nullable AzItemAnimator animator() {
-        return reusedAzItemAnimator;
+        return _reusedAzItemAnimator;
     }
 
     public AzProvider<UUID, ItemStack> provider() {
-        return provider;
+        return _provider;
     }
 
     public AzArmorRendererPipeline rendererPipeline() {
-        return rendererPipeline;
+        return _rendererPipeline;
     }
 }

@@ -56,8 +56,8 @@ public class AzEntityLeashRenderUtil {
         int entityBlockLight = azEntityRenderer.getBlockLightLevel((T) mob, entityEyePos);
         int holderBlockLight = leashHolder.isOnFire()
             ? 15
-            : leashHolder.level()
-                .getBrightness(
+            : leashHolder.level().
+                getBrightness(
                     LightLayer.BLOCK,
                     holderEyePos
                 );
@@ -148,12 +148,12 @@ public class AzEntityLeashRenderUtil {
             : yDif - yDif * (1.0f - piecePosPercent) * (1.0f - piecePosPercent);
         var z = zDif * piecePosPercent;
 
-        buffer.addVertex(positionMatrix, x - xOffset, y + yOffset, z + zOffset)
-            .setColor(red, green, blue, 1)
-            .setLight(packedLight);
-        buffer.addVertex(positionMatrix, x + xOffset, y + width - yOffset, z - zOffset)
-            .setColor(red, green, blue, 1)
-            .setLight(packedLight);
+        buffer.addVertex(positionMatrix, x - xOffset, y + yOffset, z + zOffset).
+                setColor(red, green, blue, 1).
+                setLight(packedLight);
+        buffer.addVertex(positionMatrix, x + xOffset, y + width - yOffset, z - zOffset).
+                setColor(red, green, blue, 1).
+                setLight(packedLight);
     }
 
     private AzEntityLeashRenderUtil() {

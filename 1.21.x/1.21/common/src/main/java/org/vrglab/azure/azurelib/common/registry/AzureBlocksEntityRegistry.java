@@ -14,8 +14,8 @@ public class AzureBlocksEntityRegistry {
     public static final Supplier<BlockEntityType<TickingLightEntity>> TICKING_LIGHT_ENTITY =
         registerBlockEntity(
             "lightblock",
-            () -> BlockEntityType.Builder.of(TickingLightEntity::new, AzureBlocksRegistry.TICKING_LIGHT_BLOCK.get())
-                .build(null)
+            () -> BlockEntityType.Builder.of(TickingLightEntity::new, AzureBlocksRegistry.TICKING_LIGHT_BLOCK.get()).
+                    build(null)
         );
 
     /**

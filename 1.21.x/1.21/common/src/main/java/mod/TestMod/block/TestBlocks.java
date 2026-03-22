@@ -11,14 +11,14 @@ public class TestBlocks {
 
     @RegisterBlock(Name = "ruby_block")
     public static Block RUBY_BLOCK = new Block<>(TestModeEntry.MODID,
-            ()->new Item.Properties(),
-            (prop)->new net.minecraft.world.level.block.Block(prop),
-            ()-> BlockBehaviour.Properties.of());
+            Item.Properties::new,
+            net.minecraft.world.level.block.Block::new,
+            BlockBehaviour.Properties::of);
 
     @RegisterItemlessBlock(Name = "testitemlessblock")
     public static Block TEST_ITEMLESS_BLOCK = new Block<>(TestModeEntry.MODID,
-            (prop)->new net.minecraft.world.level.block.Block(prop),
-            ()-> BlockBehaviour.Properties.of());
+            net.minecraft.world.level.block.Block::new,
+            BlockBehaviour.Properties::of);
 
     public static void Init(){
 

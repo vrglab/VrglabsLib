@@ -4,6 +4,11 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*[\\/](mixins?|javassist|azurelib)[\\/].*"/>
+    </module>
+
     <property name="severity" value="error"/>
 
     <module name="BeforeExecutionExclusionFileFilter">

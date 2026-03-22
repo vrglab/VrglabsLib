@@ -20,23 +20,23 @@ import org.vrglab.azure.azurelib.core.object.Color;
 
 public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UUID, ItemStack> {
 
-    private final AzArmorBoneContext boneContext;
+    private final AzArmorBoneContext _boneContext;
 
-    private HumanoidModel<?> baseModel;
+    private HumanoidModel<?> _baseModel;
 
-    private EquipmentSlot currentSlot;
+    private EquipmentSlot _currentSlot;
 
-    private ItemStack currentStack;
+    private ItemStack _currentStack;
 
-    private boolean translucent = false;
+    private boolean _translucent = false;
 
     public AzArmorRendererPipelineContext(AzRendererPipeline<UUID, ItemStack> rendererPipeline) {
         super(rendererPipeline);
-        this.baseModel = null;
-        this.boneContext = new AzArmorBoneContext();
+        this._baseModel = null;
+        this._boneContext = new AzArmorBoneContext();
         this.currentEntity = null;
-        this.currentSlot = null;
-        this.currentStack = null;
+        this._currentSlot = null;
+        this._currentStack = null;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UU
         RenderType defaultRenderType,
         float alpha
     ) {
-        return translucent
+        return _translucent
             ? RenderType.itemEntityTranslucentCull(texture)
             : defaultRenderType;
     }
@@ -59,11 +59,11 @@ public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UU
         @Nullable EquipmentSlot slot,
         @Nullable HumanoidModel<?> baseModel
     ) {
-        this.baseModel = baseModel;
+        this._baseModel = baseModel;
         this.currentEntity = entity;
-        this.currentStack = stack;
+        this._currentStack = stack;
         this.animatable = stack;
-        this.currentSlot = slot;
+        this._currentSlot = slot;
     }
 
     /**
@@ -74,7 +74,7 @@ public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UU
      *                    an opaque effect.
      */
     public void setTranslucent(boolean translucent) {
-        this.translucent = translucent;
+        this._translucent = translucent;
     }
 
     /**
@@ -84,19 +84,19 @@ public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UU
      */
     @Override
     public Color getRenderColor(ItemStack animatable, float partialTick, int packedLight) {
-        return this.currentStack.is(ItemTags.DYEABLE)
+        return this._currentStack.is(ItemTags.DYEABLE)
             ? Color.ofOpaque(
-                DyedItemColor.getOrDefault(this.currentStack, -6265536)
+                DyedItemColor.getOrDefault(this._currentStack, -6265536)
             )
             : Color.WHITE;
     }
 
     public HumanoidModel<?> baseModel() {
-        return baseModel;
+        return _baseModel;
     }
 
     public AzArmorBoneContext boneContext() {
-        return boneContext;
+        return _boneContext;
     }
 
     public Entity currentEntity() {
@@ -104,10 +104,10 @@ public class AzArmorRendererPipelineContext extends AzRendererPipelineContext<UU
     }
 
     public EquipmentSlot currentSlot() {
-        return currentSlot;
+        return _currentSlot;
     }
 
     public ItemStack currentStack() {
-        return currentStack;
+        return _currentStack;
     }
 }

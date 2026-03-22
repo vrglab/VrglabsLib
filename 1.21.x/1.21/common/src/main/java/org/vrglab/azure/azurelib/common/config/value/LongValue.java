@@ -21,8 +21,9 @@ public class LongValue extends IntegerValue<Long> {
 
     @Override
     public Long getCorrectedValue(Long in) {
-        if (this.range == null)
+        if (this.range == null) {
             return in;
+        }
         if (!this.range.isWithin(in)) {
             long corrected = this.range.clamp(in);
             ConfigUtils.logCorrectedMessage(this.getId(), in, corrected);

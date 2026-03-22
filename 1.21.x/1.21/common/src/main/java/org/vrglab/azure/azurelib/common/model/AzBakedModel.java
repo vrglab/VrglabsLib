@@ -12,13 +12,13 @@ public class AzBakedModel {
 
     private static AzBakedModel defaultModel = new AzBakedModel(List.of());
 
-    private final Map<String, AzBone> bonesByName;
+    private final Map<String, AzBone> _bonesByName;
 
-    private final List<AzBone> topLevelBones;
+    private final List<AzBone> _topLevelBones;
 
     public AzBakedModel(List<AzBone> topLevelBones) {
-        this.topLevelBones = Collections.unmodifiableList(topLevelBones);
-        this.bonesByName = Collections.unmodifiableMap(mapBonesByName(topLevelBones));
+        this._topLevelBones = Collections.unmodifiableList(topLevelBones);
+        this._bonesByName = Collections.unmodifiableMap(mapBonesByName(topLevelBones));
     }
 
     private Map<String, AzBone> mapBonesByName(List<AzBone> bones) {
@@ -36,15 +36,15 @@ public class AzBakedModel {
     }
 
     public AzBakedModel deepCopy() {
-        List<AzBone> copied = new ArrayList<>(this.topLevelBones.size());
-        for (AzBone bone : this.topLevelBones) {
+        List<AzBone> copied = new ArrayList<>(this._topLevelBones.size());
+        for (AzBone bone : this._topLevelBones) {
             copied.add(bone.deepCopy()); // each child deepCopy() calls saveInitialSnapshot()
         }
         return new AzBakedModel(copied); // this will rebuild bonesByName internally
     }
 
     public @Nullable AzBone getBoneOrNull(String name) {
-        return bonesByName.get(name);
+        return _bonesByName.get(name);
     }
 
     public Optional<AzBone> getBone(String name) {
@@ -52,11 +52,11 @@ public class AzBakedModel {
     }
 
     public Map<String, AzBone> getBonesByName() {
-        return bonesByName;
+        return _bonesByName;
     }
 
     public List<AzBone> getTopLevelBones() {
-        return topLevelBones;
+        return _topLevelBones;
     }
 
     public static AzBakedModel getDefault() {

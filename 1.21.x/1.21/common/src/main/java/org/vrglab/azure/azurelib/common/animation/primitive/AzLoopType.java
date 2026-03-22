@@ -15,7 +15,7 @@ import org.vrglab.azure.azurelib.common.animation.controller.AzAnimationControll
  *
  * @deprecated
  */
-@Deprecated(forRemoval = true)
+@Deprecated
 public interface AzLoopType {
 
     String name();

@@ -25,7 +25,7 @@ import org.vrglab.azure.azurelib.common.render.AzRendererPipelineContext;
  */
 public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeline<UUID, T> {
 
-    private final AzEntityRenderer<T> entityRenderer;
+    private final AzEntityRenderer<T> _entityRenderer;
 
     protected Matrix4f entityRenderTranslations = new Matrix4f();
 
@@ -33,7 +33,7 @@ public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeli
 
     public AzEntityRendererPipeline(AzEntityRendererConfig<T> config, AzEntityRenderer<T> entityRenderer) {
         super(config);
-        this.entityRenderer = entityRenderer;
+        this._entityRenderer = entityRenderer;
     }
 
     @Override
@@ -73,15 +73,15 @@ public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeli
         var poseStack = context.poseStack();
         this.entityRenderTranslations.set(poseStack.last().pose());
 
-        var config = entityRenderer.config();
+        var config = _entityRenderer.config();
         var scaleWidth = config.scaleWidth(context.animatable());
         var scaleHeight = config.scaleHeight(context.animatable());
 
         scaleModelForRender(context, scaleWidth, scaleHeight, isReRender);
         if (config.alpha(context.animatable()) < 1 || context.animatable().isInvisible()) {
             var setAlpha = context.animatable().isInvisible()
-                ? (context.animatable()
-                    .isInvisibleTo(
+                ? (context.animatable().
+                    isInvisibleTo(
                         Minecraft.getInstance().player
                     ) ? 0 : 0.38)
                 : config.alpha(context.animatable());
@@ -112,7 +112,7 @@ public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeli
         var partialTick = context.partialTick();
         var poseStack = context.poseStack();
 
-        entityRenderer.superRender(entity, 0, partialTick, poseStack, bufferSource, packedLight);
+        _entityRenderer.superRender(entity, 0, partialTick, poseStack, bufferSource, packedLight);
 
         if (!(entity instanceof Mob mob)) {
             return;
@@ -124,7 +124,7 @@ public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeli
             return;
         }
 
-        AzEntityLeashRenderUtil.renderLeash(entityRenderer, mob, partialTick, poseStack, bufferSource, leashHolder);
+        AzEntityLeashRenderUtil.renderLeash(_entityRenderer, mob, partialTick, poseStack, bufferSource, leashHolder);
     }
 
     @Override
@@ -133,6 +133,6 @@ public class AzEntityRendererPipeline<T extends Entity> extends AzRendererPipeli
     }
 
     public AzEntityRenderer<T> getRenderer() {
-        return entityRenderer;
+        return _entityRenderer;
     }
 }

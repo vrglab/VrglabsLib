@@ -18,13 +18,14 @@ import org.vrglab.azure.azurelib.common.network.packet.AzBlockEntityDispatchComm
 import org.vrglab.azure.azurelib.common.network.packet.AzEntityDispatchCommandPacket;
 import org.vrglab.azure.azurelib.common.network.packet.AzItemStackDispatchCommandPacket;
 import org.vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
+import org.vrglab.vrglabsLib.NeoForge.Utils.Utils;
 import org.vrglab.vrglabsLib.platform.services.ILibInitializer;
 
 public class LibInitializer implements ILibInitializer {
 
     @Override
-    public void LoadAzureLib(Object... Args) {
-        IEventBus modEventBus = (IEventBus)Args[0];
+    public void LoadAzureLib(Object... args) {
+        IEventBus modEventBus = Utils.typeCaster(args[0]);
         DATA_COMPONENTS_REGISTER.register(modEventBus);
         blockEntityTypeDeferredRegister.register(modEventBus);
         blockDeferredRegister.register(modEventBus);
@@ -47,8 +48,8 @@ public class LibInitializer implements ILibInitializer {
             AzureLib.MOD_ID
     );
 
-    public static final DeferredRegister.DataComponents DATA_COMPONENTS_REGISTER = DeferredRegister
-            .createDataComponents(
+    public static final DeferredRegister.DataComponents DATA_COMPONENTS_REGISTER = DeferredRegister.
+            createDataComponents(
                     AzureLib.MOD_ID
             );
 

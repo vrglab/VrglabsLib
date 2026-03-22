@@ -16,11 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
 
-    private final AzArmorRendererPipeline rendererPipeline;
+    private final AzArmorRendererPipeline _rendererPipeline;
 
     public AzArmorModel(AzArmorRendererPipeline rendererPipeline) {
         super(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
-        this.rendererPipeline = rendererPipeline;
+        this._rendererPipeline = rendererPipeline;
         this.young = false;
     }
 
@@ -33,7 +33,7 @@ public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
         int color
     ) {
         var mc = Minecraft.getInstance();
-        var context = rendererPipeline.context();
+        var context = _rendererPipeline.context();
         var currentEntity = context.currentEntity();
         var currentStack = context.currentStack();
 
@@ -43,8 +43,8 @@ public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
 
         MultiBufferSource bufferSource = leverRenderBuffer.bufferSource();
 
-        var shouldOutline = Minecraft.getInstance().levelRenderer.shouldShowEntityOutlines() && mc
-            .shouldEntityAppearGlowing(
+        var shouldOutline = Minecraft.getInstance().levelRenderer.shouldShowEntityOutlines() && mc.
+            shouldEntityAppearGlowing(
                 currentEntity
             );
 
@@ -52,7 +52,7 @@ public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
             bufferSource = leverRenderBuffer.outlineBufferSource();
         }
 
-        var config = rendererPipeline.config();
+        var config = _rendererPipeline.config();
         var animatable = context.animatable();
         var partialTick = mc.getTimer().getGameTimeDeltaTicks();
         var textureLocation = config.textureLocation(currentEntity, animatable);
@@ -66,8 +66,8 @@ public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
         );
         buffer = ItemRenderer.getArmorFoilBuffer(bufferSource, renderType, currentStack.hasFoil());
 
-        var model = rendererPipeline.renderer().provider().provideBakedModel(currentEntity, animatable);
-        rendererPipeline.render(poseStack, model, animatable, bufferSource, null, buffer, 0, partialTick, packedLight);
+        var model = _rendererPipeline.renderer().provider().provideBakedModel(currentEntity, animatable);
+        _rendererPipeline.render(poseStack, model, animatable, bufferSource, null, buffer, 0, partialTick, packedLight);
     }
 
     /**
@@ -84,7 +84,7 @@ public class AzArmorModel<E extends LivingEntity> extends HumanoidModel<E> {
     @Override
     public void setAllVisible(boolean pVisible) {
         super.setAllVisible(pVisible);
-        var boneContext = rendererPipeline.context().boneContext();
+        var boneContext = _rendererPipeline.context().boneContext();
         boneContext.setAllVisible(pVisible);
     }
 }

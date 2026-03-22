@@ -19,9 +19,9 @@ import org.vrglab.azure.azurelib.common.config.io.ConfigIO;
 
 public class StringValue extends ConfigValue<String> {
 
-    private Pattern pattern;
+    private Pattern _pattern;
 
-    private String descriptor;
+    private String _descriptor;
 
     public StringValue(ValueData<String> valueData) {
         super(valueData);
@@ -32,9 +32,9 @@ public class StringValue extends ConfigValue<String> {
         Configurable.StringPattern stringPattern = field.getAnnotation(Configurable.StringPattern.class);
         if (stringPattern != null) {
             String value = stringPattern.value();
-            this.descriptor = stringPattern.errorDescriptor().isEmpty() ? null : stringPattern.errorDescriptor();
+            this._descriptor = stringPattern.errorDescriptor().isEmpty() ? null : stringPattern.errorDescriptor();
             try {
-                this.pattern = Pattern.compile(value, stringPattern.flags());
+                this._pattern = Pattern.compile(value, stringPattern.flags());
             } catch (IllegalArgumentException e) {
                 AzureLib.LOGGER.error(
                     ConfigIO.MARKER,
@@ -48,15 +48,15 @@ public class StringValue extends ConfigValue<String> {
 
     @Override
     protected String getCorrectedValue(String in) {
-        if (this.pattern != null && (!this.pattern.matcher(in).matches())) {
+        if (this._pattern != null && (!this._pattern.matcher(in).matches())) {
             String defaultValue = this.valueData.getDefaultValue();
-            if (!this.pattern.matcher(defaultValue).matches()) {
+            if (!this._pattern.matcher(defaultValue).matches()) {
                 throw new IllegalArgumentException(
                     String.format(
                         "Invalid config default value '%s' for field '%s' - does not match required pattern \\%s\\",
                         defaultValue,
                         this.getId(),
-                        this.pattern.toString()
+                        this._pattern.toString()
                     )
                 );
             }
@@ -77,11 +77,11 @@ public class StringValue extends ConfigValue<String> {
     }
 
     public Pattern getPattern() {
-        return pattern;
+        return _pattern;
     }
 
     public String getErrorDescriptor() {
-        return descriptor;
+        return _descriptor;
     }
 
     public static final class Adapter extends TypeAdapter {

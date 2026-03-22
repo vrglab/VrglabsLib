@@ -89,8 +89,9 @@ public abstract class AzBakedModelFactory {
         if (!uvUnion.isBoxUV()) {
             FaceUV faceUV = uvUnion.faceUV().fromDirection(direction);
 
-            if (faceUV == null)
+            if (faceUV == null) {
                 return null;
+            }
 
             return GeoQuad.build(
                 vertices.verticesForQuad(direction, false, mirror || cube.mirror() == Boolean.TRUE),

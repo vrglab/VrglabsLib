@@ -89,8 +89,9 @@ public interface AzureTicker {
         for (var i = chunkPos.x - 1; i < chunkPos.x + 1; ++i) {
             for (var j = chunkPos.z - 1; j < chunkPos.z + 1; ++j) {
                 var chunkAccess = level.getChunkSource().getChunkNow(i, j);
-                if (chunkAccess != null && level.shouldTickBlocksAt(chunkAccess.getPos().toLong()))
+                if (chunkAccess != null && level.shouldTickBlocksAt(chunkAccess.getPos().toLong())) {
                     continue;
+                }
                 return false;
             }
         }

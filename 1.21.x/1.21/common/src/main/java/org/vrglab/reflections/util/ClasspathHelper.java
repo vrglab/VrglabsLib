@@ -117,8 +117,8 @@ public abstract class ClasspathHelper {
                     }
                 }
             } catch (IOException e) {
-                if (Reflections.log != null) {
-                    Reflections.log.error("error getting resources for " + resourceName, e);
+                if (Reflections.LOG != null) {
+                    Reflections.LOG.error("error getting resources for " + resourceName, e);
                 }
             }
         }
@@ -146,8 +146,8 @@ public abstract class ClasspathHelper {
                     return new URL(normalizedUrl);
                 }
             } catch (MalformedURLException e) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("Could not get URL", e);
+                if (Reflections.LOG != null) {
+                    Reflections.LOG.warn("Could not get URL", e);
                 }
             }
         }
@@ -216,8 +216,8 @@ public abstract class ClasspathHelper {
                 try {
                     urls.add(new File(path).toURI().toURL());
                 } catch (Exception e) {
-                    if (Reflections.log != null) {
-                        Reflections.log.warn("Could not get URL", e);
+                    if (Reflections.LOG != null) {
+                        Reflections.LOG.warn("Could not get URL", e);
                     }
                 }
             }
@@ -260,8 +260,9 @@ public abstract class ClasspathHelper {
             final String path = servletContext.getRealPath("/WEB-INF/classes");
             if (path != null) {
                 final File file = new File(path);
-                if (file.exists())
+                if (file.exists()) {
                     return file.toURL();
+                }
             } else {
                 return servletContext.getResource("/WEB-INF/classes");
             }

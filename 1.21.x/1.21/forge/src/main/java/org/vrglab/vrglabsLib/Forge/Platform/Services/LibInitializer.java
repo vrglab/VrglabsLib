@@ -13,13 +13,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.vrglab.vrglabsLib.Forge.Utils.Utils;
 import org.vrglab.vrglabsLib.platform.services.ILibInitializer;
 
 public class LibInitializer implements ILibInitializer {
 
     @Override
-    public void LoadAzureLib(Object... Args) {
-        IEventBus modEventBus = (IEventBus)Args[0];
+    public void LoadAzureLib(Object... args) {
+        IEventBus modEventBus = Utils.typeCaster(args[0]);
         DATA_COMPONENTS_REGISTER.register(modEventBus);
         blockEntityTypeDeferredRegister.register(modEventBus);
         blockDeferredRegister.register(modEventBus);

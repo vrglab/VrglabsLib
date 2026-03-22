@@ -82,8 +82,8 @@ public abstract class AzItemRenderer {
         var model = _provider.provideBakedModel(context.currentEntity(), stack);
         var partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaTicks();
         var textureLocation = _config.textureLocation(context.currentEntity(), stack);
-        var renderType = rendererPipeline.context()
-            .getDefaultRenderType(
+        var renderType = rendererPipeline.context().
+            getDefaultRenderType(
                 stack,
                 textureLocation,
                 source,

@@ -18,8 +18,7 @@ public class NeoForgeEntry {
     }
 
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
         VrglabsNeoForgeInitializer.InitializeCommonSetup(event, TestModeEntry.MODID);
     }
 }

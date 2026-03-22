@@ -91,27 +91,11 @@ public class ObjectImporter implements java.io.Serializable {
     /**
      * Constructs an object importer.
      *
-     * <p>Remote objects are imported from the web server that the given
-     * applet has been loaded from.
-     *
-     * @param applet    the applet loaded from the <code>Webserver</code>.
-     */
-    public ObjectImporter(@SuppressWarnings("deprecation") java.applet.Applet applet) {
-        @SuppressWarnings("deprecation")
-        URL codebase = applet.getCodeBase();
-        orgServername = servername = codebase.getHost();
-        orgPort = port = codebase.getPort();
-    }
-
-    /**
-     * Constructs an object importer.
-     *
      * <p>If you run a program with <code>javassist.tools.web.Viewer</code>,
      * you can construct an object importer as follows:
      *
      * <pre>
      * Viewer v = (Viewer)this.getClass().getClassLoader();
-     * ObjectImporter oi = new ObjectImporter(v.getServer(), v.getPort());
      * </pre>
      *
      * @see javassist.tools.web.Viewer

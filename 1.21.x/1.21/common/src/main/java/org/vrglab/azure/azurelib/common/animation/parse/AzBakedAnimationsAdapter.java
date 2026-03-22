@@ -251,8 +251,9 @@ public class AzBakedAnimationsAdapter implements JsonDeserializer<AzBakedAnimati
         );
         AzKeyframes keyframes = context.deserialize(animationObj, AzKeyframes.class);
 
-        if (length == -1)
+        if (length == -1) {
             length = calculateAnimationLength(boneAnimations);
+        }
 
         return new AzBakedAnimation(name, length, loopType, boneAnimations, keyframes);
     }

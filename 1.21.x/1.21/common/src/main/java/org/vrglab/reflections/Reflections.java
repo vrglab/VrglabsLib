@@ -112,7 +112,7 @@ import static org.vrglab.reflections.scanners.Scanners.*;
  * <i>For Javadoc, source code, and more information about Reflections Library, see http://github.com/ronmamo/reflections/</i>
  */
 public class Reflections implements NameHelper {
-    public final static Logger log = LoggerFactory.getLogger(Reflections.class);
+    public static final Logger LOG = LoggerFactory.getLogger(Reflections.class);
 
     protected final transient Configuration configuration;
     protected final Store store;
@@ -191,16 +191,16 @@ public class Reflections implements NameHelper {
                                     }
                                 }
                             } catch (Exception e) {
-                                if (log != null) {
-                                    log.debug("could not scan file {} with scanner {}", file.getRelativePath(), scanner.getClass().getSimpleName(), e);
+                                if (LOG != null) {
+                                    LOG.debug("could not scan file {} with scanner {}", file.getRelativePath(), scanner.getClass().getSimpleName(), e);
                                 }
                             }
                         }
                     }
                 }
             } catch (Throwable e) {
-                if (log != null) {
-                    log.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
+                if (LOG != null) {
+                    LOG.warn("could not create Vfs.Dir from url. ignoring the exception and continuing", e);
                 }
             }
         });
@@ -215,13 +215,13 @@ public class Reflections implements NameHelper {
                                 Map.Entry::getKey,
                                 HashMap::new,
                                 Collectors.mapping(Map.Entry::getValue, Collectors.toSet())))));
-        if (log != null) {
+        if (LOG != null) {
             int keys = 0, values = 0;
             for (Map<String, Set<String>> map : storeMap.values()) {
                 keys += map.size();
                 values += (int) map.values().stream().mapToLong(Set::size).sum();
             }
-            log.info(format("Reflections took %d ms to scan %d urls, producing %d keys and %d values", System.currentTimeMillis() - start, urls.size(), keys, values));
+            LOG.info(format("Reflections took %d ms to scan %d urls, producing %d keys and %d values", System.currentTimeMillis() - start, urls.size(), keys, values));
         }
         return storeMap;
     }

@@ -30,10 +30,10 @@ public class AzBakedModelCache extends AzResourceCache {
         return INSTANCE;
     }
 
-    private final Map<ResourceLocation, AzBakedModel> bakedModels;
+    private final Map<ResourceLocation, AzBakedModel> _bakedModels;
 
     private AzBakedModelCache() {
-        this.bakedModels = new Object2ObjectOpenHashMap<>();
+        this._bakedModels = new Object2ObjectOpenHashMap<>();
     }
 
     public CompletableFuture<Void> loadModels(Executor backgroundExecutor, ResourceManager resourceManager) {
@@ -43,19 +43,19 @@ public class AzBakedModelCache extends AzResourceCache {
             if (model == null) {
                 var defaultModelLocation = AzureLib.modResource("geo/default_model.geo.json");
                 model = FileLoader.loadModelFile(defaultModelLocation, resourceManager);
-                var defaultBaked = AzBakedModelFactoryRegistry
-                    .getForNamespace(resource.getNamespace())
-                    .constructGeoModel(GeometryTree.fromModel(model));
+                var defaultBaked = AzBakedModelFactoryRegistry.
+                        getForNamespace(resource.getNamespace()).
+                        constructGeoModel(GeometryTree.fromModel(model));
 
                 AzBakedModel.setDefault(defaultBaked);
             }
 
-            return AzBakedModelFactoryRegistry.getForNamespace(resource.getNamespace())
-                .constructGeoModel(GeometryTree.fromModel(model));
-        }, bakedModels::put);
+            return AzBakedModelFactoryRegistry.getForNamespace(resource.getNamespace()).
+                    constructGeoModel(GeometryTree.fromModel(model));
+        }, _bakedModels::put);
     }
 
     public @Nullable AzBakedModel getNullable(ResourceLocation resourceLocation) {
-        return bakedModels.get(resourceLocation);
+        return _bakedModels.get(resourceLocation);
     }
 }

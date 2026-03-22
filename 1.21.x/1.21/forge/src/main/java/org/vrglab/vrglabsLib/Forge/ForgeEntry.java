@@ -20,8 +20,7 @@ public class ForgeEntry {
         VrglabsForgeInitializer.Initialize(eventBus, TestModeEntry.MODID, "mod.TestMod");
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
         VrglabsForgeInitializer.InitializeCommonSetup(event, TestModeEntry.MODID);
     }
 }

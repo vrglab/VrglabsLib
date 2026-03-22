@@ -37,8 +37,6 @@ import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.helpers.OreGenFeatCreationHelper;
 import org.vrglab.vrglabsLib.api.helpers.PlacementModifierCreationHelper;
 import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
@@ -46,7 +44,6 @@ import org.vrglab.vrglabsLib.api.registries.Registry;
 import org.vrglab.vrglabsLib.api.registries.interfaces.BootstrapType;
 import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
-import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Supplier;
@@ -67,8 +64,9 @@ public class VrglabsNeoForgeInitializer {
         @SuppressWarnings("checkstyle:EmptyBlock")
         @Override
         public Object accept(Object... args) {
-            Object[] arg = (Object[]) args[0];
-            if (((VillagerTradesEvent) args[1]).getType() == ((DeferredHolder<VillagerProfession, ?>) arg[1]).get()) {
+            Object[] arg = Utils.typeCaster(args[0]);
+            if (Utils.typeCaster(args[1], VillagerTradesEvent.class).getType() == Utils.getDeferredHolderObject(arg[1], VillagerProfession.class ).get()) {
+                return null;
                /* Int2ObjectMap<List<TradeOffers.Factory>> trades = ((VillagerTradesEvent)args[1]).getTrades();
                 for (TradeOffer data: (TradeOffer[])arg[3]) {
                     trades.get((int)arg[2]).add((trader, rand) -> data);
@@ -125,8 +123,8 @@ public class VrglabsNeoForgeInitializer {
                      */
                     @Override
                     public Item get() {
-                        Item.Properties properties = Utils.MakeSafeSettings(((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, ResourceLocation.parse(args[0].toString()));
-                        return ((IClampedCallBack<Item>) args[1]).accept(properties);
+                        Item.Properties properties = Utils.typeCasterSupplierfied(args[2], Item.Properties.class).get();
+                        return Utils.typeCasterIClampedCallBackafied(args[1], Item.class).accept(properties);
                     }
                 };
 
@@ -140,10 +138,11 @@ public class VrglabsNeoForgeInitializer {
                 DeferredHolder<Block, ?> b = BLOCK_REGISTRY.register(args[0].toString(), new Supplier<Block>() {
                     @Override
                     public Block get() {
-                        return ((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(((Supplier<BlockBehaviour.Properties>)args[3]).get());
+                        return Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class).
+                                accept(Utils.typeCasterSupplierfied(args[3], BlockBehaviour.Properties.class).get());
                     }
                 });
-                ITEM_REGISTRY.register(args[0].toString(), ()->new BlockItem(b.get(), ((Supplier<Item.Properties>) args[2]).get()));
+                ITEM_REGISTRY.register(args[0].toString(), ()-> new BlockItem(b.get(), Utils.typeCasterSupplierfied(args[2], Item.Properties.class).get()));
                 return b;
             }
         };
@@ -154,7 +153,8 @@ public class VrglabsNeoForgeInitializer {
                 Supplier<Block> s = new Supplier<Block>() {
                     @Override
                     public Block get() {
-                        return ((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(((Supplier<BlockBehaviour.Properties>)args[2]).get());
+                        return Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class).
+                                accept(Utils.typeCasterSupplierfied(args[2], BlockBehaviour.Properties.class).get());
                     }
                 };
 
@@ -166,7 +166,7 @@ public class VrglabsNeoForgeInitializer {
         ICallBack POIcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return POI_REGISTRY.register(args[0].toString(), ()-> new PoiType(ImmutableSet.copyOf(((DeferredHolder<Block, ?>)args[3]).get().getStateDefinition().getPossibleStates()), 1,1));
+                return POI_REGISTRY.register(args[0].toString(), ()-> new PoiType(ImmutableSet.copyOf(Utils.getDeferredHolderObject(args[3], Block.class).get().getStateDefinition().getPossibleStates()), 1, 1));
             }
         };
 
@@ -175,7 +175,15 @@ public class VrglabsNeoForgeInitializer {
             @Override
             public Object accept(Object... args) {
                 TagKey<PoiType> poi =  TagKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(modid, args[1].toString()));
-                return PROFESSION_REGISTRY.register(args[0].toString(), ()->new VillagerProfession(modid+"."+args[0].toString(), entry->entry.is(poi), entry->entry.is(poi), args[2] == null ? ImmutableSet.of() : ImmutableSet.copyOf(((Item[])args[2])), args[3] == null ? ImmutableSet.of() : ImmutableSet.copyOf(((Block[])args[3])), args[4] == null ? null : (SoundEvent) args[4]));
+                return PROFESSION_REGISTRY.register(args[0].toString(), ()->
+                        new VillagerProfession(modid+"."+args[0].toString(),
+                            entry-> entry.is(poi),
+                            entry-> entry.is(poi),
+                            Utils.nullSafeGetter(args[2], ImmutableSet::of, ()-> ImmutableSet.copyOf(Utils.typeCaster(args[2], Item[].class))),
+                            Utils.nullSafeGetter(args[3], ImmutableSet::of, ()-> ImmutableSet.copyOf(Utils.typeCaster(args[3], Block[].class))),
+                            Utils.nullSafeGetter(args[4], null, ()-> Utils.typeCaster(args[4], SoundEvent.class))
+                        )
+                );
             }
         };
 
@@ -213,21 +221,21 @@ public class VrglabsNeoForgeInitializer {
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return RECIPE_SERIALIZER_REGISTRY.register(args[0].toString(), ()->(RecipeSerializer)args[1]);
+                return RECIPE_SERIALIZER_REGISTRY.register(args[0].toString(), ()-> Utils.typeCaster(args[1], RecipeSerializer.class));
             }
         };
 
         ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return RECIPE_TYPE_REGISTRY.register(args[0].toString(), ()->(RecipeType)args[1]);
+                return RECIPE_TYPE_REGISTRY.register(args[0].toString(), ()-> Utils.typeCaster(args[1], RecipeType.class));
             }
         };
 
         ICallBack CreativeModeTabcallback = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return ITEM_GROUP_REGISTRY.register(args[0].toString(), (Supplier<CreativeModeTab>)args[1]);
+                return ITEM_GROUP_REGISTRY.register(args[0].toString(), Utils.typeCasterSupplierfied(args[1], CreativeModeTab.class));
             }
         };
 
@@ -251,7 +259,7 @@ public class VrglabsNeoForgeInitializer {
             public Object accept(Object... args) {
                 AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
 
-                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+                AzArmorRendererRegistry.register(Utils.typeCasterSupplierfied(tranformed_obj.GetAzureRenderer(), AzArmorRenderer.class), tranformed_obj.asItem());
 
                 return null;
             }
@@ -262,7 +270,7 @@ public class VrglabsNeoForgeInitializer {
             @Override
             public Object accept(Object... args) {
                 AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
-                AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
+                AzItemRendererRegistry.register(Utils.typeCasterSupplierfied(tranformed_obj.GetAzureRenderer(), AzItemRenderer.class), tranformed_obj);
                 return null;
             }
         }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
@@ -271,14 +279,14 @@ public class VrglabsNeoForgeInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                Class clazz = (Class)args[1];
+                Class clazz = Utils.typeCaster(args[1]);
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
                     AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
                     AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
                     AzIdentityRegistry.register(tranformed_obj);
                 }
@@ -330,11 +338,11 @@ public class VrglabsNeoForgeInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.FieldsAnnotated));
-                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.FieldsAnnotated));
+                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -342,11 +350,11 @@ public class VrglabsNeoForgeInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.TypesAnnotated));
-                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.TypesAnnotated));
+                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -354,7 +362,12 @@ public class VrglabsNeoForgeInitializer {
 
             @Override
             public Object accept(Object... args) {
-                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block)((BlockEntity)args[0]).getArgs().get("block")).getRawData();
+                return Utils.typeCaster(
+                                    Utils.typeCaster(args[0], BlockEntity.class).
+                                    getArgs().
+                                    get("block"),
+                            org.vrglab.vrglabsLib.api.autoRegistry.World.Block.class).
+                        getRawData();
             }
         };
     }

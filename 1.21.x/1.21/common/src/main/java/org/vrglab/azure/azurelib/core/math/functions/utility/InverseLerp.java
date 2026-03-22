@@ -24,8 +24,9 @@ public class InverseLerp extends Function {
         double end = this.getArg(1);
         double value = this.getArg(2);
 
-        if (start == end)
+        if (start == end) {
             return 0;
+        }
 
         return (value - start) / (end - start);
     }

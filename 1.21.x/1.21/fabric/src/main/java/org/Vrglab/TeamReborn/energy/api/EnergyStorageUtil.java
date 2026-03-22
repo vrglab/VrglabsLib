@@ -22,7 +22,9 @@ public class EnergyStorageUtil {
      * @return The amount of energy that was successfully moved.
      */
     public static long move(@Nullable EnergyStorage from, @Nullable EnergyStorage to, long maxAmount, @Nullable TransactionContext transaction) {
-        if (from == null || to == null) return 0;
+        if (from == null || to == null) {
+            return 0;
+        }
 
         StoragePreconditions.notNegative(maxAmount);
 

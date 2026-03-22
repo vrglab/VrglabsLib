@@ -140,8 +140,9 @@ public class AzEntityModelRenderer<T extends Entity> extends AzModelRenderer<UUI
                 context.packedOverlay(),
                 context.renderColor()
             )
-        )
+        ) {
             super.renderCubesOfBone(context, bone);
+        }
 
         if (!isReRender) {
             layerRenderer.applyRenderLayersForBone(context, bone);
@@ -189,8 +190,9 @@ public class AzEntityModelRenderer<T extends Entity> extends AzModelRenderer<UUI
             float clampedHeadYaw = Mth.clamp(Mth.wrapDegrees(netHeadYaw), -85, 85);
             lerpBodyRot = lerpHeadRot - clampedHeadYaw;
 
-            if (clampedHeadYaw * clampedHeadYaw > 2500f)
+            if (clampedHeadYaw * clampedHeadYaw > 2500f) {
                 lerpBodyRot += clampedHeadYaw * 0.2f;
+            }
         }
         return lerpBodyRot;
     }

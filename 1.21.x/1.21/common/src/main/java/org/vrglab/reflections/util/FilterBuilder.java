@@ -133,7 +133,9 @@ public class FilterBuilder implements Predicate<String> {
 
     /** maps fqn to prefix pattern with a trailing dot, for example {@code packageNamePrefix("a.b") == "a\\.b\\..*} */
     private static String prefixPattern(String fqn) {
-        if (!fqn.endsWith(".")) fqn += ".";
+        if (!fqn.endsWith(".")) {
+            fqn += ".";
+        }
         return fqn.replace(".", "\\.").replace("$", "\\$") + ".*";
     }
 

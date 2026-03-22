@@ -21,7 +21,7 @@ import org.vrglab.azure.azurelib.common.render.AzRendererPipelineContext;
  */
 public class AzBlockEntityRendererPipeline<T extends BlockEntity> extends AzRendererPipeline<Long, T> {
 
-    private final AzBlockEntityRenderer<T> blockEntityRenderer;
+    private final AzBlockEntityRenderer<T> _blockEntityRenderer;
 
     protected Matrix4f entityRenderTranslations = new Matrix4f();
 
@@ -32,7 +32,7 @@ public class AzBlockEntityRendererPipeline<T extends BlockEntity> extends AzRend
         AzBlockEntityRenderer<T> blockEntityRenderer
     ) {
         super(config);
-        this.blockEntityRenderer = blockEntityRenderer;
+        this._blockEntityRenderer = blockEntityRenderer;
     }
 
     @Override
@@ -90,6 +90,6 @@ public class AzBlockEntityRendererPipeline<T extends BlockEntity> extends AzRend
     }
 
     public AzBlockEntityRenderer<T> getRenderer() {
-        return blockEntityRenderer;
+        return _blockEntityRenderer;
     }
 }

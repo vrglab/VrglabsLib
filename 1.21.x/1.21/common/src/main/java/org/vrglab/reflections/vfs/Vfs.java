@@ -76,8 +76,8 @@ public abstract class Vfs {
                     }
                 }
             } catch (Throwable e) {
-                if (Reflections.log != null) {
-                    Reflections.log.warn("could not create Dir using " + type + " from url " + url.toExternalForm() + ". skipping.", e);
+                if (Reflections.LOG != null) {
+                    Reflections.LOG.warn("could not create Dir using " + type + " from url " + url.toExternalForm() + ". skipping.", e);
                 }
             }
         }
@@ -114,8 +114,8 @@ public abstract class Vfs {
                     try {
                         return StreamSupport.stream(fromURL(url).getFiles().spliterator(), false);
                     } catch (Throwable e) {
-                        if (Reflections.log != null) {
-                            Reflections.log.error("could not findFiles for url. continuing. [" + url + "]", e);
+                        if (Reflections.LOG != null) {
+                            Reflections.LOG.error("could not findFiles for url. continuing. [" + url + "]", e);
                         }
                         return Stream.of();
                     }

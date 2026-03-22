@@ -23,7 +23,9 @@ public class AzArmorRendererRegistry {
     private record ArmorKey(
         Item item,
         int customModelData
-    ) {}
+    ) {
+
+    }
 
     /** Map storing instantiated renderers for a quick lookup. */
     private static final Map<ArmorKey, AzArmorRenderer> ITEM_TO_RENDERER = new HashMap<>();

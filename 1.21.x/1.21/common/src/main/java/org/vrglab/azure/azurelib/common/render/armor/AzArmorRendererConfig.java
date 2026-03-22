@@ -21,7 +21,7 @@ import org.vrglab.azure.azurelib.common.render.layer.AzRenderLayer;
 
 public class AzArmorRendererConfig extends AzRendererConfig<UUID, ItemStack> {
 
-    private final AzArmorBoneProvider boneProvider;
+    private final AzArmorBoneProvider _boneProvider;
 
     private AzArmorRendererConfig(
         Supplier<AzAnimator<UUID, ItemStack>> animatorProvider,
@@ -58,11 +58,11 @@ public class AzArmorRendererConfig extends AzRendererConfig<UUID, ItemStack> {
             boneTextureOverrideProvider,
             boneRenderTypeOverrideProvider
         );
-        this.boneProvider = boneProvider;
+        this._boneProvider = boneProvider;
     }
 
     public AzArmorBoneProvider boneProvider() {
-        return boneProvider;
+        return _boneProvider;
     }
 
     public static Builder builder(
@@ -81,14 +81,14 @@ public class AzArmorRendererConfig extends AzRendererConfig<UUID, ItemStack> {
 
     public static class Builder extends AzRendererConfig.Builder<UUID, ItemStack> {
 
-        private AzArmorBoneProvider boneProvider;
+        private AzArmorBoneProvider _boneProvider;
 
         protected Builder(
             BiFunction<Entity, ItemStack, ResourceLocation> modelLocationProvider,
             BiFunction<Entity, ItemStack, ResourceLocation> textureLocationProvider
         ) {
             super(modelLocationProvider, textureLocationProvider);
-            this.boneProvider = new AzDefaultArmorBoneProvider();
+            this._boneProvider = new AzDefaultArmorBoneProvider();
             this.modelRendererProvider = (entityRendererPipeline, layer) -> new AzArmorModelRenderer(
                 (AzArmorRendererPipeline) entityRendererPipeline,
                 layer
@@ -163,7 +163,7 @@ public class AzArmorRendererConfig extends AzRendererConfig<UUID, ItemStack> {
         }
 
         public Builder setBoneProvider(AzArmorBoneProvider boneProvider) {
-            this.boneProvider = boneProvider;
+            this._boneProvider = boneProvider;
             return this;
         }
 
@@ -206,7 +206,7 @@ public class AzArmorRendererConfig extends AzRendererConfig<UUID, ItemStack> {
 
             return new AzArmorRendererConfig(
                 baseConfig::createAnimator,
-                boneProvider,
+                    _boneProvider,
                 baseConfig::getRenderType,
                 baseConfig::modelLocation,
                 baseConfig.renderLayers(),

@@ -14,6 +14,12 @@ import java.util.function.Supplier;
 
 public class Utils {
 
+    /**
+     * Takes a generic object and returns an MC Type class (Item, Block ....)
+     * @param registryResult The generic Object to convert
+     * @return The Found MC Object
+     * @param <T> The generic object converted to the MC Type
+     */
     public static <T> T convertToMcSafeType(Object registryResult){
         return Services.TYPE_SERVICE.getMcSafeType(registryResult);
     }
@@ -63,7 +69,12 @@ public class Utils {
 
     @SuppressWarnings("unchecked")
     public static <T> T typeCaster(Object obj){
-        return (T) obj;
+        try {
+            return (T) obj;
+        } catch (Exception e) {
+            Constants.LOG.error("Failed to cast {}", obj.getClass().getTypeName(), e);
+            return null;
+        }
     }
 
     public static <T> T nullSafeGetter(Object obj, Supplier<T> inNullCase, Supplier<T> inNormalCase){

@@ -20,11 +20,11 @@ import org.vrglab.azure.azurelib.common.config.io.ConfigIO;
 
 public class StringArrayValue extends ConfigValue<String[]> implements ArrayValue {
 
-    private boolean fixedSize;
+    private boolean _fixedSize;
 
-    private Pattern pattern;
+    private Pattern _pattern;
 
-    private String defaultElementValue = "";
+    private String _defaultElementValue = "";
 
     public StringArrayValue(ValueData<String[]> valueData) {
         super(valueData);
@@ -32,18 +32,18 @@ public class StringArrayValue extends ConfigValue<String[]> implements ArrayValu
 
     @Override
     public boolean isFixedSize() {
-        return fixedSize;
+        return _fixedSize;
     }
 
     @Override
     protected void readFieldData(Field field) {
-        this.fixedSize = field.getAnnotation(Configurable.FixedSize.class) != null;
+        this._fixedSize = field.getAnnotation(Configurable.FixedSize.class) != null;
         Configurable.StringPattern stringPattern = field.getAnnotation(Configurable.StringPattern.class);
         if (stringPattern != null) {
             String value = stringPattern.value();
-            this.defaultElementValue = stringPattern.defaultValue();
+            this._defaultElementValue = stringPattern.defaultValue();
             try {
-                this.pattern = Pattern.compile(value, stringPattern.flags());
+                this._pattern = Pattern.compile(value, stringPattern.flags());
             } catch (IllegalArgumentException e) {
                 AzureLib.LOGGER.error(
                     ConfigIO.MARKER,
@@ -52,13 +52,13 @@ public class StringArrayValue extends ConfigValue<String[]> implements ArrayValu
                     e
                 );
             }
-            if (this.pattern != null && !this.pattern.matcher(this.defaultElementValue).matches()) {
+            if (this._pattern != null && !this._pattern.matcher(this._defaultElementValue).matches()) {
                 throw new IllegalArgumentException(
                     String.format(
                         "Invalid config default value '%s' for field '%s' - does not match required pattern \\%s\\",
-                        this.defaultElementValue,
+                        this._defaultElementValue,
                         this.getId(),
-                        this.pattern.toString()
+                        this._pattern.toString()
                     )
                 );
             }
@@ -68,16 +68,16 @@ public class StringArrayValue extends ConfigValue<String[]> implements ArrayValu
     @Override
     protected String[] getCorrectedValue(String[] in) {
         String[] defaultArray = this.valueData.getDefaultValue();
-        if (this.fixedSize && (in.length != defaultArray.length)) {
+        if (this._fixedSize && (in.length != defaultArray.length)) {
             ConfigUtils.logArraySizeCorrectedMessage(this.getId(), Arrays.toString(in), Arrays.toString(defaultArray));
             return defaultArray;
         }
-        if (this.pattern != null) {
+        if (this._pattern != null) {
             for (int i = 0; i < in.length; i++) {
                 String string = in[i];
-                if (!this.pattern.matcher(string).matches()) {
-                    ConfigUtils.logCorrectedMessage(this.getId() + "[" + i + "]", string, this.defaultElementValue);
-                    in[i] = this.defaultElementValue;
+                if (!this._pattern.matcher(string).matches()) {
+                    ConfigUtils.logCorrectedMessage(this.getId() + "[" + i + "]", string, this._defaultElementValue);
+                    in[i] = this._defaultElementValue;
                 }
             }
         }
@@ -85,7 +85,7 @@ public class StringArrayValue extends ConfigValue<String[]> implements ArrayValu
     }
 
     public String getDefaultElementValue() {
-        return defaultElementValue;
+        return _defaultElementValue;
     }
 
     @Override

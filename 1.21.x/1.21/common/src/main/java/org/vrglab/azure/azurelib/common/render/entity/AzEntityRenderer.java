@@ -34,7 +34,7 @@ public abstract class AzEntityRenderer<T extends Entity> extends EntityRenderer<
     protected final AzEntityRendererPipeline<T> rendererPipeline;
 
     @Nullable
-    private AzEntityAnimator<T> reusedAzEntityAnimator;
+    private AzEntityAnimator<T> _reusedAzEntityAnimator;
 
     protected AzEntityRenderer(AzEntityRendererConfig<T> config, EntityRendererProvider.Context context) {
         super(context);
@@ -76,7 +76,7 @@ public abstract class AzEntityRenderer<T extends Entity> extends EntityRenderer<
         var azBakedModel = provider.provideBakedModel(entity, entity);
 
         // Point the renderer's current animator reference to the cached entity animator before rendering.
-        reusedAzEntityAnimator = cachedEntityAnimator;
+        _reusedAzEntityAnimator = cachedEntityAnimator;
 
         // Execute the render pipeline.
         rendererPipeline.render(
@@ -113,7 +113,7 @@ public abstract class AzEntityRenderer<T extends Entity> extends EntityRenderer<
     }
 
     public AzEntityAnimator<T> getAnimator() {
-        return reusedAzEntityAnimator;
+        return _reusedAzEntityAnimator;
     }
 
     public AzEntityRendererConfig<T> config() {

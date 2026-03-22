@@ -12,25 +12,25 @@ import org.vrglab.azure.azurelib.common.config.adapter.TypeAdapter;
 
 public final class ValueData<T> implements IDescriptionProvider {
 
-    private final String id;
+    private final String _id;
 
-    private final String[] tooltip;
+    private final String[] _tooltip;
 
-    private final T defaultValue;
+    private final T _defaultValue;
 
-    private final TypeAdapter.AdapterContext context;
+    private final TypeAdapter.AdapterContext _context;
 
-    private final Class<T> valueType;
+    private final Class<T> _valueType;
 
     @Nullable
-    private ConfigValue<?> parent;
+    private ConfigValue<?> _parent;
 
     private ValueData(String id, String[] tooltip, T defaultValue, TypeAdapter.AdapterContext context) {
-        this.id = id;
-        this.tooltip = tooltip;
-        this.defaultValue = defaultValue;
-        this.context = context;
-        this.valueType = (Class<T>) defaultValue.getClass();
+        this._id = id;
+        this._tooltip = tooltip;
+        this._defaultValue = defaultValue;
+        this._context = context;
+        this._valueType = (Class<T>) defaultValue.getClass();
     }
 
     public static <V> ValueData<V> of(String id, V value, TypeAdapter.AdapterContext setter, String... comments) {
@@ -38,36 +38,36 @@ public final class ValueData<T> implements IDescriptionProvider {
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     @Override
     public String[] getDescription() {
-        return tooltip;
+        return _tooltip;
     }
 
     public T getDefaultValue() {
-        return defaultValue;
+        return _defaultValue;
     }
 
     public void setValueToMemory(Object value) {
-        this.context.setFieldValue(value);
+        this._context.setFieldValue(value);
     }
 
     @Nullable
     public ConfigValue<?> getParent() {
-        return parent;
+        return _parent;
     }
 
     public void setParent(@Nullable ConfigValue<?> parent) {
-        this.parent = parent;
+        this._parent = parent;
     }
 
     public TypeAdapter.AdapterContext getContext() {
-        return context;
+        return _context;
     }
 
     public Class<T> getValueType() {
-        return valueType;
+        return _valueType;
     }
 }

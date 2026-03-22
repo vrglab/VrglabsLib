@@ -11,7 +11,7 @@ import org.vrglab.azure.azurelib.common.util.client.RenderUtils;
 
 public class AzArmorBoneContext {
 
-    private AzBakedModel lastModel;
+    private AzBakedModel _lastModel;
 
     public AzBone head;
 
@@ -59,11 +59,11 @@ public class AzArmorBoneContext {
      * Gets and caches the relevant armor model bones for this baked model if it hasn't been done already
      */
     public void grabRelevantBones(AzBakedModel model, AzArmorBoneProvider boneProvider) {
-        if (this.lastModel == model) {
+        if (this._lastModel == model) {
             return;
         }
 
-        this.lastModel = model;
+        this._lastModel = model;
         this.head = boneProvider.getHeadBone(model);
         this.body = boneProvider.getBodyBone(model);
         this.rightArm = boneProvider.getRightArmBone(model);
@@ -213,8 +213,9 @@ public class AzArmorBoneContext {
      * Sets a bone as visible or hidden, with nullability
      */
     protected void setBoneVisible(@Nullable AzBone bone, boolean visible) {
-        if (bone == null)
+        if (bone == null) {
             return;
+        }
 
         bone.setHidden(!visible);
     }

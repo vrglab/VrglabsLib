@@ -24,9 +24,9 @@ import org.vrglab.azure.azurelib.common.render.layer.AzRenderLayer;
  */
 public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<UUID, T> {
 
-    private final Function<T, Float> deathMaxRotationProvider;
+    private final Function<T, Float> _deathMaxRotationProvider;
 
-    private final Function<T, Float> shadowRadius;
+    private final Function<T, Float> _shadowRadius;
 
     private AzEntityRendererConfig(
         Supplier<AzAnimator<UUID, T>> animatorProvider,
@@ -64,16 +64,16 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
             boneTextureOverrideProvider,
             boneRenderTypeOverrideProvider
         );
-        this.deathMaxRotationProvider = deathMaxRotationProvider;
-        this.shadowRadius = shadowRadius;
+        this._deathMaxRotationProvider = deathMaxRotationProvider;
+        this._shadowRadius = shadowRadius;
     }
 
     public float getDeathMaxRotation(T entity) {
-        return deathMaxRotationProvider.apply(entity);
+        return _deathMaxRotationProvider.apply(entity);
     }
 
     public float shadowRadius(T entity) {
-        return shadowRadius.apply(entity);
+        return _shadowRadius.apply(entity);
     }
 
     public static <T extends Entity> Builder<T> builder(
@@ -92,7 +92,7 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
 
     public static class Builder<T extends Entity> extends AzRendererConfig.Builder<UUID, T> {
 
-        private Function<T, Float> deathMaxRotationProvider;
+        private Function<T, Float> _deathMaxRotationProvider;
 
         protected Function<T, Float> shadowRadius;
 
@@ -107,7 +107,7 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
             );
             this.pipelineContextFunction = AzEntityRendererPipelineContext::new;
             this.renderTypeProvider = (a, b) -> RenderType.entityCutout(textureLocationProvider.apply(b));
-            this.deathMaxRotationProvider = $ -> 90F;
+            this._deathMaxRotationProvider = $ -> 90F;
             this.shadowRadius = $ -> 0.0F;
         }
 
@@ -186,7 +186,7 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
         }
 
         public Builder<T> setDeathMaxRotation(float angle) {
-            this.deathMaxRotationProvider = $ -> angle;
+            this._deathMaxRotationProvider = $ -> angle;
             return this;
         }
 
@@ -227,7 +227,7 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
          * Functionally equivalent to {@link net.minecraft.client.renderer.entity.LivingEntityRenderer#getFlipDegrees}
          */
         public Builder<T> setDeathMaxRotation(Function<T, Float> deathMaxRotationProvider) {
-            this.deathMaxRotationProvider = deathMaxRotationProvider;
+            this._deathMaxRotationProvider = deathMaxRotationProvider;
             return this;
         }
 
@@ -263,7 +263,7 @@ public class AzEntityRendererConfig<T extends Entity> extends AzRendererConfig<U
 
             return new AzEntityRendererConfig<>(
                 baseConfig::createAnimator,
-                deathMaxRotationProvider,
+                    _deathMaxRotationProvider,
                 shadowRadius,
                 baseConfig::getRenderType,
                 baseConfig::modelLocation,

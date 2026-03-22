@@ -19,20 +19,20 @@ import org.vrglab.azure.azurelib.common.render.AzProvider;
  */
 public abstract class AzBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
-    private final AzProvider<Long, T> provider;
+    private final AzProvider<Long, T> _provider;
 
-    private final AzBlockEntityRendererPipeline<T> rendererPipeline;
+    private final AzBlockEntityRendererPipeline<T> _rendererPipeline;
 
     @Nullable
-    private AzBlockAnimator<T> reusedAzBlockAnimator;
+    private AzBlockAnimator<T> _reusedAzBlockAnimator;
 
     protected AzBlockEntityRenderer(AzBlockEntityRendererConfig<T> config) {
-        this.provider = new AzProvider<>(
+        this._provider = new AzProvider<>(
             config::createAnimator,
             config::modelLocation,
             blockEntity -> blockEntity.getBlockPos().asLong()
         );
-        this.rendererPipeline = createPipeline(config);
+        this._rendererPipeline = createPipeline(config);
     }
 
     protected AzBlockEntityRendererPipeline<T> createPipeline(AzBlockEntityRendererConfig<T> config) {
@@ -48,20 +48,20 @@ public abstract class AzBlockEntityRenderer<T extends BlockEntity> implements Bl
         int packedLight,
         int packedOverlay
     ) {
-        var cachedEntityAnimator = (AzBlockAnimator<T>) provider.provideAnimator(
-            rendererPipeline.context().currentEntity(),
+        var cachedEntityAnimator = (AzBlockAnimator<T>) _provider.provideAnimator(
+            _rendererPipeline.context().currentEntity(),
             entity
         );
-        var model = provider.provideBakedModel(rendererPipeline.context().currentEntity(), entity);
+        var model = _provider.provideBakedModel(_rendererPipeline.context().currentEntity(), entity);
 
         // Point the renderer's current animator reference to the cached entity animator before rendering.
-        reusedAzBlockAnimator = cachedEntityAnimator;
+        _reusedAzBlockAnimator = cachedEntityAnimator;
 
         // Execute the render pipeline.
-        rendererPipeline.render(poseStack, model, entity, source, null, null, 0, partialTick, packedLight);
+        _rendererPipeline.render(poseStack, model, entity, source, null, null, 0, partialTick, packedLight);
     }
 
     public AzBlockAnimator<T> getAnimator() {
-        return reusedAzBlockAnimator;
+        return _reusedAzBlockAnimator;
     }
 }
