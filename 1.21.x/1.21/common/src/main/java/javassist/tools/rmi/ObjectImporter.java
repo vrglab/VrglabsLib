@@ -25,7 +25,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.Socket;
-import java.net.URL;
 
 /**
  * The object importer enables applets to call a method on a remote

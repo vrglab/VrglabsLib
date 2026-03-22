@@ -76,9 +76,6 @@ public class VrglabsNeoForgeInitializer {
         }
     };
 
-
-
-
     public static void Create(IEventBus eventBus, String modid) {
         createAutoRegistry(modid);
 
@@ -251,7 +248,6 @@ public class VrglabsNeoForgeInitializer {
         Registry.initRegistry(RecipeSerializerRegistryCallBack, RegistryTypes.RECIPE_SERIALIZER, modid);
         Registry.initRegistry(RecipeTypeRegistryCallBack, RegistryTypes.RECIPE_TYPE, modid);
     }
-
 
     public static void CreateCommonSetup(final FMLCommonSetupEvent event, String modid) {
         Bootstrapper.initBootstrapper(new ICallBack() {

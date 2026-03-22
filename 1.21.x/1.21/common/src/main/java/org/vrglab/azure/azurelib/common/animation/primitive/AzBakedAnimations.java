@@ -25,8 +25,7 @@ public record AzBakedAnimations(
     /**
      * Gets an {@link AzBakedAnimation} by its name, if present
      */
-    @Nullable
-    public AzBakedAnimation getAnimation(String name) {
+    @Nullable public AzBakedAnimation getAnimation(String name) {
         AzBakedAnimation result = animations.get(name);
         if (result == null && includes != null) {
             ResourceLocation otherFileID = includes.getOrDefault(name, null);

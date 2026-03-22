@@ -27,8 +27,7 @@ public abstract class ConfigValue<T> implements Supplier<T> {
 
     private boolean synchronizeToClient;
 
-    @Nullable
-    private SetValueCallback<T> setValueCallback;
+    @Nullable private SetValueCallback<T> setValueCallback;
 
     protected ConfigValue(ValueData<T> valueData) {
         this.valueData = valueData;

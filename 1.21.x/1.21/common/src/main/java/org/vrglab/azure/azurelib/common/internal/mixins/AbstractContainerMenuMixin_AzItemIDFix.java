@@ -19,8 +19,7 @@ import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
 @Mixin(AbstractContainerMenu.class)
 public class AbstractContainerMenuMixin_AzItemIDFix {
 
-    @Unique
-    private static final int DEFAULT_AZ_ID = -1;
+    @Unique private static final int DEFAULT_AZ_ID = -1;
 
     /**
      * Removes the AzureLib-specific ID (Az ID) from a copied `ItemStack` during a container click action. This is only
@@ -94,8 +93,7 @@ public class AbstractContainerMenuMixin_AzItemIDFix {
      * @param original            The original operation to call for the base comparison.
      * @return True if the base comparison is true and the Az IDs (if present) match; false otherwise.
      */
-    @Unique
-    private boolean azurelib$compareStacksWithAzureID(
+    @Unique private boolean azurelib$compareStacksWithAzureID(
         ItemStack itemStack,
         ItemStack comparisonItemStack,
         Operation<Boolean> original
@@ -116,8 +114,7 @@ public class AbstractContainerMenuMixin_AzItemIDFix {
      * @param comparisonItemStack The second ItemStack.
      * @return True if the Az IDs match, false otherwise.
      */
-    @Unique
-    private boolean azurelib$stacksHaveMatchingAzID(ItemStack itemStack, ItemStack comparisonItemStack) {
+    @Unique private boolean azurelib$stacksHaveMatchingAzID(ItemStack itemStack, ItemStack comparisonItemStack) {
         return itemStack.getOrDefault(AzureLib.AZ_ID.get(), DEFAULT_AZ_ID)
             .equals(comparisonItemStack.getOrDefault(AzureLib.AZ_ID.get(), DEFAULT_AZ_ID));
     }

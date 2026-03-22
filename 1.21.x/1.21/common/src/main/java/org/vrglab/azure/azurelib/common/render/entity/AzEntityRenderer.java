@@ -33,8 +33,7 @@ public abstract class AzEntityRenderer<T extends Entity> extends EntityRenderer<
 
     protected final AzEntityRendererPipeline<T> rendererPipeline;
 
-    @Nullable
-    private AzEntityAnimator<T> _reusedAzEntityAnimator;
+    @Nullable private AzEntityAnimator<T> _reusedAzEntityAnimator;
 
     protected AzEntityRenderer(AzEntityRendererConfig<T> config, EntityRendererProvider.Context context) {
         super(context);

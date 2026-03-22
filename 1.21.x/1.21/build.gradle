@@ -20,6 +20,8 @@ subprojects {
             removeUnusedImports()
             trimTrailingWhitespace()
             endWithNewline()
+
+            formatAnnotations()
         }
     }
 }

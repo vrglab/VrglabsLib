@@ -131,8 +131,7 @@ public record JsonUtil() {
     /**
      * Retrieves an optionally present Long from the provided {@link JsonObject}, or null if the element isn't present
      */
-    @Nullable
-    public static Long getOptionalLong(JsonObject obj, String elementName) {
+    @Nullable public static Long getOptionalLong(JsonObject obj, String elementName) {
         return obj.has(elementName) ? GsonHelper.getAsLong(obj, elementName) : null;
     }
 
@@ -140,24 +139,21 @@ public record JsonUtil() {
      * Retrieves an optionally present Boolean from the provided {@link JsonObject}, or null if the element isn't
      * present
      */
-    @Nullable
-    public static Boolean getOptionalBoolean(JsonObject obj, String elementName) {
+    @Nullable public static Boolean getOptionalBoolean(JsonObject obj, String elementName) {
         return obj.has(elementName) ? GsonHelper.getAsBoolean(obj, elementName) : null;
     }
 
     /**
      * Retrieves an optionally present Float from the provided {@link JsonObject}, or null if the element isn't present
      */
-    @Nullable
-    public static Float getOptionalFloat(JsonObject obj, String elementName) {
+    @Nullable public static Float getOptionalFloat(JsonObject obj, String elementName) {
         return obj.has(elementName) ? GsonHelper.getAsFloat(obj, elementName) : null;
     }
 
     /**
      * Retrieves an optionally present Double from the provided {@link JsonObject}, or null if the element isn't present
      */
-    @Nullable
-    public static Double getOptionalDouble(JsonObject obj, String elementName) {
+    @Nullable public static Double getOptionalDouble(JsonObject obj, String elementName) {
         return obj.has(elementName) ? GsonHelper.getAsDouble(obj, elementName) : null;
     }
 
@@ -165,8 +161,7 @@ public record JsonUtil() {
      * Retrieves an optionally present Integer from the provided {@link JsonObject}, or null if the element isn't
      * present
      */
-    @Nullable
-    public static Integer getOptionalInteger(JsonObject obj, String elementName) {
+    @Nullable public static Integer getOptionalInteger(JsonObject obj, String elementName) {
         return obj.has(elementName) ? GsonHelper.getAsInt(obj, elementName) : null;
     }
 }

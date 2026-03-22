@@ -178,8 +178,7 @@ public abstract class AzAbstractTexture extends SimpleTexture {
      *
      * @return The RenderCall to submit to the render pipeline, or null if no further action required
      */
-    @Nullable
-    protected abstract RenderCall loadTexture(ResourceManager resourceManager, Minecraft mc) throws IOException;
+    @Nullable protected abstract RenderCall loadTexture(ResourceManager resourceManager, Minecraft mc) throws IOException;
 
     /**
      * Get the emissive resource equivalent of the input resource path.<br>

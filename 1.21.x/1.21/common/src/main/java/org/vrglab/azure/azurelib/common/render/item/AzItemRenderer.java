@@ -32,8 +32,7 @@ public abstract class AzItemRenderer {
 
     public final AzItemRendererPipeline rendererPipeline;
 
-    @Nullable
-    private AzItemAnimator _reusedAzItemAnimator;
+    @Nullable private AzItemAnimator _reusedAzItemAnimator;
 
     protected AzItemRenderer(
         AzItemRendererConfig config

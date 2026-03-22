@@ -23,8 +23,7 @@ public interface Scanner {
     List<Map.Entry<String, String>> scan(ClassFile classFile);
 
     /** scan the given {@code file} and produces list of {@link Map.Entry} key/values */
-    @Nullable
-    default List<Map.Entry<String, String>> scan(Vfs.File file) {
+    @Nullable default List<Map.Entry<String, String>> scan(Vfs.File file) {
         return null;
     }
 

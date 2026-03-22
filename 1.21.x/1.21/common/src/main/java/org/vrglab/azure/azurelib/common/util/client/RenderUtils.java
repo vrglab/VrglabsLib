@@ -150,8 +150,7 @@ public class RenderUtils {
      * @param texture The path of the texture resource to check
      * @return The dimensions (width x height) of the texture, or null if unable to find or read the file
      */
-    @Nullable
-    public static IntIntPair getTextureDimensions(ResourceLocation texture) {
+    @Nullable public static IntIntPair getTextureDimensions(ResourceLocation texture) {
         if (texture == null) {
             return null;
         }

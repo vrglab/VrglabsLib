@@ -44,23 +44,17 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
         Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)
     );
 
-    @Nullable
-    protected ItemStack mainHandStack;
+    @Nullable protected ItemStack mainHandStack;
 
-    @Nullable
-    protected ItemStack offhandStack;
+    @Nullable protected ItemStack offhandStack;
 
-    @Nullable
-    protected ItemStack helmetStack;
+    @Nullable protected ItemStack helmetStack;
 
-    @Nullable
-    protected ItemStack chestplateStack;
+    @Nullable protected ItemStack chestplateStack;
 
-    @Nullable
-    protected ItemStack leggingsStack;
+    @Nullable protected ItemStack leggingsStack;
 
-    @Nullable
-    protected ItemStack bootsStack;
+    @Nullable protected ItemStack bootsStack;
 
     /**
      * Prepares the necessary item stacks for rendering by accessing the relevant equipment slots of the animatable
@@ -176,8 +170,7 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
      * Return a ModelPart for a given {@link AzBone}.<br>
      * This is then transformed into position for the final render
      */
-    @NotNull
-    protected ModelPart getModelPartForBone(
+    @NotNull protected ModelPart getModelPartForBone(
         AzRendererPipelineContext<UUID, T> context,
         AzBone bone,
         HumanoidModel<?> baseModel
@@ -189,8 +182,7 @@ public class AzArmorLayer<T extends LivingEntity> implements AzRenderLayer<UUID,
      * Get the {@link ItemStack} relevant to the bone being rendered.<br>
      * Return null if this bone should be ignored
      */
-    @Nullable
-    protected ItemStack getArmorItemForBone(AzRendererPipelineContext<UUID, T> context, AzBone bone) {
+    @Nullable protected ItemStack getArmorItemForBone(AzRendererPipelineContext<UUID, T> context, AzBone bone) {
         return null;
     }
 

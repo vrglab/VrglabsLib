@@ -22,8 +22,7 @@ public final class ValueData<T> implements IDescriptionProvider {
 
     private final Class<T> _valueType;
 
-    @Nullable
-    private ConfigValue<?> _parent;
+    @Nullable private ConfigValue<?> _parent;
 
     private ValueData(String id, String[] tooltip, T defaultValue, TypeAdapter.AdapterContext context) {
         this._id = id;
@@ -54,8 +53,7 @@ public final class ValueData<T> implements IDescriptionProvider {
         this._context.setFieldValue(value);
     }
 
-    @Nullable
-    public ConfigValue<?> getParent() {
+    @Nullable public ConfigValue<?> getParent() {
         return _parent;
     }
 

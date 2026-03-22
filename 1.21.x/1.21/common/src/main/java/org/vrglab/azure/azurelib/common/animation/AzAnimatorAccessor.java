@@ -15,8 +15,7 @@ import java.util.Optional;
  */
 public interface AzAnimatorAccessor<K, T> {
 
-    @Nullable
-    AzAnimator<K, T> getAnimatorOrNull();
+    @Nullable AzAnimator<K, T> getAnimatorOrNull();
 
     void setAnimator(AzAnimator<K, T> animator);
 

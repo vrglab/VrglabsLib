@@ -17,9 +17,7 @@ import org.vrglab.azure.azurelib.common.animation.AzAnimatorAccessor;
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin_AzBlockEntityAnimatorCache implements AzAnimatorAccessor<Long, BlockEntity> {
 
-    @Unique
-    @Nullable
-    private AzAnimator<Long, BlockEntity> animator;
+    @Unique @Nullable private AzAnimator<Long, BlockEntity> animator;
 
     @Override
     public void setAnimator(@Nullable AzAnimator<Long, BlockEntity> animator) {

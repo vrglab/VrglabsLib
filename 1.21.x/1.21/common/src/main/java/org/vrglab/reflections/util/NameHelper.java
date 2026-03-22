@@ -145,15 +145,13 @@ public interface NameHelper {
         return null;
     }
 
-    @Nullable
-    default <T extends AnnotatedElement> T forElement(String descriptor, Class<T> resultType, ClassLoader[] loaders) {
+    @Nullable default <T extends AnnotatedElement> T forElement(String descriptor, Class<T> resultType, ClassLoader[] loaders) {
         Member member = forMember(descriptor, loaders);
         //noinspection unchecked
         return member != null && member.getClass().equals(resultType) ? (T) member : null;
     }
 
-    @Nullable
-    default Method forMethod(String descriptor, ClassLoader... loaders) throws ReflectionsException {
+    @Nullable default Method forMethod(String descriptor, ClassLoader... loaders) throws ReflectionsException {
         return forElement(descriptor, Method.class, loaders);
     }
 
@@ -161,8 +159,7 @@ public interface NameHelper {
         return forElement(descriptor, Constructor.class, loaders);
     }
 
-    @Nullable
-    default Field forField(String descriptor, ClassLoader... loaders) {
+    @Nullable default Field forField(String descriptor, ClassLoader... loaders) {
         return forElement(descriptor, Field.class, loaders);
     }
 

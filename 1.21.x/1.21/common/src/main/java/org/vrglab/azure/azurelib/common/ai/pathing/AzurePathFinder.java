@@ -23,8 +23,7 @@ public class AzurePathFinder extends PathFinder {
         super(processor, maxVisitedNodes);
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public Path findPath(
         @NotNull PathNavigationRegion regionIn,
         @NotNull Mob mob,

@@ -29,8 +29,7 @@ public final class FileWatchManager {
 
     private final List<WatchKey> watchKeys = new ArrayList<>();
 
-    @Nullable
-    private final WatchService service;
+    @Nullable private final WatchService service;
 
     private final ScheduledExecutorService executorService;
 

@@ -24,8 +24,7 @@ public final class PropertiesFormat implements IConfigFormat {
 
     private final StringBuilder buffer;
 
-    @Nullable
-    private final String prefix;
+    @Nullable private final String prefix;
 
     private final Map<String, String> parsed;
 

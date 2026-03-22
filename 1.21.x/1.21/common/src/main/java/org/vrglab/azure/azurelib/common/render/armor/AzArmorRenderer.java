@@ -22,8 +22,7 @@ public class AzArmorRenderer {
 
     private final AzArmorRendererPipeline _rendererPipeline;
 
-    @Nullable
-    private AzItemAnimator _reusedAzItemAnimator;
+    @Nullable private AzItemAnimator _reusedAzItemAnimator;
 
     public AzArmorRenderer(AzArmorRendererConfig config) {
         this._provider = new AzProvider<>(

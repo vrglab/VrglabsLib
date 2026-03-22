@@ -42,8 +42,7 @@ public class AutoGlowingTexture extends AzAbstractTexture {
      * Generates the glow layer {@link NativeImage} and appropriately modifies the base texture for use in glow render
      * layers
      */
-    @Nullable
-    @Override
+    @Nullable @Override
     protected RenderCall loadTexture(ResourceManager resourceManager, Minecraft mc) throws IOException {
         AbstractTexture originalTexture;
 

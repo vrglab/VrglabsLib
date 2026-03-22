@@ -23,8 +23,7 @@ public abstract class AzBlockEntityRenderer<T extends BlockEntity> implements Bl
 
     private final AzBlockEntityRendererPipeline<T> _rendererPipeline;
 
-    @Nullable
-    private AzBlockAnimator<T> _reusedAzBlockAnimator;
+    @Nullable private AzBlockAnimator<T> _reusedAzBlockAnimator;
 
     protected AzBlockEntityRenderer(AzBlockEntityRendererConfig<T> config) {
         this._provider = new AzProvider<>(
