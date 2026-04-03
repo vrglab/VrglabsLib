@@ -6,7 +6,7 @@
 <module name="Checker">
 
     <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value=".*[\\/](mixins?|javassist|azurelib)[\\/].*"/>
+        <property name="fileNamePattern" value=".*[\\/](mixins?|reflectionsHelper|azurelib)[\\/].*"/>
     </module>
 
     <property name="severity" value="error"/>

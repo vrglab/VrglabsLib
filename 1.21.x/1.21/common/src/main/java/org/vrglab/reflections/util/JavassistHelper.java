@@ -1,14 +1,14 @@
 package org.vrglab.reflections.util;
 
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.AttributeInfo;
-import javassist.bytecode.ClassFile;
-import javassist.bytecode.Descriptor;
-import javassist.bytecode.FieldInfo;
-import javassist.bytecode.MethodInfo;
-import javassist.bytecode.ParameterAnnotationsAttribute;
-import javassist.bytecode.annotation.Annotation;
+import org.vrglab.reflectionsHelper.bytecode.AccessFlag;
+import org.vrglab.reflectionsHelper.bytecode.AnnotationsAttribute;
+import org.vrglab.reflectionsHelper.bytecode.AttributeInfo;
+import org.vrglab.reflectionsHelper.bytecode.ClassFile;
+import org.vrglab.reflectionsHelper.bytecode.Descriptor;
+import org.vrglab.reflectionsHelper.bytecode.FieldInfo;
+import org.vrglab.reflectionsHelper.bytecode.MethodInfo;
+import org.vrglab.reflectionsHelper.bytecode.ParameterAnnotationsAttribute;
+import org.vrglab.reflectionsHelper.bytecode.annotation.Annotation;
 
 import java.util.ArrayList;
 import java.util.Collections;

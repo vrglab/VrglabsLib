@@ -1,6 +1,6 @@
 package org.vrglab.reflections.scanners;
 
-import javassist.bytecode.ClassFile;
+import org.vrglab.reflectionsHelper.bytecode.ClassFile;
 import org.vrglab.reflections.util.JavassistHelper;
 
 import java.util.ArrayList;

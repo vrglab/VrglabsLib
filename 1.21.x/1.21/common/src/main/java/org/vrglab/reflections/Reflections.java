@@ -1,6 +1,6 @@
 package org.vrglab.reflections;
 
-import javassist.bytecode.ClassFile;
+import org.vrglab.reflectionsHelper.bytecode.ClassFile;
 import org.vrglab.reflections.scanners.MemberUsageScanner;
 import org.vrglab.reflections.scanners.MethodParameterNamesScanner;
 import org.vrglab.reflections.scanners.Scanner;

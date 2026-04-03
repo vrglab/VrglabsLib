@@ -1,7 +1,7 @@
 package org.vrglab.reflections.scanners;
 
 
-import javassist.bytecode.ClassFile;
+import org.vrglab.reflectionsHelper.bytecode.ClassFile;
 import org.vrglab.reflections.vfs.Vfs;
 import org.jetbrains.annotations.Nullable;
 

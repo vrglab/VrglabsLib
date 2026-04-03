@@ -1,9 +1,9 @@
 package org.vrglab.reflections.scanners;
 
-import javassist.bytecode.ClassFile;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
+import org.vrglab.reflectionsHelper.bytecode.ClassFile;
+import org.vrglab.reflectionsHelper.bytecode.CodeAttribute;
+import org.vrglab.reflectionsHelper.bytecode.LocalVariableAttribute;
+import org.vrglab.reflectionsHelper.bytecode.MethodInfo;
 import org.vrglab.reflections.util.JavassistHelper;
 
 import java.lang.reflect.Modifier;
