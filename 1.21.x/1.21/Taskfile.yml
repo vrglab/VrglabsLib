@@ -1,0 +1,32 @@
+version: '3'
+
+vars:
+  GRADLEW: gradlew
+
+tasks:
+  clear:
+    desc: Cleans the build cache
+    cmds:
+      - "{{.GRADLEW}} clean"
+
+  clean:
+    desc: Calls Spotless to clean up the code
+    cmds:
+      - "{{.GRADLEW}} spotlessApply"
+
+  check:
+    desc: Checks the Codebase for style issues
+    cmds:
+      - "{{.GRADLEW}} checkstyleMain"
+
+  unit-test:
+    desc: Runs all unit tests
+    cmds:
+      - "{{.GRADLEW}} test"
+
+  tests:
+    desc: Runs all tests and cleans codebase
+    cmds:
+      - task: clear
+      - "{{.GRADLEW}} test"
+      - task: clean
