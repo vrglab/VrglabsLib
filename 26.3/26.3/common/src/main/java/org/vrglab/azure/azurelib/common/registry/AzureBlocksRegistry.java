@@ -8,12 +8,10 @@ import net.minecraft.world.level.material.PushReaction;
 
 import java.util.function.Supplier;
 
-import org.vrglab.azure.azurelib.common.blocks.TickingLightBlock;
-import org.vrglab.azure.azurelib.common.platform.Services;
 
 public class AzureBlocksRegistry {
 
-    public static final Supplier<TickingLightBlock> TICKING_LIGHT_BLOCK = registerBlock(
+   /* public static final Supplier<TickingLightBlock> TICKING_LIGHT_BLOCK = registerBlock(
         "lightblock",
         () -> new TickingLightBlock(
             BlockBehaviour.Properties.of().
@@ -25,7 +23,7 @@ public class AzureBlocksRegistry {
                     replaceable().
                     noOcclusion()
         )
-    );
+    );*/
 
     /**
      * Registers a new Block.
@@ -35,8 +33,8 @@ public class AzureBlocksRegistry {
      * @param <T>       The type of the block.
      * @return A supplier for the registered block.
      */
-    static <T extends Block> Supplier<T> registerBlock(String blockName, Supplier<T> block) {
-        return Services.COMMON_REGISTRY.register(BuiltInRegistries.BLOCK, blockName, block);
+   static <T extends Block> Supplier<T> registerBlock(String blockName, Supplier<T> block) {
+        return null;//Services.COMMON_REGISTRY.register(BuiltInRegistries.BLOCK, blockName, block);
     }
 
     public static void init() {}

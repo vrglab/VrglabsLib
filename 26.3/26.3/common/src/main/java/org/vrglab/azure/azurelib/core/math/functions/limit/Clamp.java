@@ -7,7 +7,7 @@ package org.vrglab.azure.azurelib.core.math.functions.limit;
 
 import org.vrglab.azure.azurelib.core.math.IValue;
 import org.vrglab.azure.azurelib.core.math.functions.Function;
-import org.vrglab.azure.azurelib.core.utils.MathUtils;
+import org.vrglab.azure.azurelib.core.utils.MathHelper;
 
 public class Clamp extends Function {
 
@@ -22,6 +22,6 @@ public class Clamp extends Function {
 
     @Override
     public double get() {
-        return MathUtils.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
+        return MathHelper.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
     }
 }

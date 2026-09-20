@@ -3,6 +3,12 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+dependencies {
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.jboss:jboss-vfs:3.3.2.Final'
+    implementation 'org.dom4j:dom4j:2.1.4'
+}
+
 neoForge {
     version = neoforge_version
     // Automatically enable neoforge AccessTransformers if the file exists

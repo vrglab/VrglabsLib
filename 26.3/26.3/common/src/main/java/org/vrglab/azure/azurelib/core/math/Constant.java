@@ -10,23 +10,23 @@ package org.vrglab.azure.azurelib.core.math;
  */
 public class Constant implements IValue {
 
-    private double _value;
+    private double value;
 
     public Constant(double value) {
-        this._value = value;
+        this.value = value;
     }
 
     @Override
     public double get() {
-        return this._value;
+        return this.value;
     }
 
     public void set(double value) {
-        this._value = value;
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(this._value);
+        return String.valueOf(this.value);
     }
 }

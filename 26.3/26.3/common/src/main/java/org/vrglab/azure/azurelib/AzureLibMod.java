@@ -4,27 +4,17 @@
  */
 package org.vrglab.azure.azurelib;
 
-import org.vrglab.azure.azurelib.common.config.Config;
-import org.vrglab.azure.azurelib.common.config.ConfigHolder;
-import org.vrglab.azure.azurelib.common.config.ConfigHolderRegistry;
-import org.vrglab.azure.azurelib.common.config.TestingConfig;
-import org.vrglab.azure.azurelib.common.config.format.ConfigFormats;
-import org.vrglab.azure.azurelib.common.config.format.IConfigFormatHandler;
-import org.vrglab.azure.azurelib.common.config.io.ConfigIO;
-import org.vrglab.azure.azurelib.common.registry.AzureBlocksEntityRegistry;
-import org.vrglab.azure.azurelib.common.registry.AzureBlocksRegistry;
+import org.vrglab.azure.azurelib.config.Config;
+import org.vrglab.azure.azurelib.config.ConfigHolder;
+import org.vrglab.azure.azurelib.config.ConfigHolderRegistry;
+import org.vrglab.azure.azurelib.config.format.ConfigFormats;
+import org.vrglab.azure.azurelib.config.format.IConfigFormatHandler;
+import org.vrglab.azure.azurelib.config.io.ConfigIO;
 
 public final class AzureLibMod {
 
-    public static TestingConfig config;
-
     private AzureLibMod() {
         throw new UnsupportedOperationException();
-    }
-
-    public static void initRegistry() {
-        AzureBlocksRegistry.init();
-        AzureBlocksEntityRegistry.init();
     }
 
     /**

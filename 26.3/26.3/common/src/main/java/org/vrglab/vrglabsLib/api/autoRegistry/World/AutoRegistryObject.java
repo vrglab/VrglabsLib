@@ -1,6 +1,6 @@
 package org.vrglab.vrglabsLib.api.autoRegistry.World;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.vrglab.vrglabsLib.Utils.Utils;
 
 import java.util.Map;
@@ -10,7 +10,7 @@ public abstract class AutoRegistryObject<T> {
     protected boolean resolved;
     protected T registeredObject;
     protected Object rawData;
-    protected ResourceLocation id;
+    protected Identifier id;
 
     protected String modid;
     protected Map<String, Object> args;
@@ -40,11 +40,11 @@ public abstract class AutoRegistryObject<T> {
         resolved = true;
     }
 
-    public void setId(ResourceLocation id) {
+    public void setId(Identifier id) {
         this.id = id;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 

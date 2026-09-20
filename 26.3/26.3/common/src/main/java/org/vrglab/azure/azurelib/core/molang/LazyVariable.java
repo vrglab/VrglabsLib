@@ -11,11 +11,11 @@ import org.vrglab.azure.azurelib.core.math.Variable;
 
 /**
  * Lazy override of Variable, to allow for deferred value calculation. <br>
- * Optimises rendering as values are not touched until needed (if at all)
+ * Optimizes rendering as values are not touched until needed (if at all)
  */
 public class LazyVariable extends Variable {
 
-    private DoubleSupplier _valueSupplier;
+    private DoubleSupplier valueSupplier;
 
     public LazyVariable(String name, double value) {
         this(name, () -> value);
@@ -24,7 +24,7 @@ public class LazyVariable extends Variable {
     public LazyVariable(String name, DoubleSupplier valueSupplier) {
         super(name, 0);
 
-        this._valueSupplier = valueSupplier;
+        this.valueSupplier = valueSupplier;
     }
 
     /**
@@ -39,14 +39,14 @@ public class LazyVariable extends Variable {
      */
     @Override
     public void set(double value) {
-        this._valueSupplier = () -> value;
+        this.valueSupplier = () -> value;
     }
 
     /**
      * Set the new value supplier for the variable
      */
     public void set(DoubleSupplier valueSupplier) {
-        this._valueSupplier = valueSupplier;
+        this.valueSupplier = valueSupplier;
     }
 
     /**
@@ -54,6 +54,6 @@ public class LazyVariable extends Variable {
      */
     @Override
     public double get() {
-        return this._valueSupplier.getAsDouble();
+        return this.valueSupplier.getAsDouble();
     }
 }

@@ -5,6 +5,7 @@
  */
 package org.vrglab.azure.azurelib.core.molang.expressions;
 
+import org.vrglab.azure.azurelib.AzureLib;
 import org.vrglab.azure.azurelib.core.math.IValue;
 import org.vrglab.azure.azurelib.core.math.Variable;
 
@@ -23,10 +24,14 @@ public class MolangVariableHolder extends MolangValue {
 
     @Override
     public double get() {
-        double value = super.get();
+        var value = super.get();
+
+        if (this.variable == null) {
+            AzureLib.LOGGER.error("Variable is null, defaulting to 0");
+            return 0;
+        }
 
         this.variable.set(value);
-
         return value;
     }
 

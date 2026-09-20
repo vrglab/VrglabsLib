@@ -6,6 +6,10 @@ dependencies {
     minecraft("com.mojang:minecraft:${minecraft_version}")
     implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
     implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.jboss:jboss-vfs:3.3.2.Final'
+    implementation 'org.dom4j:dom4j:2.1.4'
 }
 
 loom {

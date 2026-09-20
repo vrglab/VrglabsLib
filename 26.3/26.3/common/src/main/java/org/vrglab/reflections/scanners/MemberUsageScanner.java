@@ -16,7 +16,7 @@ import org.vrglab.reflectionsHelper.expr.NewExpr;
 import org.vrglab.reflections.ReflectionsException;
 import org.vrglab.reflections.util.ClasspathHelper;
 import org.vrglab.reflections.util.JavassistHelper;
-import org.lwjgl.system.NonnullDefault;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class MemberUsageScanner implements Scanner {
         this(ClasspathHelper.classLoaders());
     }
 
-    public MemberUsageScanner(@NonnullDefault ClassLoader[] classLoaders) {
+    public MemberUsageScanner(ClassLoader[] classLoaders) {
         this._classLoaders = classLoaders;
     }
 

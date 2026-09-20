@@ -1,7 +1,7 @@
 package org.vrglab.vrglabsLib.Utils;
 
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
@@ -83,12 +83,12 @@ public class Utils {
     }
 
     @Deprecated(forRemoval = true, since = "2.0.0-mc1.21")
-    public static Item.Properties MakeSafeSettings(Item.Properties settings, IRegistryType registry, ResourceLocation id){
+    public static Item.Properties MakeSafeSettings(Item.Properties settings, IRegistryType registry, Identifier id){
         return settings;
     }
 
     @Deprecated(forRemoval = true, since = "2.0.0-mc1.21")
-    public static BlockBehaviour.Properties MakeSafeSettings(BlockBehaviour.Properties settings, IRegistryType registry, ResourceLocation id){
+    public static BlockBehaviour.Properties MakeSafeSettings(BlockBehaviour.Properties settings, IRegistryType registry, Identifier id){
         return settings;
     }
 }

@@ -1,17 +1,17 @@
 package mod.TestMod.Items;
 
-import net.minecraft.resources.ResourceLocation;
-import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
-import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererConfig;
+import net.minecraft.resources.Identifier;
+import org.vrglab.azure.azurelib.render.armor.AzArmorRenderer;
+import org.vrglab.azure.azurelib.render.armor.AzArmorRendererConfig;
 import org.vrglab.vrglabsLib.core.Constants;
 
 public class ExampleArmorRenderer extends AzArmorRenderer {
-    private static final ResourceLocation GEO = ResourceLocation.fromNamespaceAndPath(
+    private static final Identifier GEO = Identifier.fromNamespaceAndPath(
             Constants.MOD_ID,
             "geo/amethyst_armor.geo.json"
     );
 
-    private static final ResourceLocation TEX = ResourceLocation.fromNamespaceAndPath(
+    private static final Identifier TEX = Identifier.fromNamespaceAndPath(
             Constants.MOD_ID,
             "textures/armor/amethyst_armor.png"
     );

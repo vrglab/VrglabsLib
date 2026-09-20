@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.vrglab.azure.azurelib.AzureLib;
-import org.vrglab.azure.azurelib.common.util.AzureLibException;
 import org.vrglab.azure.azurelib.core.math.functions.Function;
 import org.vrglab.azure.azurelib.core.math.functions.classic.*;
 import org.vrglab.azure.azurelib.core.math.functions.easing.back.EaseInBack;
@@ -53,6 +52,7 @@ import org.vrglab.azure.azurelib.core.math.functions.rounding.Floor;
 import org.vrglab.azure.azurelib.core.math.functions.rounding.Round;
 import org.vrglab.azure.azurelib.core.math.functions.rounding.Trunc;
 import org.vrglab.azure.azurelib.core.math.functions.utility.*;
+import org.vrglab.azure.azurelib.util.AzureLibException;
 
 /**
  * Math builder This class is responsible for parsing math expressions provided by user in a string to an {@link IValue}

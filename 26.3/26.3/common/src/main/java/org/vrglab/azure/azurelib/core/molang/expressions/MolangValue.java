@@ -15,38 +15,38 @@ import org.vrglab.azure.azurelib.core.molang.MolangParser;
  */
 public class MolangValue implements IValue {
 
-    private final IValue _value;
+    private final IValue value;
 
-    private final boolean _returns;
+    private final boolean returns;
 
     public MolangValue(IValue value) {
         this(value, false);
     }
 
     public MolangValue(IValue value, boolean isReturn) {
-        this._value = value;
-        this._returns = isReturn;
+        this.value = value;
+        this.returns = isReturn;
     }
 
     @Override
     public double get() {
-        return this._value.get();
+        return this.value.get();
     }
 
     public IValue getValueHolder() {
-        return this._value;
+        return this.value;
     }
 
     public boolean isReturnValue() {
-        return this._returns;
+        return this.returns;
     }
 
     public boolean isConstant() {
-        return getClass() == MolangValue.class && _value instanceof Constant;
+        return getClass() == MolangValue.class && value instanceof Constant;
     }
 
     @Override
     public String toString() {
-        return (this._returns ? MolangParser.RETURN : "") + this._value.toString();
+        return (this.returns ? MolangParser.RETURN : "") + this.value.toString();
     }
 }

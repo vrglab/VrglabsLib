@@ -1,9 +1,8 @@
 package mod.TestMod.Items;
 
 import mod.TestMod.TestModeEntry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
-import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
-import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
 import org.vrglab.vrglabsLib.api.autoRegistry.Annotations.RegisterItem;
 import org.vrglab.vrglabsLib.api.autoRegistry.World.Item;
 
@@ -18,7 +17,7 @@ public class TestItems {
             () ->  new net.minecraft.world.item.Item.Properties().stacksTo(16)
     );
 
-
+/*
     @RegisterItem(ItemName = "ruby_axe")
     public static Item<AxeItem> RUBY_AXE = new Item<>(TestModeEntry.MODID,
 
@@ -81,7 +80,7 @@ public class TestItems {
             () ->  new net.minecraft.world.item.Item.Properties().stacksTo(1),
             AzureArmor.class
     );
-
+*/
     public static void Init() {
 
     }

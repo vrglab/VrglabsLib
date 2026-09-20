@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import org.vrglab.azure.azurelib.AzureLib;
-import org.vrglab.azure.azurelib.common.platform.services.IPlatformHelper;
+import org.vrglab.azure.azurelib.platform.services.IPlatformHelper;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 

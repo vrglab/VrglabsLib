@@ -1,7 +1,7 @@
 package org.vrglab.azure.azurelib.world.Item;
 
 import net.minecraft.world.item.Item;
-import org.vrglab.azure.azurelib.common.render.item.AzItemRenderer;
+import org.vrglab.azure.azurelib.render.item.AzItemRenderer;
 
 import java.util.function.Supplier;
 

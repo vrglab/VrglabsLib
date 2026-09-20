@@ -19,11 +19,6 @@ public class TestCreativeModeTabs {
                     displayItems(
                             (itemDisplayParameters, output) -> {
                                 output.accept(TestItems.RUBY.getRegisteredObject());
-                                output.accept(TestItems.RUBY_AXE.getRegisteredObject());
-                                output.accept(TestItems.AMETHYST_CHESTPLATE.getRegisteredObject());
-                                output.accept(TestItems.AMETHYST_BOOTS.getRegisteredObject());
-                                output.accept(TestItems.AMETHYST_LEGGINGS.getRegisteredObject());
-                                output.accept(TestItems.AMETHYST_HELMET.getRegisteredObject());
                             }
                     ).
                     build());

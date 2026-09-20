@@ -5,7 +5,7 @@ import com.mojang.serialization.DataResult;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.vrglab.TeamReborn.energy.api.EnergyStorage;
 import org.vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,7 +18,7 @@ public class EnergyImpl {
             build();
 
     public static void init() {
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.fromNamespaceAndPath("team_reborn_energy", "energy"), ENERGY_COMPONENT);
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath("team_reborn_energy", "energy"), ENERGY_COMPONENT);
         EnergyStorage.ITEM.registerFallback((stack, ctx) -> {
             if (stack.getItem() instanceof SimpleEnergyItem energyItem) {
                 return SimpleEnergyItem.createStorage(ctx, energyItem.getEnergyCapacity(stack), energyItem.getEnergyMaxInput(stack), energyItem.getEnergyMaxOutput(stack));

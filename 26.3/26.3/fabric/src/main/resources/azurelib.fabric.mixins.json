@@ -1,23 +1,25 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.vrglab.azure.azurelib.common.internal.mixins",
-  "compatibilityLevel": "JAVA_21",
+  "package": "org.vrglab.azure.azurelib.mixins",
+  "compatibilityLevel": "JAVA_25",
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
     "AbstractContainerMenuMixin_AzItemIDFix",
-    "ItemStackMixin_AzItemStackIdentityRegistry",
-    "PlayerListMixin"
+    "ItemMixin_EnsureCraftHasID",
+    "ItemStackMixin_AzItemStackIdentityRegistry"
   ],
   "client": [
     "BlockEntityMixin_AzBlockEntityAnimatorCache",
     "EntityMixin_AzEntityAnimatorCache",
     "ItemStackMixin_AzItemAnimatorCache",
-    "MinecraftMixin",
     "MixinHumanoidArmorLayer",
-    "MixinItemRenderer",
+    "MixinEntityRendererArmorContext",
     "TextureManagerMixin"
-  ]
+  ],
+  "overwrites": {
+    "requireAnnotations": true
+  }
 }

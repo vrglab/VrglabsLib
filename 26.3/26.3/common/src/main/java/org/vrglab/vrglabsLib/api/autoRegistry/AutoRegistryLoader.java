@@ -1,6 +1,6 @@
 package org.vrglab.vrglabsLib.api.autoRegistry;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.vrglab.vrglabsLib.Utils.Utils;
 import org.vrglab.vrglabsLib.api.autoRegistry.Annotations.*;
@@ -38,7 +38,7 @@ public class AutoRegistryLoader {
             CreativeModeTab autoRegTab = Utils.typeCaster(args[0], CreativeModeTab.class);
             RegisterCreativeModeTab rt = Utils.typeCaster(args[1], RegisterCreativeModeTab.class);
 
-            autoRegTab.setId(ResourceLocation.fromNamespaceAndPath(autoRegTab.getModid(), rt.Name()));
+            autoRegTab.setId(Identifier.fromNamespaceAndPath(autoRegTab.getModid(), rt.Name()));
             Object return_val = Registry.RegisterCreativeModeTab(rt.Name(), autoRegTab.getModid(), autoRegTab.getSupplier());
             autoRegTab.setRegistryData(return_val);
             successFullyLoadedContentCount.getAndIncrement();
@@ -51,7 +51,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItem.class, (args) -> {
             Item<?> autoRegItem = Utils.typeCaster(args[0], Item.class);
             RegisterItem rt = Utils.typeCaster(args[1], RegisterItem.class);
-            autoRegItem.setId(ResourceLocation.fromNamespaceAndPath(autoRegItem.getModid(), rt.ItemName()));
+            autoRegItem.setId(Identifier.fromNamespaceAndPath(autoRegItem.getModid(), rt.ItemName()));
 
             Object return_val = null;
 
@@ -75,7 +75,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterBlock.class, (args) -> {
             Block<?> autoRegBlock = Utils.typeCaster(args[0], Block.class);
             RegisterBlock rt = Utils.typeCaster(args[1], RegisterBlock.class);
-            autoRegBlock.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
+            autoRegBlock.setId(Identifier.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
             Object return_val = Registry.RegisterBlock(rt.Name(), modId,
                     Utils.typeCasterIClampedSingleCallBackafied(autoRegBlock.getArgs().get("block"), net.minecraft.world.level.block.Block.class, BlockBehaviour.Properties.class),
                     Utils.typeCasterSupplierfied(autoRegBlock.getArgs().get("item.settings"), net.minecraft.world.item.Item.Properties.class),
@@ -90,7 +90,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterItemlessBlock.class, (args) -> {
             Block<?> autoRegBlock = Utils.typeCaster(args[0], Block.class);
             RegisterItemlessBlock rt = Utils.typeCaster(args[1], RegisterItemlessBlock.class);
-            autoRegBlock.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
+            autoRegBlock.setId(Identifier.fromNamespaceAndPath(autoRegBlock.getModid(), rt.Name()));
 
             Object return_val = Registry.
                     RegisterItemlessBlock(rt.Name(), modId,
@@ -106,7 +106,7 @@ public class AutoRegistryLoader {
         LoadingResolver(packageName, modId, RegisterBlockEntityType.class, (args) -> {
             BlockEntity<?> autoRegBlockEntity = Utils.typeCaster(args[0], BlockEntity.class);
             RegisterBlockEntityType rt = Utils.typeCaster(args[1], RegisterBlockEntityType.class);
-            autoRegBlockEntity.setId(ResourceLocation.fromNamespaceAndPath(autoRegBlockEntity.getModid(), rt.Name()));
+            autoRegBlockEntity.setId(Identifier.fromNamespaceAndPath(autoRegBlockEntity.getModid(), rt.Name()));
             Object return_val = Registry.RegisterBlockEntityType(
                     rt.Name(),
                     modId,

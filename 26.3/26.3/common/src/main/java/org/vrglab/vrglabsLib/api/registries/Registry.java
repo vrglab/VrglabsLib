@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.OreFeature;
-import org.vrglab.azure.azurelib.world.Armor.AzureArmor;
 import org.vrglab.azure.azurelib.world.Item.AzureItem;
 import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
@@ -142,6 +141,7 @@ public class Registry {
      * @since 1.0.0
      */
     public static <T extends Item> Object RegisterItem(String name, String modId, IClampedCallBack<T> aNew, Supplier<Item.Properties> settings) {
+
         Object data = SimpleRegister(RegistryTypes.ITEM, modId, name, aNew, settings);
         DataGenRegistry.RegisterItem(modId, data);
         return data;
@@ -151,17 +151,17 @@ public class Registry {
 
         Object data = SimpleRegister(RegistryTypes.ITEM, modId, name, aNew, settings);
 
-        if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+        /*if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
             Bootstrapper.SimpleRegister(BootstrapType.AZURE_ARMOR.getTypeId(), modId, data, clazz);
-        }
+        }*/
 
         if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
             Bootstrapper.SimpleRegister(BootstrapType.AZURE_ITEM.getTypeId(), modId, data, clazz);
         }
 
-        if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class) || ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+        /*if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class) || ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
             Bootstrapper.SimpleRegister(BootstrapType.AZURE_ID.getTypeId(), modId, data, clazz);
-        }
+        }*/
         DataGenRegistry.RegisterItem(modId, data);
         return data;
     }
@@ -287,17 +287,17 @@ public class Registry {
         SimpleRegister(RegistryTypes.TRADE, modId, name, profession, level, trades);
     }
 
-    public static Object RegisterOreConfiguredFeature(String name, String modId, Supplier<List<OreFeature>> targets, int size) {
+    /*public static Object RegisterOreConfiguredFeature(String name, String modId, Supplier<List<OreFeature>> targets, int size) {
         return SimpleRegister(RegistryTypes.CONFIGURED_FEAT_ORE,  modId, name, Feature.ORE, targets, size);
-    }
+    }*/
 
     public static Object RegisterPlacedFeature(String name, String modId, Object configuredFeat, Object data) {
         return SimpleRegister(RegistryTypes.PLACED_FEAT, modId, name, configuredFeat, data);
     }
 
-    public static void AddBiomeModification(String name, String modId, Biomes biomeTypes, GenerationStep.Carving genStep, Object placedOre) {
+    /*public static void AddBiomeModification(String name, String modId, Biomes biomeTypes, GenerationStep.Carving genStep, Object placedOre) {
         SimpleRegister(RegistryTypes.BIOME_MODIFICATIONS,  modId, name, biomeTypes, genStep, placedOre);
-    }
+    }*/
 
     /**
      *  Register's a new Recipe Serializer

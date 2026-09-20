@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.vrglab.azure.azurelib.common.render.block.AzBlockEntityRenderer;
+import org.vrglab.azure.azurelib.render.block.AzBlockEntityRenderer;
 
 
 import java.util.function.Supplier;

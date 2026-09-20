@@ -1,10 +1,10 @@
 package org.vrglab.vrglabsLib.Fabric.Utils;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class Utils extends org.vrglab.vrglabsLib.Utils.Utils {
 
-    public static ResourceLocation CreateNewId(String modid, String pathId ){
-        return ResourceLocation.fromNamespaceAndPath(modid, pathId);
+    public static Identifier CreateNewId(String modid, String pathId ){
+        return Identifier.fromNamespaceAndPath(modid, pathId);
     }
 }

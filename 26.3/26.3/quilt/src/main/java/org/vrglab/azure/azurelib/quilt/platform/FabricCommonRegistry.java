@@ -2,7 +2,7 @@ package org.vrglab.azure.azurelib.quilt.platform;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.CreativeModeTab;
@@ -23,7 +23,7 @@ public class FabricCommonRegistry implements CommonRegistry {
     ) {
         final T registeredObject = Registry.register(
             (Registry<T>) registry,
-            ResourceLocation.fromNamespaceAndPath(modID, id),
+            Identifier.fromNamespaceAndPath(modID, id),
             object.get()
         );
 

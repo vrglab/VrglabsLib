@@ -52,15 +52,13 @@ public class MolangParser extends MathBuilder {
     }
 
     public static MolangValue parseJson(JsonElement element) {
-        if (!element.isJsonPrimitive()) {
+        if (!element.isJsonPrimitive())
             return ZERO;
-        }
 
         JsonPrimitive primitive = element.getAsJsonPrimitive();
 
-        if (primitive.isNumber()) {
+        if (primitive.isNumber())
             return new MolangValue(new Constant(primitive.getAsDouble()));
-        }
 
         if (primitive.isString()) {
             String string = primitive.getAsString();
@@ -212,9 +210,8 @@ public class MolangParser extends MathBuilder {
      */
     @Override
     public void register(Variable variable) {
-        if (!(variable instanceof LazyVariable)) {
+        if (!(variable instanceof LazyVariable))
             variable = LazyVariable.from(variable);
-        }
 
         VARIABLES.put(variable.getName(), (LazyVariable) variable);
     }
@@ -236,9 +233,8 @@ public class MolangParser extends MathBuilder {
     public void setValue(String name, DoubleSupplier value) {
         LazyVariable variable = getVariable(name);
 
-        if (variable != null) {
+        if (variable != null)
             variable.set(value);
-        }
     }
 
     /**
@@ -251,17 +247,17 @@ public class MolangParser extends MathBuilder {
 
         variable.set(new DoubleSupplier() {
 
-            private boolean _computed = false;
+            private boolean computed = false;
 
-            private double _cachedValue;
+            private double cachedValue;
 
             @Override
             public double getAsDouble() {
-                if (!_computed) {
-                    _cachedValue = value.getAsDouble();
-                    _computed = true;
+                if (!computed) {
+                    cachedValue = value.getAsDouble();
+                    computed = true;
                 }
-                return _cachedValue;
+                return cachedValue;
             }
         });
     }
@@ -275,18 +271,24 @@ public class MolangParser extends MathBuilder {
      */
     @Override
     public LazyVariable getVariable(String name) {
+        if (name.startsWith("q.")) {
+            name = "query." + name.substring(2);
+        }
         return VARIABLES.computeIfAbsent(name, key -> new LazyVariable(key, 0));
     }
 
     public LazyVariable getVariable(String name, MolangCompoundValue currentStatement) {
         LazyVariable variable;
 
+        if (name.startsWith("q.")) {
+            name = "query." + name.substring(2);
+        }
+
         if (currentStatement != null) {
             variable = currentStatement.locals.get(name);
 
-            if (variable != null) {
+            if (variable != null)
                 return variable;
-            }
         }
 
         return getVariable(name);

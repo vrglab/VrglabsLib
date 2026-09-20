@@ -1,7 +1,6 @@
 package org.vrglab.azure.azurelib.fabric.platform;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -13,19 +12,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-import org.vrglab.azure.azurelib.common.network.AbstractPacket;
-import org.vrglab.azure.azurelib.common.network.packet.SendConfigDataPacket;
-import org.vrglab.azure.azurelib.common.platform.Services;
-import org.vrglab.azure.azurelib.common.platform.services.AzureLibNetwork;
+import org.vrglab.azure.azurelib.network.AbstractPacket;
+import org.vrglab.azure.azurelib.platform.Services;
+import org.vrglab.azure.azurelib.platform.services.AzureLibNetwork;
 
+@SuppressWarnings("unchecked")
 public class FabricAzureLibNetwork implements AzureLibNetwork {
 
     public static <B extends FriendlyByteBuf, P extends AbstractPacket> void registerPacket(
         CustomPacketPayload.Type<P> packetType,
         StreamCodec<B, P> codec
     ) {
-        PayloadTypeRegistry.playS2C().register(packetType, (StreamCodec<FriendlyByteBuf, P>) codec);
-        ClientPlayNetworking.registerGlobalReceiver(packetType, (packet, context) -> packet.handle());
+        PayloadTypeRegistry.clientboundPlay().register(packetType, (StreamCodec<FriendlyByteBuf, P>) codec);
+        ClientPlayNetworking.registerGlobalReceiver(packetType, (packet, _) -> packet.handle());
     }
 
     @Override
@@ -35,24 +34,18 @@ public class FabricAzureLibNetwork implements AzureLibNetwork {
         boolean isClientBound
     ) {
         if (isClientBound) {
-            if (Services.PLATFORM.isEnvironmentClient()) {
+            if (Services.PLATFORM.isEnvironmentClient())
                 FabricAzureLibNetwork.registerPacket(payloadType, codec);
-            }
         } else {
-            PayloadTypeRegistry.playC2S().register(payloadType, (StreamCodec<FriendlyByteBuf, P>) codec);
-            ServerPlayNetworking.registerGlobalReceiver(payloadType, (packet, context) -> packet.handle());
+            PayloadTypeRegistry.serverboundPlay().register(payloadType, (StreamCodec<FriendlyByteBuf, P>) codec);
+            ServerPlayNetworking.registerGlobalReceiver(payloadType, (packet, _) -> packet.handle());
         }
-    }
-
-    public FriendlyByteBuf createFriendlyByteBuf() {
-        return PacketByteBufs.create();
     }
 
     @Override
     public void sendToTrackingEntityAndSelf(AbstractPacket packet, Entity entityToTrack) {
-        if (entityToTrack instanceof ServerPlayer pl) {
+        if (entityToTrack instanceof ServerPlayer pl)
             sendToPlayer(packet, pl);
-        }
 
         for (ServerPlayer player : PlayerLookup.tracking(entityToTrack)) {
             sendToPlayer(packet, player);
@@ -69,10 +62,5 @@ public class FabricAzureLibNetwork implements AzureLibNetwork {
     @Override
     public void sendToPlayer(AbstractPacket packet, ServerPlayer player) {
         ServerPlayNetworking.send(player, packet);
-    }
-
-    @Override
-    public void sendClientPacket(ServerPlayer player, String id) {
-        ServerPlayNetworking.send(player, new SendConfigDataPacket(id));
     }
 }

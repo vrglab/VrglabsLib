@@ -3,20 +3,20 @@ package org.vrglab.azure.azurelib.common.registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.vrglab.azure.azurelib.platform.Services;
 
 import java.util.function.Supplier;
 
-import org.vrglab.azure.azurelib.common.blocks.TickingLightEntity;
-import org.vrglab.azure.azurelib.common.platform.Services;
+
 
 public class AzureBlocksEntityRegistry {
 
-    public static final Supplier<BlockEntityType<TickingLightEntity>> TICKING_LIGHT_ENTITY =
+    /*public static final Supplier<BlockEntityType<TickingLightEntity>> TICKING_LIGHT_ENTITY =
         registerBlockEntity(
             "lightblock",
             () -> BlockEntityType.Builder.of(TickingLightEntity::new, AzureBlocksRegistry.TICKING_LIGHT_BLOCK.get()).
                     build(null)
-        );
+        );*/
 
     /**
      * Registers a new Block Entity.
@@ -30,7 +30,7 @@ public class AzureBlocksEntityRegistry {
         String blockEntityName,
         Supplier<BlockEntityType<T>> blockEntity
     ) {
-        return Services.COMMON_REGISTRY.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityName, blockEntity);
+        return null;//Services.COMMON_REGISTRY.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityName, blockEntity);
     }
 
     public static void init() {}
