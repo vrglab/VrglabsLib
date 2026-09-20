@@ -1,0 +1,42 @@
+{
+    "schema_version": 1,
+    "quilt_loader": {
+      "group": "${group}",
+        "id": "${mod_id}",
+        "version": "${version}",
+        "metadata": {
+            "name": "${mod_name}",
+            "description": "${description}",
+            "contributors": {
+                "${mod_author}": "Author"
+            },
+            "contact": {},
+            "icon": "${mod_id}.png",
+            "license": "MIT"
+        },
+        "intermediate_mappings": "net.fabricmc:intermediary",
+        "entrypoints": {
+            "init": "org.vrglab.vrglabsLib.quilt.QuiltEntryPoint",
+            "client": "org.vrglab.vrglabsLib.quilt.QuiltClientEntryPoint"
+        },
+        "depends": [
+            {
+                "id": "quilt_loader",
+                "versions": ">=0.19.1"
+            },
+            {
+                "id": "quilted_fabric_api",
+                "versions": ">=7.0.2"
+            },
+            {
+                "id": "minecraft",
+                "versions": ">=1.21"
+            }
+        ]
+    },
+  "mixin": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.quilt.mixins.json" ,
+    "azurelib.quilt.mixins.json"
+  ]
+}
