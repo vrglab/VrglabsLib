@@ -1,0 +1,12 @@
+package org.vrglab.vrglabsLib.core;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Constants {
+
+    public static final String MOD_ID = "vrglabslib";
+    public static final String MOD_NAME = "VrglabsLib";
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+
+}

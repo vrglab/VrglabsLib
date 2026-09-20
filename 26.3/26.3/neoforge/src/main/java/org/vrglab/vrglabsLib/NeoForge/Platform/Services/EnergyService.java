@@ -1,0 +1,58 @@
+package org.vrglab.vrglabsLib.NeoForge.Platform.Services;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
+import org.vrglab.vrglabsLib.Utils.Utils;
+import org.vrglab.vrglabsLib.api.energy.EnergyContainer;
+import org.vrglab.vrglabsLib.api.energy.interfaces.IEnergyContainer;
+import org.vrglab.vrglabsLib.platform.services.energy.IEnergyService;
+
+public class EnergyService implements IEnergyService {
+    @Override
+    public Object CreateContainerInstance(long capacity, long maxTransfer, long maxEnergy, long energy, IEnergyContainer safeContainer, Object rawBlockEntity) {
+        return new EnergyStorage(Utils.typeCaster(capacity), Utils.typeCaster(maxTransfer), Utils.typeCaster(maxEnergy), Utils.typeCaster(energy));
+    }
+
+    @Override
+    public Long ExtractEnergyFromContainer(Object rawEnergyContainer, long maxExtract, boolean simulate) {
+        EnergyStorage energyStorage = Utils.typeCaster(rawEnergyContainer);
+
+        return Utils.typeCaster(energyStorage.extractEnergy(Utils.typeCaster(maxExtract), simulate));
+    }
+
+    @Override
+    public Long GiveEnergyToContainer(Object rawEnergyContainer, long maxReceive, boolean simulate) {
+        EnergyStorage  energyStorage = Utils.typeCaster(rawEnergyContainer);
+
+        return Utils.typeCaster(energyStorage.receiveEnergy(Utils.typeCaster(maxReceive), simulate));
+    }
+
+    @Override
+    public boolean EntityHasEnergyCapabilities(BlockEntity entity) {
+        if (entity == null){
+            return false;
+        }
+
+        IEnergyStorage storage = entity.getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, entity.getBlockPos(), null);
+        return storage != null;
+    }
+
+    @Override
+    public EnergyContainer WrapExternalStorage(Level level, BlockPos pos, Direction facing, BlockEntity blockEntity) {
+        IEnergyStorage storage = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos, facing);
+        return EnergyContainer.ExternalContainerBuilder.Open().
+                maxReceive(ReflectionUtil.getField(storage, "maxReceive", int.class)).
+                maxExtract(ReflectionUtil.getField(storage, "maxExtract", int.class)).
+                capacity(storage.getMaxEnergyStored()).
+                energy(storage.getEnergyStored()).
+                rawLoaderDependentContainer(storage).
+                rawBlockEntity(blockEntity).
+                Build();
+    }
+}
