@@ -1,9 +1,7 @@
 package org.vrglab.vrglabsLib.quilt.utils;
 
 
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +12,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import org.vrglab.azure.azurelib.common.animation.cache.AzIdentityRegistry;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRenderer;
 import org.vrglab.azure.azurelib.common.render.armor.AzArmorRendererRegistry;
@@ -31,7 +29,6 @@ import org.vrglab.vrglabsLib.Utils.ReflectionUtil;
 import org.vrglab.vrglabsLib.Utils.Utils;
 import org.vrglab.vrglabsLib.api.autoRegistry.AutoRegistryLoader;
 import org.vrglab.vrglabsLib.api.callbacks.ICallBack;
-import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.functionProviders.IBlockEntityLoaderFunction;
 import org.vrglab.vrglabsLib.api.registries.Bootstrapper;
@@ -40,7 +37,6 @@ import org.vrglab.vrglabsLib.api.registries.interfaces.RegistryTypes;
 import org.vrglab.vrglabsLib.core.VrglabsInitializer;
 
 import java.lang.annotation.Annotation;
-import java.util.function.Supplier;
 
 public class VrglabsQuiltInitializer {
 
@@ -49,7 +45,7 @@ public class VrglabsQuiltInitializer {
         VrglabsInitializer.Initialize(modid, modPackage);
     }
 
-    public static void InitializeClient( String modid) {
+    public static void InitializeClient(String modid) {
        /* ClientPlayNetworking.registerGlobalReceiver(
                 AzEntityDispatchCommandPacket.TYPE,
                 (packet, context) -> packet.handle()
@@ -77,7 +73,7 @@ public class VrglabsQuiltInitializer {
      */
     public static void Create(String modid) {
         createAutoRegistry();
-       setEnergyStorageStatics(modid);
+        setEnergyStorageStatics(modid);
         setOreGenHelperStatics();
         setNetworkStatics();
 
@@ -86,8 +82,8 @@ public class VrglabsQuiltInitializer {
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
 
-                Item.Properties properties = Utils.MakeSafeSettings((Item.Properties) ((Supplier<Item.Properties>) args[2]).get(), RegistryTypes.ITEM, id);
-                Item itemToRegister = ((IClampedCallBack<Item>) args[1]).accept(properties);
+                Item.Properties properties = Utils.typeCasterSupplierfied(args[2], Item.Properties.class).get();
+                Item itemToRegister = Utils.typeCasterIClampedCallBackafied(args[1], Item.class).accept(properties);
 
                 return Registry.register(BuiltInRegistries.ITEM, id, itemToRegister);
             }
@@ -95,9 +91,14 @@ public class VrglabsQuiltInitializer {
         ICallBack BlockRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
+
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                Block b = Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[3]).get(), RegistryTypes.BLOCK, id))));
-                Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, Utils.MakeSafeSettings( ((Supplier<Item.Properties>)args[2]).get(), RegistryTypes.BLOCK, id)));
+                BlockBehaviour.Properties properties = Utils.typeCasterSupplierfied(args[3], BlockBehaviour.Properties.class).get();
+                IClampedSingleCallback<Block, BlockBehaviour.Properties> callback = Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class);
+                Item.Properties itemProperties = Utils.typeCaster(args[2], Item.Properties.class);
+
+                Block b = Registry.register(BuiltInRegistries.BLOCK, id, callback.accept(properties));
+                Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(b, itemProperties));
                 return b;
             }
         };
@@ -105,13 +106,16 @@ public class VrglabsQuiltInitializer {
             @Override
             public Object accept(Object... args) {
                 ResourceLocation id = CreateNewId(modid, args[0].toString());
-                return Registry.register(BuiltInRegistries.BLOCK, id, (((IClampedSingleCallback<Block, BlockBehaviour.Properties>)args[1]).accept(Utils.MakeSafeSettings(((Supplier<BlockBehaviour.Properties>)args[2]).get(), RegistryTypes.BLOCK, id))));
+                BlockBehaviour.Properties properties = Utils.typeCasterSupplierfied(args[2], BlockBehaviour.Properties.class).get();
+                IClampedSingleCallback<Block, BlockBehaviour.Properties> callback = Utils.typeCasterIClampedSingleCallBackafied(args[1], Block.class, BlockBehaviour.Properties.class);
+
+                return Registry.register(BuiltInRegistries.BLOCK, id, callback.accept(properties));
             }
         };
         ICallBack POIRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), (int)args[1], (int)args[2], (Block)args[3]);
+                return PointOfInterestHelper.register(CreateNewId(modid, args[0].toString()), Utils.typeCaster(args[1], int.class), Utils.typeCaster(args[2], int.class),  Utils.typeCaster(args[1], Block.class));
             }
         };
 
@@ -176,13 +180,8 @@ public class VrglabsQuiltInitializer {
         ICallBack BlockEntityTypeRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                FabricBlockEntityTypeBuilder.Factory factory = new FabricBlockEntityTypeBuilder.Factory() {
-                    @Override
-                    public BlockEntity create(BlockPos blockPos, BlockState blockState) {
-                        return ((IBlockEntityLoaderFunction<BlockEntity>)args[1]).create(blockPos, blockState);
-                    }
-                };
-                return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), FabricBlockEntityTypeBuilder.create(factory, (Block)args[2]).build());
+                BlockEntityType.BlockEntitySupplier<?> factory = (blockPos, blockState) -> ((IBlockEntityLoaderFunction<BlockEntity>) args[1]).create(blockPos, blockState);
+                return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNewId(modid, args[0].toString()), BlockEntityType.Builder.of(factory, Utils.typeCaster(args[2], Block.class)).build());
             }
         };
 
@@ -190,21 +189,21 @@ public class VrglabsQuiltInitializer {
         ICallBack RecipeSerializerRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), (RecipeSerializer)args[1]);
+                return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, CreateNewId(modid, args[0].toString()), Utils.typeCaster(args[1], RecipeSerializer.class));
             }
         };
 
         ICallBack RecipeTypeRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.RECIPE_TYPE, CreateNewId(modid, args[0].toString()), (RecipeType) args[1]);
+                return Registry.register(BuiltInRegistries.RECIPE_TYPE, CreateNewId(modid, args[0].toString()), Utils.typeCaster(args[1], RecipeType.class));
             }
         };
 
         ICallBack ItemGroupRegistryCallBack = new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), ((Supplier<CreativeModeTab>)args[1]).get());
+                return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CreateNewId(modid, args[0].toString()), Utils.typeCasterSupplierfied(args[1], CreativeModeTab.class).get());
             }
         };
 
@@ -227,9 +226,9 @@ public class VrglabsQuiltInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
+                AzureArmor tranformedObj = Utils.convertToMcSafeType(args[0]);
 
-                AzArmorRendererRegistry.register((Supplier<AzArmorRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj.asItem());
+                AzArmorRendererRegistry.register(Utils.typeCasterSupplierfied(tranformedObj.GetAzureRenderer(), AzArmorRenderer.class), tranformedObj.asItem());
 
                 return null;
             }
@@ -239,8 +238,8 @@ public class VrglabsQuiltInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
-                AzItemRendererRegistry.register((Supplier<AzItemRenderer>)tranformed_obj.GetAzureRenderer(), tranformed_obj);
+                AzureItem tranformedObj = Utils.convertToMcSafeType(args[0]);
+                AzItemRendererRegistry.register(Utils.typeCasterSupplierfied(tranformedObj.GetAzureRenderer(), AzItemRenderer.class), tranformedObj);
                 return null;
             }
         }, BootstrapType.AZURE_ITEM.getTypeId(),  modid);
@@ -249,16 +248,16 @@ public class VrglabsQuiltInitializer {
         Bootstrapper.initBootstrapper(new ICallBack() {
             @Override
             public Object accept(Object... args) {
-                Class clazz = (Class)args[1];
+                Class clazz = (Class) args[1];
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
-                    AzureArmor tranformed_obj = Utils.convertToMcSafeType(args[0]);
-                    AzIdentityRegistry.register(tranformed_obj);
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureArmor.class)) {
+                    AzureArmor tranformedObj = Utils.convertToMcSafeType(args[0]);
+                    AzIdentityRegistry.register(tranformedObj);
                 }
 
-                if(ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
-                    AzureItem tranformed_obj = Utils.convertToMcSafeType(args[0]);
-                    AzIdentityRegistry.register(tranformed_obj);
+                if (ReflectionUtil.isSubclassOrSame(clazz, AzureItem.class)) {
+                    AzureItem tranformedObj = Utils.convertToMcSafeType(args[0]);
+                    AzIdentityRegistry.register(tranformedObj);
                 }
 
                 return null;
@@ -416,11 +415,11 @@ public class VrglabsQuiltInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.FieldsAnnotated));
-                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.FieldsAnnotated));
+                return reflections.getFieldsAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -428,11 +427,11 @@ public class VrglabsQuiltInitializer {
             @Override
             public Object accept(Object... args) {
                 Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(args[0].toString())
-                                .filterInputsBy(new FilterBuilder().includePackage(args[0].toString()))
-                                .setScanners(Scanners.TypesAnnotated));
-                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>)args[1]);
+                        new ConfigurationBuilder().
+                                forPackage(args[0].toString()).
+                                filterInputsBy(new FilterBuilder().includePackage(args[0].toString())).
+                                setScanners(Scanners.TypesAnnotated));
+                return reflections.getTypesAnnotatedWith((Class<? extends Annotation>) args[1]);
             }
         };
 
@@ -440,7 +439,10 @@ public class VrglabsQuiltInitializer {
 
             @Override
             public Object accept(Object... args) {
-                return ((org.vrglab.vrglabsLib.api.autoRegistry.World.Block)((org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity)args[0]).getArgs().get("block")).getRegisteredObject();
+                var uncastBlock = Utils.typeCaster(args[0], org.vrglab.vrglabsLib.api.autoRegistry.World.BlockEntity.class).getArgs().get("block");
+                org.vrglab.vrglabsLib.api.autoRegistry.World.Block<?> castBlock = Utils.typeCaster(uncastBlock, org.vrglab.vrglabsLib.api.autoRegistry.World.Block.class);
+
+                return castBlock.getRegisteredObject();
             }
         };
     }

@@ -15,11 +15,11 @@ import org.vrglab.TeamReborn.energy.api.EnergyStorage;
 @SuppressWarnings({"unused"})
 public abstract class SimpleSidedEnergyContainer extends SnapshotParticipant<Long> {
     public long amount = 0;
-    private final SideStorage[] sideStorages = new SideStorage[7];
+    private final SideStorage[] _sideStorages = new SideStorage[7];
 
     public SimpleSidedEnergyContainer() {
         for (int i = 0; i < 7; ++i) {
-            sideStorages[i] = new SideStorage(i == 6 ? null : Direction.from3DDataValue(i));
+            _sideStorages[i] = new SideStorage(i == 6 ? null : Direction.from3DDataValue(i));
         }
     }
 
@@ -42,7 +42,7 @@ public abstract class SimpleSidedEnergyContainer extends SnapshotParticipant<Lon
      * @return An {@link EnergyStorage} implementation for the passed side.
      */
     public EnergyStorage getSideStorage(@Nullable Direction side) {
-        return sideStorages[side == null ? 6 : side.get3DDataValue()];
+        return _sideStorages[side == null ? 6 : side.get3DDataValue()];
     }
 
     @Override
@@ -56,22 +56,22 @@ public abstract class SimpleSidedEnergyContainer extends SnapshotParticipant<Lon
     }
 
     private class SideStorage implements EnergyStorage {
-        private final Direction side;
+        private final Direction _side;
 
         private SideStorage(Direction side) {
-            this.side = side;
+            this._side = side;
         }
 
         @Override
         public boolean supportsInsertion() {
-            return getMaxInsert(side) > 0;
+            return getMaxInsert(_side) > 0;
         }
 
         @Override
         public long insert(long maxAmount, TransactionContext transaction) {
             StoragePreconditions.notNegative(maxAmount);
 
-            long inserted = Math.min(getMaxInsert(side), Math.min(maxAmount, getCapacity() - amount));
+            long inserted = Math.min(getMaxInsert(_side), Math.min(maxAmount, getCapacity() - amount));
 
             if (inserted > 0) {
                 updateSnapshots(transaction);
@@ -84,14 +84,14 @@ public abstract class SimpleSidedEnergyContainer extends SnapshotParticipant<Lon
 
         @Override
         public boolean supportsExtraction() {
-            return getMaxExtract(side) > 0;
+            return getMaxExtract(_side) > 0;
         }
 
         @Override
         public long extract(long maxAmount, TransactionContext transaction) {
             StoragePreconditions.notNegative(maxAmount);
 
-            long extracted = Math.min(getMaxExtract(side), Math.min(maxAmount, amount));
+            long extracted = Math.min(getMaxExtract(_side), Math.min(maxAmount, amount));
 
             if (extracted > 0) {
                 updateSnapshots(transaction);

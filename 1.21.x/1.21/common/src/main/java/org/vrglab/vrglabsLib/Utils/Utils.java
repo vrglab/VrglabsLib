@@ -4,6 +4,7 @@ package org.vrglab.vrglabsLib.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.jetbrains.annotations.NotNull;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedCallBack;
 import org.vrglab.vrglabsLib.api.callbacks.IClampedSingleCallback;
 import org.vrglab.vrglabsLib.api.registries.interfaces.IRegistryType;
@@ -24,7 +25,7 @@ public class Utils {
         return Services.TYPE_SERVICE.getMcSafeType(registryResult);
     }
 
-    public static <T> T typeCaster(Object obj, Class<T> type){
+    public static <T> T typeCaster(@NotNull Object obj, @NotNull Class<T> type){
         try {
             if (type.isInstance(String.class) || type.isAssignableFrom(String.class)) {
                 return type.cast(obj.toString());
@@ -38,7 +39,7 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Supplier<T> typeCasterSupplierfied(Object obj, Class<T> type) {
+    public static <T> Supplier<T> typeCasterSupplierfied(@NotNull Object obj, Class<T> type) {
         try {
             return (Supplier<T>) obj;
         } catch (Exception e) {
@@ -48,7 +49,7 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> IClampedCallBack<T> typeCasterIClampedCallBackafied(Object obj, Class<T> type){
+    public static <T> IClampedCallBack<T> typeCasterIClampedCallBackafied(@NotNull Object obj, @NotNull Class<T> type){
         try {
             return (IClampedCallBack<T>) obj;
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T, P> IClampedSingleCallback<T, P> typeCasterIClampedSingleCallBackafied(Object obj, Class<T> type, Class<P> pType){
+    public static <T, P> IClampedSingleCallback<T, P> typeCasterIClampedSingleCallBackafied(@NotNull Object obj, @NotNull Class<T> type, @NotNull Class<P> pType){
         try {
             return (IClampedSingleCallback<T, P>) obj;
         } catch (Exception e) {
@@ -68,7 +69,7 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T typeCaster(Object obj){
+    public static <T> T typeCaster(@NotNull Object obj){
         try {
             return (T) obj;
         } catch (Exception e) {

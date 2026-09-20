@@ -1,32 +1,44 @@
 version: '3'
 
 vars:
-  GRADLEW: gradlew
+  GRADLEW: cmd /c call ".\gradlew.bat"
 
 tasks:
+  build:
+    desc: Builds the project
+    dir: "{{.USER_WORKING_DIR}}"
+    cmds:
+      - task: tests
+      - "{{.GRADLEW}} build"
+
   clear:
     desc: Cleans the build cache
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - "{{.GRADLEW}} clean"
 
   clean:
     desc: Calls Spotless to clean up the code
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - "{{.GRADLEW}} spotlessApply"
 
   check:
     desc: Checks the Codebase for style issues
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - "{{.GRADLEW}} checkstyleMain"
 
   unit-test:
     desc: Runs all unit tests
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - "{{.GRADLEW}} test"
 
   tests:
     desc: Runs all tests and cleans codebase
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - task: clear
-      - "{{.GRADLEW}} test"
+      - task: unit-test
       - task: clean

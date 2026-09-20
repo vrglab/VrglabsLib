@@ -13,9 +13,9 @@ import org.vrglab.TeamReborn.energy.api.base.SimpleEnergyItem;
 
 @ApiStatus.Internal
 public class EnergyImpl {
-    public static final DataComponentType<Long> ENERGY_COMPONENT = DataComponentType.<Long>builder()
-        .persistent(nonNegativeLong())
-        .build();
+    public static final DataComponentType<Long> ENERGY_COMPONENT = DataComponentType.<Long>builder().
+            persistent(nonNegativeLong()).
+            build();
 
     public static void init() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.fromNamespaceAndPath("team_reborn_energy", "energy"), ENERGY_COMPONENT);
